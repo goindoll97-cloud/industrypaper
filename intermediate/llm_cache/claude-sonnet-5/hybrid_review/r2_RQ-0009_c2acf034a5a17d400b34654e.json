@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0009",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 106-65-0 (dimethyl succinate, SMILES COC(=O)CCC(=O)OC) is an ester of succinic acid, not succinic acid or a salt thereof. It does not match any enumerated members or reference substances in the catalog, including PS::110-15-6 which covers succinic acid and its salts but not its esters.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10528,
+  "output_tokens": 170,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.5729914999992616,
+  "runtime_source": "FRESH_API_CALL"
+}

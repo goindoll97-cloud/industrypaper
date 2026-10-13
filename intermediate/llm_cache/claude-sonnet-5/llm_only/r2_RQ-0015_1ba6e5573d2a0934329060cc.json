@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0015",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 113-00-8 matches guanidine exactly, listed under PS::113-00-8 'Guanidine and its salts' reference substance with identical CAS and SMILES.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10156,
+  "output_tokens": 112,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.4026411000004373,
+  "runtime_source": "FRESH_API_CALL"
+}

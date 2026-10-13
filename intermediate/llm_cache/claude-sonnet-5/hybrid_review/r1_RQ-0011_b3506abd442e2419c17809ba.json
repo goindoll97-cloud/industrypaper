@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0011",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 109-07-9 is 2-methylpiperazine, a substituted piperazine ring (SMILES CC1CNCCN1) matching the piperazine scaffold C1CNCCN1 of PS::110-85-0, which covers piperazine and its salts/derivatives with no stereo restriction specified beyond ring saturation.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 167,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.597928999999567,
+  "runtime_source": "FRESH_API_CALL"
+}

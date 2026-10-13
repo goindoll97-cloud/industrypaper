@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0052",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 4342-36-3 is tributyltin benzoate, a tributyltin compound (CCCC[Sn](CCCC)(CCCC)OC(=O)C1=CC=CC=C1), falling under the Trialkyl tin hydroxide/Tributyltin compound regulatory scope, consistent with other tributyltin esters listed in the catalog (e.g., 4342-30-7, 2155-70-6).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10185,
+  "output_tokens": 204,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9471941000001607,
+  "runtime_source": "FRESH_API_CALL"
+}

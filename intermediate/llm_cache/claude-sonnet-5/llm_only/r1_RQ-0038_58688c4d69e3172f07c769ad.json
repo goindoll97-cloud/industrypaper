@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0038",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "Candidate CAS 1863-63-4 is ammonium benzoate (C6H5COO- NH4+), the ammonium salt of benzoic acid, matching catalog scope 'Benzoic acid and its salts' (PS::65-85-0).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10176,
+  "output_tokens": 136,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.4142774000001737,
+  "runtime_source": "FRESH_API_CALL"
+}

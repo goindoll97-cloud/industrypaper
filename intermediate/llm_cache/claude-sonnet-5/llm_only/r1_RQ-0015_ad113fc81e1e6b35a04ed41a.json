@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0015",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 113-00-8 and SMILES C(=N)(N)N exactly match the reference substance Guanidine in catalog entry PS::113-00-8, which covers guanidine and its salts with ALL_STEREOISOMERS scope (no stereocenters present).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 142,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2523854999999458,
+  "runtime_source": "FRESH_API_CALL"
+}

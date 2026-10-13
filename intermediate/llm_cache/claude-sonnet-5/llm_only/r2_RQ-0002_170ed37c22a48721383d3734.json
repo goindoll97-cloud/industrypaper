@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0002",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 10049-05-5 (chromium(III) chloride, Cl[Cr]Cl representing CrCl3/CrCl2 species) is not Chromium(6+) and does not match any enumerated member in CG::CRVI_COMPOUNDS or any other catalog entry; it is not listed in any enumerated catalog list.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 165,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.5521205000004556,
+  "runtime_source": "FRESH_API_CALL"
+}

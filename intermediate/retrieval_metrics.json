@@ -1,0 +1,75 @@
+{
+  "protocol": "STUDY2_LLM_VS_HYBRID_CAS_RETRIEVAL_RESULTS_V2",
+  "n_queries": 112,
+  "systems": {
+    "LLM_ONLY": {
+      "n": 112,
+      "exact_accuracy": 0.8482142857142857,
+      "resolved_rate": 1.0,
+      "review_rate": 0.0,
+      "accuracy_on_resolved": 0.8482142857142857,
+      "found_target_accuracy": 0.95,
+      "not_found_accuracy": 0.7307692307692307,
+      "not_found_precision": 0.9743589743589743,
+      "not_found_recall": 0.7307692307692307,
+      "n_wrong_target": 2,
+      "n_false_not_found": 1,
+      "n_false_found": 14
+    },
+    "HYBRID": {
+      "n": 112,
+      "exact_accuracy": 0.8571428571428571,
+      "resolved_rate": 1.0,
+      "review_rate": 0.0,
+      "accuracy_on_resolved": 0.8571428571428571,
+      "found_target_accuracy": 0.9833333333333333,
+      "not_found_accuracy": 0.7115384615384616,
+      "not_found_precision": 1.0,
+      "not_found_recall": 0.7115384615384616,
+      "n_wrong_target": 1,
+      "n_false_not_found": 0,
+      "n_false_found": 15
+    }
+  },
+  "efficiency": {
+    "LLM_ONLY": {
+      "ok_calls": 112,
+      "input_tokens": 1181123,
+      "output_tokens": 18542,
+      "elapsed_sec": 312.3092858000009
+    },
+    "HYBRID_LLM_ESCALATIONS": {
+      "ok_calls": 63,
+      "input_tokens": 663846,
+      "output_tokens": 11417,
+      "elapsed_sec": 179.38206179998997
+    },
+    "hybrid_direct_queries": 49,
+    "hybrid_review_queries": 63,
+    "llm_call_reduction_fraction": 0.4375,
+    "input_token_reduction_fraction": 0.43795354082512994
+  },
+  "qc": {
+    "repeat_completeness": {
+      "LLM_ONLY": {
+        "condition": "LLM_ONLY",
+        "expected_queries": 112,
+        "complete_queries": 112,
+        "required_ok_per_query": 1,
+        "min_ok_per_query": 1,
+        "max_ok_per_query": 1,
+        "incomplete": []
+      },
+      "HYBRID_REVIEW": {
+        "condition": "HYBRID_REVIEW",
+        "expected_queries": 63,
+        "complete_queries": 63,
+        "required_ok_per_query": 1,
+        "min_ok_per_query": 1,
+        "max_ok_per_query": 1,
+        "incomplete": []
+      }
+    },
+    "not_found_hybrid_deterministic_conflicts": 0
+  }
+}

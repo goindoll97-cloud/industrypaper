@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0066",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 569-64-2 (Malachite Green chloride) exactly matches an enumerated member of CG::MG_SALTS with identical SMILES structure.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10207,
+  "output_tokens": 108,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6628478999991785,
+  "runtime_source": "FRESH_API_CALL"
+}

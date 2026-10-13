@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0044",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 2437-29-8 exactly matches the enumerated member of CG::MG_SALTS (malachite green oxalate salt) with identical SMILES structure.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10670,
+  "output_tokens": 110,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 4.24937090000094,
+  "runtime_source": "FRESH_API_CALL"
+}

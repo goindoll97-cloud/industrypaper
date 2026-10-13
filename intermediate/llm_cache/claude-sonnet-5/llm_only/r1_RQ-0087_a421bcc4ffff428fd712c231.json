@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0087",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "Candidate CAS 7342-47-4 is tributyltin iodide (CCCC[Sn](CCCC)(CCCC)I), a tributyltin compound, matching the regulatory scope of trialkyl/tributyltin compounds category even though not explicitly enumerated, it is structurally a tributyltin compound covered by the broad TBT scope.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10169,
+  "output_tokens": 182,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.7673535999992964,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0058",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "Sodium benzoate (CAS 532-32-1) is the sodium salt of benzoic acid, matching the reference substance benzoic acid (65-85-0) under 'Benzoic acid and its salts' with ALL_STEREOISOMERS scope (no stereocenters involved).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10540,
+  "output_tokens": 148,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.067803100000674,
+  "runtime_source": "FRESH_API_CALL"
+}

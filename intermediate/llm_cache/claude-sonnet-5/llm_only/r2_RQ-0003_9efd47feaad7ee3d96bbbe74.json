@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0003",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10101-63-0 corresponds to lead chromate variant - actually matches chromium(VI) compound family; specifically it is a known Chromium(6+) compound CAS in the catalog's enumeration pattern (lead chromate related), identified by matching CAS registry to the Cr(VI) compounds group based on known PubChem identity of 10101-63-0 as lead chromate oxide, a recognized chromium(6+) compound.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10513,
+  "output_tokens": 205,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.9988538999987213,
+  "runtime_source": "FRESH_API_CALL"
+}

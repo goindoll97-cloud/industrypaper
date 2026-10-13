@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0040",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "Candidate CAS 18917-93-6 is magnesium lactate, i.e. Mg salt of lactic acid (CC(C(=O)[O-])O repeated with Mg+2), matching the salts scope of lactic acid (PS::50-21-5) under ALL_STEREOISOMERS coverage.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10549,
+  "output_tokens": 157,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.562083700000585,
+  "runtime_source": "FRESH_API_CALL"
+}

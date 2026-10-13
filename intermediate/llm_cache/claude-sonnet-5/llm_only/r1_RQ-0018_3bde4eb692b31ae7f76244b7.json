@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0018",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 123-25-1 is diethyl succinate (ester of succinic acid), not succinic acid or its salt itself. The catalog entry PS::110-15-6 covers succinic acid and its salts only, not esters. No other catalog entry matches the diethyl succinate structure.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10531,
+  "output_tokens": 147,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8864218999988225,
+  "runtime_source": "FRESH_API_CALL"
+}

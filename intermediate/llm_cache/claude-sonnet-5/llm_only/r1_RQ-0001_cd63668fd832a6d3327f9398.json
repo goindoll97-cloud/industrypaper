@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0001",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10025-73-7 (chromium(III) chloride, CrCl3) - wait, candidate is CrCl3 with Cr in +3 oxidation state based on SMILES Cl[Cr](Cl)Cl, but regulatory scope is Chromium(6+) compounds. However CAS 10025-73-7 is chromic chloride (Cr(III)), not Cr(VI). This does not match the enumerated Cr(VI) members nor any other catalog entry.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 219,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 4.072297200000321,
+  "runtime_source": "FRESH_API_CALL"
+}

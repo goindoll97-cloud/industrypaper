@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0069",
+  "status": "FOUND",
+  "target_id": "PS::69-72-7",
+  "reason": "Candidate 578-36-9 is potassium salicylate, a potassium salt of salicylic acid (SMILES shows salicylate anion with K+ counterion), matching the 'Salicylic acid and its salts' scope.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10176,
+  "output_tokens": 127,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.094006999999692,
+  "runtime_source": "FRESH_API_CALL"
+}

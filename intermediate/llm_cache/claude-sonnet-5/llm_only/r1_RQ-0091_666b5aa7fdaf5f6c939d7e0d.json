@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0091",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 77-93-0 (triethyl citrate) is an ester of citric acid, not citric acid itself or one of its salts. The catalog entry PS::77-92-9 covers citric acid and its salts only, not esters. No other catalog entry matches this ester derivative.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10545,
+  "output_tokens": 139,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.9908981999997195,
+  "runtime_source": "FRESH_API_CALL"
+}

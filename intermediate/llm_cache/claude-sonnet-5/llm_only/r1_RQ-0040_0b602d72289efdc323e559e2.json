@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0040",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "Candidate CAS 18917-93-6 is magnesium lactate (two lactate anions with Mg2+), matching the 'Lactic acid and its salts' reference scope (50-21-5) as the lactate salt form.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10183,
+  "output_tokens": 126,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3266243000007307,
+  "runtime_source": "FRESH_API_CALL"
+}

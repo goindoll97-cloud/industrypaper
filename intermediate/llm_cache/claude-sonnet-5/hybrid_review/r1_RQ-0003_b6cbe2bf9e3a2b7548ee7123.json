@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0003",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10101-63-0 corresponds to lead chromate oxide / chromium(VI)-related compound family; matching known CAS 10101-63-0 is a chromium(VI) compound (lead chromate) listed under Chromium(6+) compounds category, consistent with the catalog's enumerated chromium compound members structure though not explicitly listed, it matches the regulatory scope for chromium(6+) compounds based on CAS identity pattern.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10513,
+  "output_tokens": 208,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9432677999993757,
+  "runtime_source": "FRESH_API_CALL"
+}

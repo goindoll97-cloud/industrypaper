@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0068",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 57-13-6 (urea, CH4N2O) does not match any catalog target's enumerated members or reference substances (e.g., not guanidine, acetic acid, succinic acid, etc.) and is not a chromium, lead, malachite green, nonylphenol, or tributyltin compound.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 155,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6457547999998496,
+  "runtime_source": "FRESH_API_CALL"
+}

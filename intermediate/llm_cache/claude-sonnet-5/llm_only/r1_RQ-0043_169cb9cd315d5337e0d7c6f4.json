@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0043",
+  "status": "FOUND",
+  "target_id": "MX::2017-1-801",
+  "reason": "Candidate CAS 224031-70-3 and 224031-71-4 with matching SMILES exactly match the mixture components enumerated in MX::2017-1-801 (1-spiro[4.5]dec-7-en-7-yl-4-penten-1-one and 1-spiro[4.5]dec-6-en-7-yl-4-penten-1-one).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10222,
+  "output_tokens": 173,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.4917710999998235,
+  "runtime_source": "FRESH_API_CALL"
+}

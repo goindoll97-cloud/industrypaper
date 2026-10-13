@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0048",
+  "status": "FOUND",
+  "target_id": "MX::97-1-127",
+  "reason": "The candidate CAS/SMILES set (3084-48-8, 31160-64-2, 78-50-2) exactly matches the three component substances (trihexylphosphine oxide, monooctyldihexylphosphine oxide, tri-n-octylphosphine oxide) defined in mixture entry MX::97-1-127.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10636,
+  "output_tokens": 160,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6382530000009865,
+  "runtime_source": "FRESH_API_CALL"
+}

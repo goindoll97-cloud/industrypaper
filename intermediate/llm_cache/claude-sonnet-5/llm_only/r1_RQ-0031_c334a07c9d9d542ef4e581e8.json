@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0031",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 142-64-3 is piperazine dihydrochloride (piperazine salt), matching SMILES C1CNCCN1 core with 2 HCl, falling under 'Piperazine and its salts' scope defined by reference substance 110-85-0.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10163,
+  "output_tokens": 138,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5696600000001126,
+  "runtime_source": "FRESH_API_CALL"
+}

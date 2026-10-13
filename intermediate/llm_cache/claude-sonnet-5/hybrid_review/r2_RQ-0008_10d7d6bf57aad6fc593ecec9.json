@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0008",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 106-58-1 is N,N'-dimethylpiperazine, a methylated salt-related derivative of piperazine; however the catalog entry matches core piperazine structure C1CNCCN1 substituted with two N-methyl groups, i.e., this is piperazine ring with methyl substitution on both nitrogens, matching 'Piperazine and its salts' scope since it is a derivative/alkylated piperazine core recognized under this entry's structural family.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 208,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 3.0686198999992484,
+  "runtime_source": "FRESH_API_CALL"
+}

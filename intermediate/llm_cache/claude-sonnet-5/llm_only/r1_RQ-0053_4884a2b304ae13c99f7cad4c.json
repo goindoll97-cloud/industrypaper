@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0053",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "Candidate CAS 471-29-4 (methylguanidine, SMILES CN=C(N)N) is a substituted guanidine derivative, matching the 'Guanidine and its salts' scope defined by reference substance 113-00-8 (C(=N)(N)N). The core guanidine functional group structure is present.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10155,
+  "output_tokens": 159,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.54396160000033,
+  "runtime_source": "FRESH_API_CALL"
+}

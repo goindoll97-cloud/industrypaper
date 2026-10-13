@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0022",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 127-17-3 (pyruvic acid, CC(=O)C(=O)O) does not match any catalog entry: it is not a chromium(VI), lead, malachite green, nonylphenol, or tributyltin compound, not part of any listed mixture, and is not oxalic, lactic, acetic, benzoic, salicylic, citric, succinic acid or its salts, piperazine, or guanidine.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10159,
+  "output_tokens": 193,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.565512999999555,
+  "runtime_source": "FRESH_API_CALL"
+}

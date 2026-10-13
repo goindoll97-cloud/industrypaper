@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0004",
+  "status": "FOUND",
+  "target_id": "MX::2010-1-603",
+  "reason": "Both candidate CAS numbers (1027326-93-7 and 31775-89-0) with matching SMILES exactly match the component_cas entries of mixture MX::2010-1-603, defined as pentaerythritol tetrakis/tris(3-mercaptobutanoate) mixture.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10267,
+  "output_tokens": 150,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.3724386000003506,
+  "runtime_source": "FRESH_API_CALL"
+}

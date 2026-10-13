@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0090",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 77-90-7 is tributyl acetylcitrate (acetyl tributyl citrate), an ester of citric acid, not citric acid itself or its salt. It is not enumerated in any catalog entry and esters are not covered by the 'Citric acid and its salts' scope, nor does it match any other catalog target (chromium, lead, malachite green, nonylphenol, TBT, or mixture entries).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10557,
+  "output_tokens": 188,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.850947000000815,
+  "runtime_source": "FRESH_API_CALL"
+}

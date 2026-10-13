@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0092",
+  "status": "FOUND",
+  "target_id": "CG::LEAD_COMPOUNDS",
+  "reason": "CAS 7758-95-4 (lead chloride, PbCl2) is an inorganic lead compound, falling under the 'Lead and its compounds' regulatory scope; though not explicitly enumerated, it matches the compound class definition.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10159,
+  "output_tokens": 141,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.091317400000662,
+  "runtime_source": "FRESH_API_CALL"
+}

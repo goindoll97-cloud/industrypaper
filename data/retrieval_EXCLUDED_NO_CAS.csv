@@ -1,0 +1,13 @@
+﻿case_id,category,target_id,target_scope_id,candidate_cas,candidate_components,query_mode,gold_label
+MX-017,MIXTURE,MX::2026-1-1328,2026-1-1328,,methylsilanetriol triphosphate|phosphoric acid,NO_CAS_QUERY,MATCH
+MX-019,MIXTURE,MX::2017-886,2017-886,,ethyl 1-cyclohexene-1-propanoate|ethyl 2-cyclohexene-1-propanoate,NO_CAS_QUERY,MATCH
+MX-020,MIXTURE,MX::2017-886,2017-886,,"4-(3,6-dihydro-4-methyl-2H-pyran-2-yl)-2-methoxyphenol|2-methoxy-4-(tetrahydro-4-methylene-2H-pyran-2-yl)phenol",NO_CAS_QUERY,NO_MATCH
+MX-021,MIXTURE,MX::2017-887,2017-887,,"4-(3,6-dihydro-4-methyl-2H-pyran-2-yl)-2-methoxyphenol|2-methoxy-4-(tetrahydro-4-methylene-2H-pyran-2-yl)phenol",NO_CAS_QUERY,MATCH
+MX-022,MIXTURE,MX::2017-887,2017-887,,"cis-1-(1,1-dimethylpropyl)-4-ethoxycyclohexane|trans-1-(1,1-dimethylpropyl)-4-ethoxycyclohexane",NO_CAS_QUERY,NO_MATCH
+MX-023,MIXTURE,MX::2017-890,2017-890,,"cis-1-(1,1-dimethylpropyl)-4-ethoxycyclohexane|trans-1-(1,1-dimethylpropyl)-4-ethoxycyclohexane",NO_CAS_QUERY,MATCH
+MX-024,MIXTURE,MX::2017-890,2017-890,,"α,α,4-trimethylbenzenepropanenitrile|α,α,2-trimethylbenzenepropanenitrile|α,α,3-trimethylbenzenepropanenitrile",NO_CAS_QUERY,NO_MATCH
+MX-025,MIXTURE,MX::2017-891,2017-891,,"α,α,4-trimethylbenzenepropanenitrile|α,α,2-trimethylbenzenepropanenitrile|α,α,3-trimethylbenzenepropanenitrile",NO_CAS_QUERY,MATCH
+MX-026,MIXTURE,MX::2017-891,2017-891,,"3,4,5,6,6-pentamethyl-2-heptanol|3,4,5,5,6-pentamethyl-2-heptanol|3,5,6,6-tetramethyl-4-methylene-2-heptanol|3,5,5,6-tetramethyl-4-methylene-2-heptanol",NO_CAS_QUERY,NO_MATCH
+MX-027,MIXTURE,MX::2017-892,2017-892,,"3,4,5,6,6-pentamethyl-2-heptanol|3,4,5,5,6-pentamethyl-2-heptanol|3,5,6,6-tetramethyl-4-methylene-2-heptanol|3,5,5,6-tetramethyl-4-methylene-2-heptanol",NO_CAS_QUERY,MATCH
+MX-028,MIXTURE,MX::2017-892,2017-892,,ethyl 1-cyclohexene-1-propanoate|ethyl 2-cyclohexene-1-propanoate,NO_CAS_QUERY,NO_MATCH
+MX-030,MIXTURE,MX::2023-1-1162,2023-1-1162,,methylsilanetriol triphosphate|phosphoric acid,NO_CAS_QUERY,NO_MATCH

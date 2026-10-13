@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0085",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 6915-15-7 (malic acid, C(C(C(=O)O)O)C(=O)O) does not match any catalog target's reference substance or enumerated members. It is not succinic, oxalic, lactic, acetic, benzoic, salicylic, citric acid, nor any chromium/lead/malachite green/nonylphenol/organotin entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10533,
+  "output_tokens": 176,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2895914999990055,
+  "runtime_source": "FRESH_API_CALL"
+}

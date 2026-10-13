@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0056",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 50-78-2 is acetylsalicylic acid (aspirin), with SMILES CC(=O)OC1=CC=CC=C1C(=O)O. This does not match any catalog entries: it is not a chromium(6+) compound, lead compound, malachite green salt, nonylphenol, trialkyltin compound, or any listed mixture. It is also not elemental salicylic acid (PS::69-72-7 refers specifically to salicylic acid, CAS 69-72-7, not its acetylated ester). No catalog target applies.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10171,
+  "output_tokens": 233,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 5.13148209999963,
+  "runtime_source": "FRESH_API_CALL"
+}

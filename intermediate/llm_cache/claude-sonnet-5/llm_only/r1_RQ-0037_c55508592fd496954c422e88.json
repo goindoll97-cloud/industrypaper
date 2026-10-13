@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0037",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 1806-26-4 (4-nonylphenol, para-substituted C9H19 phenol) matches the nonylphenol/nonylphenol ethoxylate catalog scope based on SMILES structure CCCCCCCCC1=CC=C(C=C1)O, consistent with isomer group of listed nonylphenol CAS numbers (e.g., 104-40-5, 25154-52-3, 136-83-4).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10170,
+  "output_tokens": 204,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.120188199999575,
+  "runtime_source": "FRESH_API_CALL"
+}

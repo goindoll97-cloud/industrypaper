@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0077",
+  "status": "FOUND",
+  "target_id": "PS::144-62-7",
+  "reason": "CAS 62-76-0 is disodium oxalate, the sodium salt of oxalic acid (SMILES shows oxalate dianion with two Na+), matching the 'Oxalic acid and its salts' reference scope.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10176,
+  "output_tokens": 127,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.40056100000038,
+  "runtime_source": "FRESH_API_CALL"
+}

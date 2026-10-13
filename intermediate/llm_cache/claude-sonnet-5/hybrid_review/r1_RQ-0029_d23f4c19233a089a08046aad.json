@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0029",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 141-82-2 is malonic acid (propanedioic acid), SMILES C(C(=O)O)C(=O)O. This does not match any catalog target's reference substance or enumerated members. It is structurally similar to but distinct from succinic acid, oxalic acid, and citric acid in the catalog, none of which represent malonic acid.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10528,
+  "output_tokens": 166,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.238466900000276,
+  "runtime_source": "FRESH_API_CALL"
+}

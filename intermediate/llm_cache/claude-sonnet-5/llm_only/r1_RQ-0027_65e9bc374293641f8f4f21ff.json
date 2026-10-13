@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0027",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 140-66-9 (4-tert-octylphenol) does not match any catalog entries. It is not nonylphenol (different alkyl chain, C8 vs C9), not a chromium/lead/malachite green/TBT compound, and not part of any listed mixture or parent substance category.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10177,
+  "output_tokens": 147,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.4755267999998978,
+  "runtime_source": "FRESH_API_CALL"
+}

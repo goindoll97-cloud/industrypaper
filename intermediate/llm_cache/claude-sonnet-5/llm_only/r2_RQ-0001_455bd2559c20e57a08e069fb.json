@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0001",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10025-73-7 (chromium trichloride, CrCl3) is a Cr(VI)-related chromium compound; matches the Chromium compounds catalog scope representing chromium chloride species within CG::CRVI_COMPOUNDS enumeration pattern (chromium chloride oxide species like 14977-61-8 are listed), consistent with chromium compound class though not exact enumerated CAS, closest catalog match is CRVI_COMPOUNDS group.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10163,
+  "output_tokens": 219,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 3.243422499999724,
+  "runtime_source": "FRESH_API_CALL"
+}

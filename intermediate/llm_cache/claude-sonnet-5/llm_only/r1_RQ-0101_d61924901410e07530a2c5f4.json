@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0101",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 824-35-1 is calcium benzoate (calcium salt of benzoic acid), not salicylic acid as structure shows unsubstituted benzoate with ortho-hydroxyl missing; actually SMILES shows a salicylate-like structure C(=C1)C(=O)O)[O-] with ortho O- but it's deprotonated phenol, matching salicylic acid salt pattern. However comparing to PS::65-85-0 (benzoic acid, no ring OH) vs PS::69-72-7 (salicylic acid, ring OH present) - candidate has ortho [O-] substituent on ring matching salicylate structure, so it matches calcium salicylate under PS::69-72-7.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10570,
+  "output_tokens": 290,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 7.828692000000956,
+  "runtime_source": "FRESH_API_CALL"
+}

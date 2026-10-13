@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0074",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 60-35-5 (acetamide, CC(=O)N) does not match any catalog target. It is not an acid/salt (not acetic acid, which is CH3COOH), nor a Cr/Pb/MG/nonylphenol/TBT compound, nor part of any mixture entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10520,
+  "output_tokens": 149,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8633549000005587,
+  "runtime_source": "FRESH_API_CALL"
+}

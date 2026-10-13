@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0056",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 50-78-2 is acetylsalicylic acid (aspirin, CC(=O)OC1=CC=CC=C1C(=O)O), which is not a salt of salicylic acid but an ester, and does not match any catalog entry including PS::69-72-7 (salicylic acid and its salts) since it is a distinct ester compound, nor any other listed target.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10537,
+  "output_tokens": 176,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.7233775000004243,
+  "runtime_source": "FRESH_API_CALL"
+}

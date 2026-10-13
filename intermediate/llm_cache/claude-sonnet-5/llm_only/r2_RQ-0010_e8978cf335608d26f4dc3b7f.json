@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0010",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 109-01-3 (N-methylpiperazine, SMILES CN1CCNCC1) does not match any catalog entry. It is structurally similar to piperazine (PS::110-85-0) but is a distinct substance (N-substituted derivative), not a listed salt of piperazine, and does not match any other enumerated members or regulatory scopes in the catalog.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10156,
+  "output_tokens": 180,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.398514499999692,
+  "runtime_source": "FRESH_API_CALL"
+}

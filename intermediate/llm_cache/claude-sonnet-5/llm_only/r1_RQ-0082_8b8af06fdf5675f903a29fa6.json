@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0082",
+  "status": "FOUND",
+  "target_id": "MX::2018-1-877",
+  "reason": "Candidate CAS 67634-20-2 and 68039-39-4 exactly match the two components of the mixture entry MX::2018-1-877, with matching SMILES structures as well.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10224,
+  "output_tokens": 114,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.322683600000346,
+  "runtime_source": "FRESH_API_CALL"
+}

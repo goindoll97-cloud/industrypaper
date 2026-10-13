@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0011",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 109-07-9 (2-methylpiperazine, SMILES CC1CNCCN1) is a methylated piperazine derivative, structurally a piperazine ring with a methyl substituent, falling under 'Piperazine and its salts' scope which covers piperazine and related salts/derivatives.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10156,
+  "output_tokens": 156,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.347845899999811,
+  "runtime_source": "FRESH_API_CALL"
+}

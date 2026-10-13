@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0090",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 77-90-7 (tributyl acetylcitrate / acetyl tributyl citrate ester) does not match any enumerated member CAS or structural scope in the catalog (not Cr(VI), lead, malachite green, nonylphenol, TBT, mixture, or simple acid/salt reference substances).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10191,
+  "output_tokens": 156,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.139174899999489,
+  "runtime_source": "FRESH_API_CALL"
+}

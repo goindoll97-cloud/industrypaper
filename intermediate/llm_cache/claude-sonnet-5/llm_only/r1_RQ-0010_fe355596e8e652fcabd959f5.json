@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0010",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 109-01-3 (N-methylpiperazine, SMILES CN1CCNCC1) is a piperazine derivative but not piperazine itself or its salt; it does not match PS::110-85-0 (piperazine, unsubstituted ring) nor any other catalog entry including Chromium, Lead, Malachite green, Nonylphenol, Tributyltin, or mixture entries.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 188,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.7933167000010144,
+  "runtime_source": "FRESH_API_CALL"
+}

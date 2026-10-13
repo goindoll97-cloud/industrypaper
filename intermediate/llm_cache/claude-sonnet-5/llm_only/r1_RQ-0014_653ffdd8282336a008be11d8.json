@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0014",
+  "status": "FOUND",
+  "target_id": "PS::144-62-7",
+  "reason": "Candidate CAS 1113-38-8 is diammonium oxalate, the ammonium salt of oxalic acid (C(=O)(C(=O)[O-])[O-].[NH4+].[NH4+]), matching the scope 'Oxalic acid and its salts' referenced by PS::144-62-7.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10179,
+  "output_tokens": 157,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 5.561371899999358,
+  "runtime_source": "FRESH_API_CALL"
+}

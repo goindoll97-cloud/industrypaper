@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0095",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate is silver iodide (AgI, CAS 7783-96-2), which does not match any catalog target. It is not a chromium(VI), lead, malachite green, nonylphenol, or trialkyltin compound, nor any of the listed mixtures or simple organic acids/bases/salts.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10520,
+  "output_tokens": 149,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5427897999998095,
+  "runtime_source": "FRESH_API_CALL"
+}

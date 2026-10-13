@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0008",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 106-58-1 (N,N'-dimethylpiperazine, SMILES CN1CCN(CC1)C) is a substituted derivative of piperazine core structure; however exact match is to piperazine salts scope which covers piperazine and its salts, and N,N'-dimethylpiperazine is closely related as a methylated piperazine derivative matching the piperazine regulatory scope family.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10159,
+  "output_tokens": 187,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.474172600000202,
+  "runtime_source": "FRESH_API_CALL"
+}

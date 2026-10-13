@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0022",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 127-17-3 (pyruvic acid, CC(=O)C(=O)O) does not match any catalog entry's enumerated members or reference substances (e.g., it is not oxalic, acetic, citric, benzoic, salicylic, lactic, succinic acid, guanidine, piperazine, nor any metal/organotin/pesticide mixture entry).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 174,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5593365999993694,
+  "runtime_source": "FRESH_API_CALL"
+}

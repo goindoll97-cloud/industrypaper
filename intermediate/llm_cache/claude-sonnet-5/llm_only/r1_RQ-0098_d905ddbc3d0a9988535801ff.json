@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0098",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Methyl acetate (CAS 79-20-9, SMILES CC(=O)OC) does not match any catalog entry - it is not a chromium(VI), lead, malachite green, nonylphenol, or tributyltin compound, nor does it match any listed mixture or parent-substance/salt reference entries (e.g., acetic acid salts are specifically acetate salts, not esters like methyl acetate).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10155,
+  "output_tokens": 185,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6952566999998453,
+  "runtime_source": "FRESH_API_CALL"
+}

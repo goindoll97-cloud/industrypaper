@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0075",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 61-73-4 (Malachite green chloride) matches the chloride salt member (CAS 569-64-2) with identical malachite green cation structure and chloride counterion, falling under the Malachite green salts scope.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10197,
+  "output_tokens": 128,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2342284999995172,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0112",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "Potassium lactate (CAS 996-31-6) is a potassium salt of lactic acid (CC(C(=O)[O-])O.[K+]), matching the catalog entry for Lactic acid and its salts, which covers all stereoisomers.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10531,
+  "output_tokens": 135,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.512833100001444,
+  "runtime_source": "FRESH_API_CALL"
+}

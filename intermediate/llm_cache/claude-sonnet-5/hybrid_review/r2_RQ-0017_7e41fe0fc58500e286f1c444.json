@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0017",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "CAS 120-51-4 (benzyl benzoate) is the benzyl ester of benzoic acid; however, the SMILES shows a benzoate ester, and the candidate matches PS::65-85-0 scope as benzoic acid derivative salt-like ester structure containing the benzoate moiety. Closest catalog match is benzoic acid and its salts given the C(=O)O-benzene core.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10543,
+  "output_tokens": 184,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 10.181855099999666,
+  "runtime_source": "FRESH_API_CALL"
+}

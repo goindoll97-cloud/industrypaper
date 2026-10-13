@@ -1,0 +1,65 @@
+{
+  "run_at_utc": "2026-10-01T14:02:15.430544+00:00",
+  "execute_llm": true,
+  "runtime_contract": {
+    "model": "claude-sonnet-5",
+    "prompt_version": "study2-retrieval-cas-smiles-v2-isomer-scope-20261001",
+    "system_prompt_sha256": "49a49189d89531bf9d10b5a39f920cc98456dabf082d9c34cd73c742dadf9bf0",
+    "n_repeats": 1,
+    "sampling_control": "MODEL_DEFAULT_NO_TEMPERATURE_PARAMETER",
+    "max_tokens": 700,
+    "effort": "medium"
+  },
+  "n_queries": 112,
+  "hybrid_direct_queries": 49,
+  "hybrid_review_queries": 63,
+  "expected_llm_only_calls": 112,
+  "expected_hybrid_llm_calls": 63,
+  "execution_order": "INTERLEAVED_BY_REPEAT_AND_QUERY_ALTERNATING_CONDITION_ORDER",
+  "force_fresh_calls": false,
+  "protocol_checks": {
+    "eval_common.py": true,
+    "retrieval_runtime.py": true,
+    "04_run_retrieval_llm_hybrid.py": true,
+    "hybrid_gate_preflight.csv": true,
+    "RETRIEVAL_DATASET_FREEZE.json": true,
+    "SHARED_PUBCHEM_FREEZE.json": true,
+    "prompt_manifest.csv": true,
+    "parent_engine_sha256": true,
+    "runtime_contract": true,
+    "rdkit_version": true,
+    "engine_version": true,
+    "engine_self_tests": true,
+    "prompts_recomputed_equal": true,
+    "gate_recomputed_equal": true
+  },
+  "frozen_input_checks": {
+    "retrieval_INPUT": true,
+    "regulatory_catalog": true,
+    "shared_pubchem_smiles": true
+  },
+  "frozen_protocol_sha256": "c2e8b444c217c25ec984e8375fb676c0d557ab3cde81f9f9adfeac6cc37b90de",
+  "repeat_completeness": {
+    "LLM_ONLY": {
+      "condition": "LLM_ONLY",
+      "expected_queries": 112,
+      "complete_queries": 112,
+      "required_ok_per_query": 1,
+      "min_ok_per_query": 1,
+      "max_ok_per_query": 1,
+      "incomplete": []
+    },
+    "HYBRID_REVIEW": {
+      "condition": "HYBRID_REVIEW",
+      "expected_queries": 63,
+      "complete_queries": 63,
+      "required_ok_per_query": 1,
+      "min_ok_per_query": 1,
+      "max_ok_per_query": 1,
+      "incomplete": []
+    }
+  },
+  "actual_llm_only_ok_calls": 112,
+  "actual_hybrid_ok_calls": 63,
+  "prediction_file_sha256": "7e9fb87bacf3e4bc2c3be8ccfa4ef83d44964a0b6574351520dec9130dadb878"
+}

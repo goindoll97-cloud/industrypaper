@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0079",
+  "status": "FOUND",
+  "target_id": "PS::64-19-7",
+  "reason": "CAS 64-19-7 with SMILES CC(=O)O matches exactly the reference substance acetic acid in catalog entry PS::64-19-7, which covers all stereoisomers (none applicable, achiral molecule).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10520,
+  "output_tokens": 128,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.1137646999995923,
+  "runtime_source": "FRESH_API_CALL"
+}

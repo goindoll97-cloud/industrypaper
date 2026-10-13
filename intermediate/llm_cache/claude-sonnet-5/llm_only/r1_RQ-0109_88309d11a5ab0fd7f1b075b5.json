@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0109",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 97-64-3 is ethyl lactate (CCOC(=O)C(C)O), an ester of lactic acid, not lactic acid or its salts. It does not match any catalog target's reference substance or enumerated members; it is structurally distinct (an ester, not an acid/salt) from PS::50-21-5 (lactic acid) and does not appear in any other category.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10526,
+  "output_tokens": 177,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5652179999997315,
+  "runtime_source": "FRESH_API_CALL"
+}

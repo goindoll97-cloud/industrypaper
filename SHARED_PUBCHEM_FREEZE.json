@@ -1,0 +1,26 @@
+{
+  "protocol": "STUDY2_SHARED_PUBCHEM_SMILES_V1",
+  "frozen_at_utc": "2026-10-01T13:47:05.877568+00:00",
+  "n_unique_cas": 222,
+  "structure_status_counts": {
+    "PUBCHEM_EXACT_CAS_VERIFIED": 206,
+    "PUBCHEM_NOT_FOUND": 14,
+    "PUBCHEM_MULTIPLE_CANDIDATES_REVIEW": 2
+  },
+  "evaluated_system_visible_columns": [
+    "cas",
+    "smiles",
+    "structure_status"
+  ],
+  "external_data_rule": "LLM-only and Hybrid must read the same shared_pubchem_smiles.csv. PubChem names, titles, synonyms, InChIKeys, CIDs, descriptions, classifications, and regulatory annotations are not model inputs.",
+  "exact_cas_qc_note": "PubChem synonym data may be used internally only to verify that a CAS lookup resolved to the exact record. This QC information is not supplied to either evaluated system.",
+  "retrieval_freeze_checks": {
+    "retrieval_INPUT.csv": true,
+    "regulatory_catalog.csv": true
+  },
+  "sha256": {
+    "RETRIEVAL_DATASET_FREEZE.json": "3bb8ea4a461db47335ff9fb14ec35e4cd7adf65cdf733521ae5a9498d648dde0",
+    "../identity_shared_runtime_V5.py": "f88b2ae61c9f5cc355e6b07080af1a2593c08f18832229bba7ddb50fea5bca4d",
+    "intermediate/shared_pubchem_smiles.csv": "4dc4b08da6d83cc341a811cca90bef1d28c8c2d09436c19d86413c36780b80db"
+  }
+}

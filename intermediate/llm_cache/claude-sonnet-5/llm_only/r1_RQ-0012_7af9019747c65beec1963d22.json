@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0012",
+  "status": "FOUND",
+  "target_id": "PS::110-15-6",
+  "reason": "CAS 110-15-6 and SMILES C(CC(=O)O)C(=O)O exactly match the reference substance for succinic acid and its salts, with no stereocenters, so ALL_STEREOISOMERS scope applies trivially.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 134,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.9618250000003172,
+  "runtime_source": "FRESH_API_CALL"
+}

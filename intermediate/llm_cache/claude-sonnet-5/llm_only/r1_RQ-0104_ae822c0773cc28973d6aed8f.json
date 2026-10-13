@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0104",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 900-95-8 (triphenyltin acetate) is structurally an organotin with acetate ester; however, the catalog scope is Trialkyl tin / Tributyl tin compounds and triphenyltin is triaryl not trialkyl. Reconsidering, triphenyltin acetate does not match the enumerated tributyltin/trialkyltin hydroxide members, which are all butyl-tin species, so no exact match exists.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10561,
+  "output_tokens": 206,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9916468000010354,
+  "runtime_source": "FRESH_API_CALL"
+}

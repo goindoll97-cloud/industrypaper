@@ -1,0 +1,73 @@
+{
+  "protocol": "STUDY2_LLM_VS_HYBRID_CAS_RETRIEVAL_V2",
+  "frozen_at_utc": "2026-10-01T14:01:41.526741+00:00",
+  "research_question": "Given candidate CAS identifier(s) and shared PubChem SMILES, retrieve the correct target from the full frozen regulatory catalog, or return NOT_FOUND.",
+  "systems": {
+    "LLM_ONLY": "Every query is evaluated by the LLM against the full frozen regulatory catalog.",
+    "HYBRID": "High-confidence exact-CAS, exact mixture-component, or unique RDKit parent/salt matches are decided deterministically; all remaining queries are sent to the same LLM with the same full-catalog prompt used by LLM-only."
+  },
+  "candidate_visible_information": [
+    "CAS identifier(s)",
+    "PubChem-derived SMILES for exactly those CAS identifiers"
+  ],
+  "forbidden_candidate_information": [
+    "candidate chemical name",
+    "PubChem title",
+    "PubChem synonyms",
+    "PubChem classification",
+    "candidate category",
+    "row-specific target scope",
+    "GOLD label or GOLD target"
+  ],
+  "runtime_contract": {
+    "model": "claude-sonnet-5",
+    "prompt_version": "study2-retrieval-cas-smiles-v2-isomer-scope-20261001",
+    "system_prompt_sha256": "49a49189d89531bf9d10b5a39f920cc98456dabf082d9c34cd73c742dadf9bf0",
+    "n_repeats": 1,
+    "sampling_control": "MODEL_DEFAULT_NO_TEMPERATURE_PARAMETER",
+    "max_tokens": 700,
+    "effort": "medium"
+  },
+  "hybrid_parent_engine": {
+    "parent_engine_path": "E:\\framework_chemical_regul\\study2_e2e_v6\\cheminformatics_identity_V5_FAIR.py",
+    "parent_engine_sha256": "40c60b04a2a6e91adec700ee36ac2f0c9d2da61d436c20bf978a8c474954eb37",
+    "engine_version": "V5.2_FAIR_SALT_AWARE_FROZEN_2026-09-30",
+    "policy_version": "parent-salt-policy-v5.2",
+    "rdkit_version": "2024.09.6",
+    "self_test_n": 18,
+    "self_test_passed": 18
+  },
+  "transport_amendment": "Deprecated temperature parameter was removed before any successful LLM evaluation call. Sampling uses the model default; all other frozen settings are explicit.",
+  "n_queries": 112,
+  "n_catalog_targets": 29,
+  "hybrid_gate_counts": {
+    "REVIEW": 63,
+    "FOUND": 49
+  },
+  "hybrid_gate_reason_counts": {
+    "NO_HIGH_CONFIDENCE_DETERMINISTIC_TARGET": 61,
+    "UNIQUE_RDKIT_PARENT_SALT_MATCH": 29,
+    "EXACT_CAS_IN_REGULATORY_CATALOG": 12,
+    "EXACT_MIXTURE_COMPONENT_CAS_SET": 8,
+    "MULTIPLE_PARENT_SALT_STRUCTURE_MATCHES": 1,
+    "NO_UNIQUE_EXACT_MIXTURE_COMPONENT_SET": 1
+  },
+  "expected_llm_only_calls": 112,
+  "expected_hybrid_llm_calls": 63,
+  "hybrid_review_prompt_identical_to_llm_only": true,
+  "frozen_input_checks": {
+    "retrieval_INPUT": true,
+    "regulatory_catalog": true,
+    "shared_pubchem_smiles": true
+  },
+  "sha256": {
+    "eval_common.py": "c1592665adf8090ab5bb43a28dc4400ca6c86fc8cf92c14421a5f6c8bcae7334",
+    "retrieval_runtime.py": "2cd885c06fe780bd4ccd22fdf5136e46e174a64278f9aef1fac4b5e4e69fd47e",
+    "04_run_retrieval_llm_hybrid.py": "7c48242236e679f828554c36a63a4a202275544cafc5342db690e0e462e9ed3c",
+    "../cheminformatics_identity_V5_FAIR.py": "40c60b04a2a6e91adec700ee36ac2f0c9d2da61d436c20bf978a8c474954eb37",
+    "RETRIEVAL_DATASET_FREEZE.json": "3bb8ea4a461db47335ff9fb14ec35e4cd7adf65cdf733521ae5a9498d648dde0",
+    "SHARED_PUBCHEM_FREEZE.json": "2614db869b9137583e6b328c257717d51049d82c6468ce421e9adc40ce9f5475",
+    "intermediate/hybrid_gate_preflight.csv": "681457d059525d214690578eee6198adbffcb765e2eebda10ac2bbd52bf58cc5",
+    "intermediate/prompt_manifest.csv": "aa2e3e269d07389f9691ff77ffd6d13d6e4391921298fb28634b62e4b480e66b"
+  }
+}

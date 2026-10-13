@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0057",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 506-93-4 is guanidine nitrate (guanidine salt of nitric acid), matching the catalog entry for Guanidine and its salts, which covers all stereoisomers (no stereocenters present).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10537,
+  "output_tokens": 124,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5999116000002687,
+  "runtime_source": "FRESH_API_CALL"
+}

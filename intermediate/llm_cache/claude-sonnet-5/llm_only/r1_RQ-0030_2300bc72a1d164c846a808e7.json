@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0030",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 142-63-2 is piperazine hexahydrate (piperazine + water), matching the piperazine salts/hydrates scope defined by reference SMILES C1CNCCN1 under PS::110-85-0.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10533,
+  "output_tokens": 126,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.9796913000009226,
+  "runtime_source": "FRESH_API_CALL"
+}

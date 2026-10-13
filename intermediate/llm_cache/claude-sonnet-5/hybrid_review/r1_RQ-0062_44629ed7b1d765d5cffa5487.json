@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0062",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 55-21-0 is benzamide (C1=CC=C(C=C1)C(=O)N), which does not match any catalog entry's enumerated members, reference substances, or mixture components. It is not a salt or stereoisomer of any listed acid/base, not a chromium, lead, malachite green, nonylphenol, or tributyltin compound, nor part of any listed mixture.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10532,
+  "output_tokens": 183,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.875194799999008,
+  "runtime_source": "FRESH_API_CALL"
+}

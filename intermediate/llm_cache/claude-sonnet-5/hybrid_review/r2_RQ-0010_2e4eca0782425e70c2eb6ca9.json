@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0010",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 109-01-3 (N-methylpiperazine) is a piperazine derivative but not piperazine itself or its salt; it does not match the structural scope (unsubstituted piperazine ring) of PS::110-85-0, nor any other catalog entry, including the enumerated lists for CrVI, Lead, Malachite Green, Nonylphenol, or Tributyltin compounds.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 182,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.8478303000010783,
+  "runtime_source": "FRESH_API_CALL"
+}

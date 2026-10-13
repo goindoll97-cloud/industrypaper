@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0052",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "The candidate CAS 4342-36-3 is tributyltin benzoate (CCCC[Sn](CCCC)(CCCC)OC(=O)C1=CC=CC=C1), a tributyltin compound (triorganotin), falling under the 'Tributyl tin compound' scope of the TBT catalog entry, which covers tributyltin esters/salts beyond the explicitly enumerated list.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10551,
+  "output_tokens": 197,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.619251500000246,
+  "runtime_source": "FRESH_API_CALL"
+}

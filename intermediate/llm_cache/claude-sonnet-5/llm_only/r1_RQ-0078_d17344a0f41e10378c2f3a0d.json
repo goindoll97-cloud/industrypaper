@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0078",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 633-03-4 is Ethyl Violet (N-ethyl analog of Malachite Green, with bisulfate counterion), not a listed salt of Malachite Green (dimethylamino groups). The catalog MG_SALTS entries all require the N,N-dimethylamino substituted triarylmethane cation, whereas the candidate has N,N-diethylamino groups - a different core structure, not merely a salt variant. No catalog entry matches this specific tetraethyl-substituted diphenylmethane dye compound.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10585,
+  "output_tokens": 229,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 4.472895099999732,
+  "runtime_source": "FRESH_API_CALL"
+}

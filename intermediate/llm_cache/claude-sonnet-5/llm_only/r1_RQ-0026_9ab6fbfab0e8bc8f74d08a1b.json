@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0026",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 136-83-4 with SMILES matching nonylphenol structure is explicitly enumerated as a member of the Nonylphenols/NPE catalog group.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10168,
+  "output_tokens": 116,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.735330000000431,
+  "runtime_source": "FRESH_API_CALL"
+}

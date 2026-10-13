@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0014",
+  "status": "FOUND",
+  "target_id": "PS::144-62-7",
+  "reason": "CAS 1113-38-8 is diammonium oxalate, an ammonium salt of oxalic acid (C(=O)(C(=O)[O-])[O-].[NH4+].[NH4+]), matching catalog entry Oxalic acid and its salts which covers all salts/stereoisomers.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10545,
+  "output_tokens": 153,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.8045984000000317,
+  "runtime_source": "FRESH_API_CALL"
+}

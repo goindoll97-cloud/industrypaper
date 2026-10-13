@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0086",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "CAS 72-17-3 (sodium lactate) is the sodium salt of lactic acid, SMILES CC(C(=O)[O-])O.[Na+] matches lactic acid's salt form under PS::50-21-5 'Lactic acid and its salts'.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10166,
+  "output_tokens": 142,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.243054000000484,
+  "runtime_source": "FRESH_API_CALL"
+}

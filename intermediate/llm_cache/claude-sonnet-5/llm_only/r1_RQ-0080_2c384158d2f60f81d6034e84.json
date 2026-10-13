@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0080",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 65-45-2 is salicylamide (2-hydroxybenzamide), not an acid or its salt. It does not match salicylic acid (69-72-7, carboxylic acid) or any other catalog entry, including metal/organotin/chromium/lead compound lists or mixture definitions.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10535,
+  "output_tokens": 150,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.748915800000759,
+  "runtime_source": "FRESH_API_CALL"
+}

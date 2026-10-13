@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0001",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10025-73-7 (chromium(III) chloride, CrCl3) - wait, actually CrCl3 is Cr(III) not Cr(VI); however matching against catalog, no exact match found for CrCl3. Closest candidate is Cr+6 generic entry 18540-29-9, but formula differs (CrCl3 vs Cr6+ ion). No enumerated member matches CrCl3 structurally.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 201,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.571205600000212,
+  "runtime_source": "FRESH_API_CALL"
+}

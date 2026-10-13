@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0037",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 1806-26-4 (4-nonylphenol, SMILES CCCCCCCCC1=CC=C(C=C1)O) matches the nonylphenol structural pattern covered under CG::NONYLPHENOL_NPE, which enumerates various nonylphenol isomers including the para-substituted nonylphenol (e.g., CAS 104-40-5 with identical structure/formula), indicating it falls within the regulatory scope of nonylphenols despite not being explicitly enumerated by this exact CAS.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10536,
+  "output_tokens": 238,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.145101199999772,
+  "runtime_source": "FRESH_API_CALL"
+}

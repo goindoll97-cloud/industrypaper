@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0070",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "CAS 582-25-2 is potassium benzoate, a salt of benzoic acid (C6H5COOH), matching the benzoic acid and its salts catalog entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10539,
+  "output_tokens": 110,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.902701299999535,
+  "runtime_source": "FRESH_API_CALL"
+}

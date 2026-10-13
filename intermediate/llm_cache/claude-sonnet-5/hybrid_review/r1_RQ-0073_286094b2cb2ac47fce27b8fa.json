@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0073",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 598-81-2 is (S)-lactamide (2-hydroxypropanamide), an amide not an acid or salt. It does not match any catalog target; it is not lactic acid (PS::50-21-5) since it lacks the carboxylic acid group, and no other catalog entry covers amides of lactic acid.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10527,
+  "output_tokens": 163,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.7588295999994443,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0087",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 7342-47-4 is tributyltin iodide, a tributyltin compound (CCCC[Sn](CCCC)(CCCC)I) falling under the 'Tributyl tin compound' scope of CG::TBT_TRIALKYLTIN, analogous to other listed tributyltin salts like the chloride and fluoride.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10535,
+  "output_tokens": 176,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8401764999998704,
+  "runtime_source": "FRESH_API_CALL"
+}

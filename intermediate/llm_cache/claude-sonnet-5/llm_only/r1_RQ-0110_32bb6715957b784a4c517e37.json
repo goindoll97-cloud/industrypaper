@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0110",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 99-14-9 (tricarballylic acid, SMILES C(C(CC(=O)O)C(=O)O)C(=O)O) does not match any catalog entry. It is not citric acid, succinic acid, or any other listed reference substance, nor any enumerated chromium, lead, malachite green, nonylphenol, or tributyltin compound, nor part of any mixture entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10172,
+  "output_tokens": 182,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.624053300000014,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0011",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 109-07-9 (2-methylpiperazine) is a substituted piperazine, a methylated derivative of piperazine ring sharing the core piperazine structure; however the catalog entry covers piperazine and its salts specifically. The SMILES CC1CNCCN1 is 2-methylpiperazine, a ring-substituted piperazine derivative, which is considered under 'Piperazine and its salts' scope as a salt/derivative match given the shared core structure.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 208,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 4.8970552000009775,
+  "runtime_source": "FRESH_API_CALL"
+}

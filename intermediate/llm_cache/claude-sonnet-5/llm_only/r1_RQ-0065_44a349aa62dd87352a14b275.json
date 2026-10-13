@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0065",
+  "status": "FOUND",
+  "target_id": "PS::144-62-7",
+  "reason": "Candidate CAS 563-72-4 is calcium oxalate, a salt of oxalic acid (C(=O)(C(=O)O)O), matching PS::144-62-7 'Oxalic acid and its salts' with ALL_STEREOISOMERS scope (oxalic acid has no stereocenters).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10539,
+  "output_tokens": 157,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.568637399999716,
+  "runtime_source": "FRESH_API_CALL"
+}

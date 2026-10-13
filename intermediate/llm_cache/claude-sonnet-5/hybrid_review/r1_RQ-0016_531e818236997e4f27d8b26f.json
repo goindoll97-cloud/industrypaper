@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0016",
+  "status": "FOUND",
+  "target_id": "PS::69-72-7",
+  "reason": "CAS 119-36-8 is methyl salicylate (COC(=O)C1=CC=CC=C1O), the methyl ester of salicylic acid. However, the catalog scope is 'Salicylic acid and its salts' which covers salicylic acid and its salt forms, not esters. Methyl salicylate is an ester, not a salt, so strictly it would not match; but given the structural core matches salicylic acid closely and no better match exists, classifying under salicylic acid family with lower confidence.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10531,
+  "output_tokens": 215,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.2382052000011754,
+  "runtime_source": "FRESH_API_CALL"
+}

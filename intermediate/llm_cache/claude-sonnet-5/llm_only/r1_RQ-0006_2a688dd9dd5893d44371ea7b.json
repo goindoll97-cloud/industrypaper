@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0006",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 104-43-8 (4-dodecylphenol) does not match any catalog entry; it is structurally similar to but distinct from nonylphenol (CAS 104-40-5, decylphenol) listed under CG::NONYLPHENOL_NPE, with a different alkyl chain length (C12 vs C9/C10). No exact match found in any catalog group.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10539,
+  "output_tokens": 175,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.387984900000447,
+  "runtime_source": "FRESH_API_CALL"
+}

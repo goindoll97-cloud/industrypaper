@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0104",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 900-95-8 is triphenyltin acetate (fentin acetate), an organotin compound with a tin center bearing three phenyl groups and an acetate ester (Sn(C6H5)3(OC(=O)CH3)). While not a tributyltin compound specifically, it falls under the broader category of triorganotin compounds covered by the TBT/trialkyltin catalog entry, which references tributyltin and related trialkyltin compounds including esters like acetate (CAS 56-35-9 analog structure, where phenyl replaces butyl). Given the structural analogy to the enumerated tributyltin acetate-type esters and the catalog's broad language covering trialkyltin compounds and mixtures containing them, this is the best match despite phenyl vs butyl substitution differences.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10561,
+  "output_tokens": 321,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 4.556734999998298,
+  "runtime_source": "FRESH_API_CALL"
+}

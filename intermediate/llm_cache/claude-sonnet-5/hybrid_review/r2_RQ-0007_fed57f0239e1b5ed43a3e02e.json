@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0007",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 106-57-0 (glycine anhydride / piperazine-2,5-dione, SMILES C1C(=O)NCC(=O)N1) does not match any catalog target. It is not a chromium, lead, malachite green, nonylphenol, or tributyltin compound, nor does it match any mixture or single-substance (succinic acid, piperazine, guanidine, oxalic acid, lactic acid, acetic acid, benzoic acid, salicylic acid, citric acid) reference structures.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 219,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.9323760000006587,
+  "runtime_source": "FRESH_API_CALL"
+}

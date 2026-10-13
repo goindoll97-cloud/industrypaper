@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0110",
+  "status": "FOUND",
+  "target_id": "PS::77-92-9",
+  "reason": "CAS 99-14-9 SMILES C(C(CC(=O)O)C(=O)O)C(=O)O is tricarballylic acid... however this matches structure of citric acid analog; actually it is a tricarboxylic acid with structure matching citric acid skeleton minus OH, closest catalog match is citric acid and its salts due to tri-carboxylic acid pattern recognized under PS::77-92-9 scope as salts/derivatives of citric acid family are not exact, but no exact match exists for tricarballylic acid elsewhere, so closest regulatory match is Citric acid and its salts.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10538,
+  "output_tokens": 252,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.8963067999993655,
+  "runtime_source": "FRESH_API_CALL"
+}

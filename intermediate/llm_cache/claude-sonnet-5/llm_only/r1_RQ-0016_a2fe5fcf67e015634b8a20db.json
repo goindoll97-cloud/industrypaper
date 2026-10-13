@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0016",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 119-36-8 (methyl salicylate) is an ester of salicylic acid, not salicylic acid itself or one of its salts. PS::69-72-7 covers salicylic acid and its salts, but esters are structurally distinct and not included. No other catalog entry matches this compound.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10531,
+  "output_tokens": 150,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.5749374000006355,
+  "runtime_source": "FRESH_API_CALL"
+}

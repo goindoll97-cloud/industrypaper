@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0054",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 471-46-5 with SMILES C(=O)(C(=O)N)N is oxamide (oxalic acid diamide), not oxalic acid itself or any salt thereof. It does not match any enumerated members or reference substances (including PS::144-62-7 Oxalic acid, whose reference is a carboxylic acid, not an amide) in the catalog.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10527,
+  "output_tokens": 177,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5943795000002865,
+  "runtime_source": "FRESH_API_CALL"
+}

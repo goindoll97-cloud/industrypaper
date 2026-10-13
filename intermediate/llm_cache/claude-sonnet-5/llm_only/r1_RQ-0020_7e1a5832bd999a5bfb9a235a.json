@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0020",
+  "status": "FOUND",
+  "target_id": "PS::64-19-7",
+  "reason": "CAS 127-08-2 is potassium acetate, a salt of acetic acid (SMILES CC(=O)[O-].[K+] matches acetate anion with potassium cation), matching the 'Acetic acid and its salts' catalog entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10161,
+  "output_tokens": 135,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.126129899999796,
+  "runtime_source": "FRESH_API_CALL"
+}

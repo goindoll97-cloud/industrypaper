@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0019",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 123-56-8 (succinimide, SMILES C1CC(=O)NC1=O) does not match any catalog entry. It is structurally related to succinic acid (PS::110-15-6) but is a cyclic imide, not succinic acid or one of its salts, so it is not covered by that entry's scope. No other catalog target matches.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10526,
+  "output_tokens": 170,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5215530000004946,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0091",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 77-93-0 (triethyl citrate) does not match citric acid itself (77-92-9) nor any other catalog entry; it is an ester, not citric acid or a salt of it, and none of the other catalog groups (chromium, lead, malachite green, nonylphenol, tributyltin, mixtures) apply.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10179,
+  "output_tokens": 159,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.745025799999894,
+  "runtime_source": "FRESH_API_CALL"
+}

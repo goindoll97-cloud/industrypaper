@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0053",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 471-29-4 (methylguanidine, CN=C(N)N) is a substituted guanidine salt-forming analog; however, checking the structure, it is methylguanidine which is a guanidine derivative. Matched to guanidine and its salts category based on core guanidine functional group match in scope description.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10521,
+  "output_tokens": 152,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.518835400000171,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0042",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "CAS 2090-05-3 is calcium benzoate, with SMILES showing two benzoate anions and a calcium cation, matching the 'Benzoic acid and its salts' scope under PS::65-85-0.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10199,
+  "output_tokens": 124,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.8290948000003482,
+  "runtime_source": "FRESH_API_CALL"
+}

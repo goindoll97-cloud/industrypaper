@@ -1,0 +1,64 @@
+{
+  "protocol": "VALIDATION_V2_DERIVED_CAS_ONLY_RETRIEVAL_V2",
+  "source_validation_frozen_n": 132,
+  "regulatory_catalog_targets": 29,
+  "retrieval_query_n": 112,
+  "query_gold_status_counts": {
+    "FOUND": 60,
+    "NOT_FOUND": 52
+  },
+  "retrieval_scope_review_required_n": 52,
+  "excluded_no_cas_pairwise_rows": 12,
+  "excluded_no_cas_unique_targets": 7,
+  "input_policy": "Candidate-side input is CAS identifier(s) only. Single substances use one CAS. Named mixtures without a mixture CAS may use an all-CAS component set. No candidate names, row-specific target scopes, categories, GOLD labels, or regulatory IDs are present in retrieval_INPUT.csv.",
+  "catalog_policy": "Catalog identity fields are derived only from frozen target/reference fields and the frozen regulatory-group reference. No mixture CAS is back-filled from a GOLD MATCH candidate. Named mixtures are represented by scope text and target component CAS set.",
+  "gold_review_policy": "FOUND targets reuse frozen verified pairwise MATCH provenance. Derived NOT_FOUND and any MULTI_TARGET result require separate researcher review against the complete 29-target catalog before retrieval freeze.",
+  "external_data_policy": "At runtime, PubChem may be queried only to obtain SMILES for CAS identifiers. PubChem titles, synonyms, names, classifications, and regulatory annotations must not be supplied to either evaluated system.",
+  "validation_freeze_verification": {
+    "freeze_file": "E:\\framework_chemical_regul\\study2_e2e_v6\\validation_v2\\VALIDATION_V2_FREEZE.json",
+    "sha_checks": {
+      "data/validation_master_INPUT.csv": true,
+      "data/validation_master_GOLD.csv": true,
+      "regulatory_group_reference.py": true
+    }
+  },
+  "sha256": {
+    "validation_master_INPUT.csv": "a9007ca0a9bc0f015a4b80b61ce3e5958a184f64ca1396e070f6e2c048f4b316",
+    "validation_master_GOLD.csv": "5a10aa8875bcffd4b8d92169f4997f05675ae7df86b80067112c98f4a16cc2d4",
+    "regulatory_catalog.csv": "177497b6aa1d9688836a72f160dde722512e92595e65bdc6cf5c1ad432276f6e",
+    "retrieval_INPUT.csv": "1e6e34249e852370d8f8dd917a42b66947a41a10a1fd070c82c32511b5c86c71",
+    "retrieval_GOLD.csv": "c8fe5673cbd6fa25057f2b730d1c64abcd87ba1bf61dd5315ab9a2e298d4db2b",
+    "retrieval_EXCLUDED_NO_CAS.csv": "5c8d2eb4637ecb3924c481895500bc62a0a4c2aa4209da25760c89b347fe40c0",
+    "reference/mixture_regulatory_reference.csv": "fc95fd75051128190f2ed587bca874f11ab24ab058dcc41f7654dbc4f22af5c2",
+    "mixture_regulatory_reference_applied.csv": "de9f00c1cfbb7b0509887e5c0a59db9ebfcc6764704acf3ad389c76bf286a46c",
+    "retrieval_CAS_CORRECTIONS.csv": "f50414b8a0263431ca83106a697066bce4cb32e612ec0854bfd091904cb561b3",
+    "review/retrieval_gold_overrides.csv": "904ec59cb42c02e95730680f865f525bcc6538aaab5370694e6fc064600628da"
+  },
+  "independent_mixture_regulatory_reference": {
+    "policy": "Official mixture CAS values are added only from an independent official regulatory reference and never inferred from retrieval GOLD or a MATCH candidate row.",
+    "reference_file": "reference/mixture_regulatory_reference.csv",
+    "reference_sha256": "fc95fd75051128190f2ed587bca874f11ab24ab058dcc41f7654dbc4f22af5c2",
+    "n_reference_rows": 1,
+    "applied_targets": [
+      {
+        "target_id": "MX::2023-1-1162",
+        "official_mixture_cas": "78643-41-1",
+        "source_name": "Korea Law Information Center"
+      }
+    ]
+  },
+  "cas_correction_policy": "Frozen Validation V2 source files are unchanged. Documented source CAS inconsistencies are normalized only in the derived retrieval representation when independently verified. The correction audit contains no run timestamp so repeated builds are hash-stable.",
+  "cas_corrections": [
+    {
+      "original_cas": "3084-48-0",
+      "corrected_cas": "3084-48-8",
+      "chemical_identity": "trihexylphosphine oxide",
+      "reason": "Source CAS fails CAS checksum; corrected CAS 3084-48-8 has valid checksum and is independently associated with trihexylphosphine oxide.",
+      "evidence_url_1": "https://www.chemicalbook.com/ChemicalProductProperty_KR_CB2918549.htm",
+      "evidence_url_2": "https://www.alfa-chemistry.com/cas_3084-48-8.htm"
+    }
+  ],
+  "cas_correction_audit_rows": 2,
+  "gold_overrides": [],
+  "gold_override_policy": "Derived retrieval GOLD may be corrected only through a versioned override file with required evidence; every overridden row requires fresh researcher approval. All overrides must be reported, including whether they were prompted by a Hybrid-gate conflict."
+}

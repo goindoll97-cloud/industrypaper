@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0002",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10049-05-5 (chromium(III) chloride, Cl[Cr]Cl) is chromium chloride; however catalog entry 14977-61-8 represents Cr(VI) oxychloride dichloride dioxide with distinct stoichiometry. The candidate SMILES Cl[Cr]Cl matches chromium chloride form closest to CrVI compounds list given Cr-Cl bonding pattern and lack of better match elsewhere in catalog; classified under CRVI_COMPOUNDS as closest enumerated chromium compound group.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10159,
+  "output_tokens": 248,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.4959994999999253,
+  "runtime_source": "FRESH_API_CALL"
+}

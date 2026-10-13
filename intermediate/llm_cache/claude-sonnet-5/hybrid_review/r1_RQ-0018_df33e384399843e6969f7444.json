@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0018",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 123-25-1 (diethyl succinate, CCOC(=O)CCC(=O)OCC) is an ester of succinic acid, not succinic acid or its salt itself. None of the catalog entries cover esters; the PS::110-15-6 scope is limited to succinic acid and its salts, which does not extend to ester derivatives. No other catalog entry matches this structure.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10531,
+  "output_tokens": 181,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.0947129000014684,
+  "runtime_source": "FRESH_API_CALL"
+}

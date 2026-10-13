@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0053",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 471-29-4, methylguanidine (CN=C(N)N), is a substituted guanidine; however the catalog entry PS::113-00-8 covers 'Guanidine and its salts' with reference substance guanidine (C(=N)(N)N). Methylguanidine is an N-substituted derivative, not a salt of guanidine itself, but given no closer match exists in the catalog and it is structurally the guanidine class, this is the best match though with reduced certainty.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10521,
+  "output_tokens": 208,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.0523721000008663,
+  "runtime_source": "FRESH_API_CALL"
+}

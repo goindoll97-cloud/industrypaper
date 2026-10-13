@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0011",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 109-07-9 is 2-methylpiperazine, a substituted piperazine derivative; SMILES CC1CNCCN1 matches piperazine ring core with methyl substitution, falling under 'Piperazine and its salts' scope which covers piperazine derivatives/salts.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 152,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.5723536999994394,
+  "runtime_source": "FRESH_API_CALL"
+}

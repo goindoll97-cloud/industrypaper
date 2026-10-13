@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0106",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Methyl benzoate (CAS 93-58-3) does not match any catalog target; it is not a chromium, lead, malachite green, nonylphenol, tributyltin compound, mixture, or listed acid/salt reference substance.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10164,
+  "output_tokens": 128,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2554757000007157,
+  "runtime_source": "FRESH_API_CALL"
+}

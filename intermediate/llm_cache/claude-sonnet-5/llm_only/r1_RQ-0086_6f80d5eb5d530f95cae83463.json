@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0086",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "CAS 72-17-3 is sodium lactate (CC(C(=O)[O-])O.[Na+]), a salt of lactic acid, matching the catalog entry PS::50-21-5 which covers lactic acid and its salts with ALL_STEREOISOMERS scope.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10532,
+  "output_tokens": 147,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9317508000003727,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0010",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 109-01-3 (N-methylpiperazine, CN1CCNCC1) is a methylated derivative/salt-class analog of piperazine (110-85-0, C1CNCCN1); however, exact match only applies to piperazine and its salts, not substituted derivatives. Reassessing: N-methylpiperazine is a distinct substance, not a salt of piperazine, so no exact match exists in catalog.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10156,
+  "output_tokens": 191,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9342979000002742,
+  "runtime_source": "FRESH_API_CALL"
+}

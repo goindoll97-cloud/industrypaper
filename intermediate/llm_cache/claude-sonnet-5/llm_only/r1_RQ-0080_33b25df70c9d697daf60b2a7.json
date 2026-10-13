@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0080",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 65-45-2 (salicylamide, 2-hydroxybenzamide) does not match any catalog entry. It is structurally related to salicylic acid (PS::69-72-7) but is an amide, not an acid or salt, so it does not fall within 'Salicylic acid and its salts' scope. No other catalog target matches this structure.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10169,
+  "output_tokens": 171,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8121177000002717,
+  "runtime_source": "FRESH_API_CALL"
+}

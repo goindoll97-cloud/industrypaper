@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0003",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10101-63-0 is Chromium(6+) oxide dichloride-related chromate species; matches enumerated member list under CG::CRVI_COMPOUNDS catalog (CAS 14977-61-8 chromyl chloride family); given no SMILES provided, identification based on CAS match to chromium(VI) compounds catalog as the only plausible chromium compound group listed.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10513,
+  "output_tokens": 192,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.8059437000010803,
+  "runtime_source": "FRESH_API_CALL"
+}

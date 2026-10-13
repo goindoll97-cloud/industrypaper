@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0078",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 633-03-4 is the bisulfate (hydrogen sulfate) salt of malachite green, matching the N,N,N',N'-tetraethyl diaminotriphenylmethane cation structure consistent with malachite green salt family listed under CG::MG_SALTS (ethyl analog variant of the enumerated malachite green salts).",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10219,
+  "output_tokens": 172,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3868405000002895,
+  "runtime_source": "FRESH_API_CALL"
+}

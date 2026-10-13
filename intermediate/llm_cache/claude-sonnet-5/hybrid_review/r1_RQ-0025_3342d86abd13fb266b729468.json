@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0025",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 1314-98-3 (zinc sulfide, [S-2].[Zn+2]) does not match any catalog entry. It is not a chromium compound, lead compound, malachite green salt, nonylphenol, tributyltin compound, listed mixture, or any pure-substance acid/base scope entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10526,
+  "output_tokens": 158,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5473585999989155,
+  "runtime_source": "FRESH_API_CALL"
+}

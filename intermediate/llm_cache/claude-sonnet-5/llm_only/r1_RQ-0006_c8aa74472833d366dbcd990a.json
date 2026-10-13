@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0006",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 104-43-8 (4-dodecylphenol) is not enumerated in any catalog target; the nonylphenol list only contains nonyl-substituted phenols (C9), not dodecylphenol (C12), and no other category matches.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10173,
+  "output_tokens": 133,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.9986814000003505,
+  "runtime_source": "FRESH_API_CALL"
+}

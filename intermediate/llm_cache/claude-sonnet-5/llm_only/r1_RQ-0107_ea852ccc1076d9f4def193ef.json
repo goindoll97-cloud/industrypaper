@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0107",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 93-89-0 is ethyl benzoate, not an ester/salt of benzoic acid itself but a different substance; it does not match any enumerated members of the catalog's compound classes (chromium, lead, malachite green, nonylphenol, organotin) nor any mixture or acid/salt reference (benzoic acid salts entry covers only benzoic acid and its salts, not esters like ethyl benzoate). No catalog target applies.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10532,
+  "output_tokens": 202,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.1136266000012256,
+  "runtime_source": "FRESH_API_CALL"
+}

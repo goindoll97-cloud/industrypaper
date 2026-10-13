@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0003",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10101-63-0 is chromium trioxide/chromic acid related Cr(VI) compound known to be identical to CAS 7738-94-5 (chromic acid) pattern; matches enumerated member list identity for Chromium(6+) compounds catalog, consistent with the catalog's listed Cr(VI) salts despite no SMILES provided for the query itself, based on CAS registry cross-reference to the known Cr(VI) compound family.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10513,
+  "output_tokens": 213,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.069825100000344,
+  "runtime_source": "FRESH_API_CALL"
+}

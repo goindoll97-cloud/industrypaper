@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0088",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Sodium chloride (CAS 7647-14-5) does not match any catalog target. It is not a chromium(6+) compound, lead compound, malachite green salt, nonylphenol, tributyltin compound, listed mixture, or any of the organic acid/salt parent substances (no carbon backbone matching succinic, piperazine, guanidine, oxalic, lactic, acetic, benzoic, salicylic, or citric acid).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 195,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.076185299998542,
+  "runtime_source": "FRESH_API_CALL"
+}

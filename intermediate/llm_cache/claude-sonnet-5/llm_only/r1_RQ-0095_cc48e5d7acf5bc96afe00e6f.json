@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0095",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Silver iodide (CAS 7783-96-2) is not an enumerated member of any catalog target group. It is neither a chromium(VI) compound, lead compound, malachite green salt, nonylphenol/NPE, trialkyltin compound, nor any listed mixture or reference substance salt.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10154,
+  "output_tokens": 149,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5089974000002258,
+  "runtime_source": "FRESH_API_CALL"
+}

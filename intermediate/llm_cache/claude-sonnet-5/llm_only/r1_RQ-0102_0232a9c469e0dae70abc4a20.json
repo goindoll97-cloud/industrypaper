@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0102",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 83042-08-4 is pyridinium chromium oxide fluoride salt, containing CrO3 (chromium VI) moiety as pyridinium chlorochromate analog; the candidate SMILES shows pyridinium cation with CrO3 and fluoride, matching the Chromium(6+) compounds scope (hexavalent chromium species), analogous to enumerated Cr(VI) salts in CG::CRVI_COMPOUNDS.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10544,
+  "output_tokens": 216,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.4082109999999375,
+  "runtime_source": "FRESH_API_CALL"
+}

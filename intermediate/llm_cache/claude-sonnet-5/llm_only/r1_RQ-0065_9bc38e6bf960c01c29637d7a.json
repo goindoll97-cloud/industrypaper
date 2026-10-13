@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0065",
+  "status": "FOUND",
+  "target_id": "PS::144-62-7",
+  "reason": "Calcium oxalate (CAS 563-72-4, SMILES C(=O)(C(=O)[O-])[O-].[Ca+2]) is a calcium salt of oxalic acid, matching the 'Oxalic acid and its salts' scope.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10173,
+  "output_tokens": 138,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.347307600000022,
+  "runtime_source": "FRESH_API_CALL"
+}

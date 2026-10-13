@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0006",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 104-43-8 (4-dodecylphenol) is a para-substituted alkylphenol but does not match any enumerated member of CG::NONYLPHENOL_NPE (which lists specific nonylphenol isomers, CAS 104-40-5, 136-83-4, 139-84-4, etc., all with nonyl C9 chains), nor any other catalog target. It is not a nonylphenol (dodecyl vs nonyl chain) and does not appear in any other listed category.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10539,
+  "output_tokens": 214,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.961172199999055,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0029",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 141-82-2 (malonic acid, C(C(=O)O)C(=O)O) does not match any catalog target. It is structurally similar but distinct from succinic acid (110-15-6), oxalic acid (144-62-7), and other listed PS acids; no exact match exists in the catalog.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10162,
+  "output_tokens": 152,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.4627334999995583,
+  "runtime_source": "FRESH_API_CALL"
+}

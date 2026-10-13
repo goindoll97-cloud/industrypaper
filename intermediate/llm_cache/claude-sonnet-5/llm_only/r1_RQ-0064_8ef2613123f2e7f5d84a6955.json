@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0064",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 56-36-0 (tributyltin acetate) matches the regulatory scope of tributyltin compounds covered under CG::TBT_TRIALKYLTIN; SMILES shows a tributyltin moiety bonded to an acetate ester, consistent with the catalog's tributyltin compound category even though not explicitly enumerated, as it falls under the general class definition.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10540,
+  "output_tokens": 187,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6184938000005786,
+  "runtime_source": "FRESH_API_CALL"
+}

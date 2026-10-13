@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0003",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 10101-63-0 corresponds to Chromium(III) sulfate, which is not an enumerated Chromium(6+) compound member nor matches any other catalog entry. The catalog CG::CRVI_COMPOUNDS lists specific Cr(VI) salts/species, and 10101-63-0 (Cr2(SO4)3) is not among them, nor does it fit any other target's scope.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10147,
+  "output_tokens": 185,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.710526099999697,
+  "runtime_source": "FRESH_API_CALL"
+}

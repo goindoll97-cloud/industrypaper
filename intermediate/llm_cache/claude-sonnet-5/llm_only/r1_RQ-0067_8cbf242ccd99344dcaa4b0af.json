@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0067",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 57-00-1 (creatine, CN(CC(=O)O)C(=N)N) is a guanidine derivative but not guanidine itself or a salt thereof; it does not match any catalog entry's enumerated members or reference substances exactly. Guanidine (113-00-8) is listed separately as a distinct substance scope, and creatine is a distinct compound, not a salt of guanidine.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10164,
+  "output_tokens": 184,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.648591799999849,
+  "runtime_source": "FRESH_API_CALL"
+}

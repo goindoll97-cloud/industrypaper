@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0001",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10025-73-7 (chromium(III) chloride, CrCl3) is a chromium compound; however checking SMILES Cl[Cr](Cl)Cl shows Cr with no explicit oxidation state marker but structurally represents CrCl3. Given the candidate matches chromium chloride and the catalog's CRVI_COMPOUNDS list includes chromium(VI)-related species like CrO3 and dichromates; closest chemical match by formula pattern is chromium chloride entries, but none of enumerated members matches CrCl3 exactly (14977-61-8 is CrO2Cl2 as Cr+6 with O and Cl). CrCl3 (10025-73-7) is trivalent chromium, not hexavalent, so it does not belong to the Cr(VI) compounds catalog.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 330,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 4.698948699999164,
+  "runtime_source": "FRESH_API_CALL"
+}

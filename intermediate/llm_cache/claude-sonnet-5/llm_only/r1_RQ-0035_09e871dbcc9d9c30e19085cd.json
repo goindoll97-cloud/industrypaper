@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0035",
+  "status": "FOUND",
+  "target_id": "PS::110-15-6",
+  "reason": "CAS 150-90-3 is disodium succinate, the sodium salt of succinic acid (C(CC(=O)O)C(=O)O), matching PS::110-15-6 'Succinic acid and its salts' with ALL_STEREOISOMERS scope (no stereocenters present).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10544,
+  "output_tokens": 149,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2523562999995193,
+  "runtime_source": "FRESH_API_CALL"
+}

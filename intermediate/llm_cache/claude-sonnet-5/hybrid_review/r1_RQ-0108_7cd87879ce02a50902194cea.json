@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0108",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 95-92-1 (diethyl oxalate, CCOC(=O)C(=O)OCC) is an ester of oxalic acid, not a salt. The catalog entry PS::144-62-7 covers oxalic acid and its salts only, not esters. No other catalog entry matches this structure.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 159,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3110417000007146,
+  "runtime_source": "FRESH_API_CALL"
+}

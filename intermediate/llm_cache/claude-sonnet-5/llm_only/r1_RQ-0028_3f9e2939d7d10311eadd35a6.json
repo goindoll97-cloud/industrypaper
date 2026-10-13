@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0028",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 141-78-6 is ethyl acetate (CCOC(=O)C), an ester, not an acid or salt. It does not match any enumerated catalog members or reference substances (acetic acid itself is 64-19-7, not its ester), nor any mixture or chromium/lead/malachite green/nonylphenol/tributyltin entries.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 170,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3022664000000077,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0045",
+  "status": "FOUND",
+  "target_id": "MX::2017-1-787",
+  "reason": "Both CAS numbers (24860-22-8 and 85916-01-4) with matching SMILES structures exactly correspond to the two named components of the mixture defined in MX::2017-1-787 (2,2,6,6-tetramethyl-4-piperidinyl octadecanoate and hexadecanoate).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10618,
+  "output_tokens": 156,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.509023500000694,
+  "runtime_source": "FRESH_API_CALL"
+}

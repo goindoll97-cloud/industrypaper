@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0006",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 104-43-8 (4-dodecylphenol) is a para-alkylphenol but is not nonylphenol (which requires a nonyl/C9 chain, e.g., CAS 104-40-5, 136-83-4, etc.) nor any other listed catalog entry; chain length is C12 (dodecyl), not matching any enumerated member of the catalogs.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10173,
+  "output_tokens": 175,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.7251741999998558,
+  "runtime_source": "FRESH_API_CALL"
+}

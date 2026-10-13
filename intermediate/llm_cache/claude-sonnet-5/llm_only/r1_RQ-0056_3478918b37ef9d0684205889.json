@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0056",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 50-78-2 (acetylsalicylic acid/aspirin) is an acetylated ester of salicylic acid, not salicylic acid itself or one of its salts. It does not match any catalog entry's reference substance (e.g., PS::69-72-7 salicylic acid requires the free phenolic OH, which is esterified here) nor any enumerated member in other catalogs.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10537,
+  "output_tokens": 181,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6079322999994474,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0060",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 547-64-8 (methyl lactate, SMILES CC(C(=O)OC)O) is a lactic acid ester, not lactic acid or its salt, nor any other catalog entry. It does not match any enumerated member or reference substance in the catalog, including PS::50-21-5 which covers lactic acid and its salts only, not esters.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10159,
+  "output_tokens": 171,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5065289999993183,
+  "runtime_source": "FRESH_API_CALL"
+}

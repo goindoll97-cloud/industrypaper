@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0032",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 142-88-1 SMILES shows piperazine adipate salt (piperazine + adipic acid); piperazine component matches PS::110-85-0 'Piperazine and its salts' reference substance, covering salts of piperazine regardless of counterion.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10540,
+  "output_tokens": 139,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.390889199999947,
+  "runtime_source": "FRESH_API_CALL"
+}

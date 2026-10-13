@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0111",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 99-96-7 (4-hydroxybenzoic acid) does not match any catalog target. It is not a salicylic acid isomer (that's hydroxybenzoic acid with OH at para position, not ortho), and does not match chromium, lead, malachite green, nonylphenol, tributyltin, or mixture entries, nor any listed reference acid (benzoic acid is unsubstituted, salicylic acid is ortho-hydroxy).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10167,
+  "output_tokens": 202,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9456937999993897,
+  "runtime_source": "FRESH_API_CALL"
+}

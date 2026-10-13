@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0097",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 79-09-4 is propionic acid (CCC(=O)O), which does not match any catalog target. It is not acetic, lactic, benzoic, salicylic, citric, oxalic, succinic acid or their salts, nor any metal/organotin/mixture entries.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10521,
+  "output_tokens": 143,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9129262999995262,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0050",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidates are pentaerythritol acrylate esters (mono-, tri-, tetra-acrylate) which do not match any catalog entries: not chromium, lead, malachite green, nonylphenol, TBT compounds, nor any listed mixture or simple acid/base substance.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10700,
+  "output_tokens": 146,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8305103999991843,
+  "runtime_source": "FRESH_API_CALL"
+}

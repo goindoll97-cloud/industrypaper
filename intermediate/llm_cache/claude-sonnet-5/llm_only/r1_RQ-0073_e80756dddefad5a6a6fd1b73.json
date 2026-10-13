@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0073",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 598-81-2 (lactamide, 2-hydroxypropanamide) does not match any catalog entry - it is not chromium, lead, malachite green, nonylphenol, organotin compound, mixture component, or any of the listed polybasic acids/salts.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10161,
+  "output_tokens": 144,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3655455999996775,
+  "runtime_source": "FRESH_API_CALL"
+}

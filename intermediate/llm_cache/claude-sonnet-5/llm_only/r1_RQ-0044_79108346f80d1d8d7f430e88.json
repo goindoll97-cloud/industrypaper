@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0044",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 2437-29-8 exactly matches an enumerated member of the Malachite Green salts catalog entry, with identical SMILES (malachite green oxalate salt).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10304,
+  "output_tokens": 112,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.248533199999656,
+  "runtime_source": "FRESH_API_CALL"
+}

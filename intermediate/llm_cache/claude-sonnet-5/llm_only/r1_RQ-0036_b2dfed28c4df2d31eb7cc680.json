@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0036",
+  "status": "FOUND",
+  "target_id": "PS::110-15-6",
+  "reason": "Candidate CAS 159389-75-0 is calcium succinate hydrate (succinate dianion with Ca2+ and water), matching the salt-of-succinic-acid scope defined by reference substance 110-15-6 (succinic acid, HOOC-CH2-CH2-COOH) under ALL_STEREOISOMERS scope (succinic acid has no stereocenters).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10544,
+  "output_tokens": 180,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.33129689999987,
+  "runtime_source": "FRESH_API_CALL"
+}

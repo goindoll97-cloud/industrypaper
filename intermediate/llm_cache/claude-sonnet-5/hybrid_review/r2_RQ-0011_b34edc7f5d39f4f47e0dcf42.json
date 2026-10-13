@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0011",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 109-07-9 is 2-methylpiperazine, SMILES CC1CNCCN1, a substituted analog of piperazine (C1CNCCN1). However, piperazine scope is unsubstituted ring; 2-methylpiperazine is a methylated derivative, not a salt of piperazine. Re-evaluating: the structure contains the piperazine ring core with a methyl substituent, which is a distinct substance from piperazine itself and not a salt, so match is uncertain.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 215,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 6.1945457000001625,
+  "runtime_source": "FRESH_API_CALL"
+}

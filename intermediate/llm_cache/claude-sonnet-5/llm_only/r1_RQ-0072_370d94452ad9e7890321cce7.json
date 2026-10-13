@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0072",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 593-85-1 is guanidine carbonate, a salt of guanidine (SMILES shows two guanidine units plus carbonic acid), matching the 'Guanidine and its salts' catalog entry with ALL_STEREOISOMERS scope (no stereocenters present).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10542,
+  "output_tokens": 148,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.479011500001434,
+  "runtime_source": "FRESH_API_CALL"
+}

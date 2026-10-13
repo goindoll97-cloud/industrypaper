@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0108",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Diethyl oxalate (CAS 95-92-1, CCOC(=O)C(=O)OCC) is an ester of oxalic acid, not oxalic acid or a salt thereof, and does not match any enumerated member or scope in the catalog (chromium compounds, lead compounds, malachite green salts, nonylphenols, tributyltin compounds, listed mixtures, or the parent substance list which requires the acid/base itself or salts, not esters).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10163,
+  "output_tokens": 203,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8038291000002573,
+  "runtime_source": "FRESH_API_CALL"
+}

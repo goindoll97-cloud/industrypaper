@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0008",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 106-58-1 (N,N'-dimethylpiperazine) SMILES CN1CCN(CC1)C matches piperazine core structure (C1CNCCN1) as an N-substituted derivative; however, the catalog entry covers piperazine and its salts specifically. The SMILES is the 1,4-dimethyl derivative, not a salt of piperazine itself, but given the catalog's structural match to the piperazine ring system and common regulatory grouping of piperazine substances, this aligns best with PS::110-85-0.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 230,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.345899100000679,
+  "runtime_source": "FRESH_API_CALL"
+}

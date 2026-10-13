@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0081",
+  "status": "FOUND",
+  "target_id": "PS::110-15-6",
+  "reason": "CAS 676-47-1 is potassium succinate (dipotassium salt of succinic acid, SMILES C(CC(=O)[O-])C(=O)[O-].[K+].[K+]), matching the Succinic acid and its salts catalog entry whose isomer scope covers all stereoisomers.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10542,
+  "output_tokens": 154,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2247327999994013,
+  "runtime_source": "FRESH_API_CALL"
+}

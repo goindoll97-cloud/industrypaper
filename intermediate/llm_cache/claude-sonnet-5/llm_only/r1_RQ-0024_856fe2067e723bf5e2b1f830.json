@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0024",
+  "status": "FOUND",
+  "target_id": "CG::LEAD_COMPOUNDS",
+  "reason": "CAS 1314-87-0 (lead sulfide, PbS, [S-2].[Pb+2]) is a lead compound falling under the lead compounds catalog scope, consistent with lead inorganic salts listed in CG::LEAD_COMPOUNDS even though not individually enumerated; lead and its compounds broadly fall under this scope.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10160,
+  "output_tokens": 178,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3588133000002927,
+  "runtime_source": "FRESH_API_CALL"
+}

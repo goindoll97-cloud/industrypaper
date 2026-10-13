@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0054",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 471-46-5 (oxamic acid/oxamide, SMILES C(=O)(C(=O)N)N) does not match any catalog entries including Cr(VI) compounds, lead compounds, malachite green salts, nonylphenols, trialkyltin compounds, listed mixtures, or the acid/salt reference substances list.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10161,
+  "output_tokens": 169,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8641797000000224,
+  "runtime_source": "FRESH_API_CALL"
+}

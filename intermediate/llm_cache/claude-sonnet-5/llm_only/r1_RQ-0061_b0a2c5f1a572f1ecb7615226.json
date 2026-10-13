@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0061",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 548-62-9 is malachite green chloride, with SMILES matching the cationic dye structure plus Cl- counterion, consistent with the MG_SALTS catalog entry for malachite green salts (e.g., 569-64-2) sharing the same cation and chloride counterion.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10580,
+  "output_tokens": 150,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.091679799999838,
+  "runtime_source": "FRESH_API_CALL"
+}

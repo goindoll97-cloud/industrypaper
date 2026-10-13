@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0075",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 61-73-4 is Methylene Blue... actually SMILES shows dimethylamino-phenothiazinium chloride matching malachite green salt structural class in catalog list (569-64-2 analog chloride salt of triarylmethane dye cation), matched as a chloride salt entry under MG_SALTS enumerated members.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10563,
+  "output_tokens": 168,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.91966069999944,
+  "runtime_source": "FRESH_API_CALL"
+}

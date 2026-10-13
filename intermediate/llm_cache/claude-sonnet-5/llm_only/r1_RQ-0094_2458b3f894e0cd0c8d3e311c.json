@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0094",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 7778-50-9 (potassium dichromate) is an explicitly enumerated member of the Chromium(6+) compounds catalog entry, with matching SMILES.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10554,
+  "output_tokens": 119,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.0194752999996126,
+  "runtime_source": "FRESH_API_CALL"
+}

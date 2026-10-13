@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0085",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 6915-15-7 (malic acid, C(C(C(=O)O)O)C(=O)O) does not match any catalog target. It is structurally distinct from succinic, oxalic, lactic, acetic, benzoic, salicylic, or citric acid reference substances, and is not a metal/organotin/chromium/lead/malachite green/nonylphenol compound, nor part of any mixture entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10533,
+  "output_tokens": 187,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.533641699999862,
+  "runtime_source": "FRESH_API_CALL"
+}

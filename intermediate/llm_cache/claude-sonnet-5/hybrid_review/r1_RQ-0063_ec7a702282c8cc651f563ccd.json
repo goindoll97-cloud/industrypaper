@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0063",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 553-90-2 (dimethyl oxalate, SMILES COC(=O)C(=O)OC) is an ester of oxalic acid, not oxalic acid or its salt. It does not match the PS::144-62-7 scope (oxalic acid and its salts) nor any other catalog entry, as esters are structurally distinct from the acid/salt forms covered.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10526,
+  "output_tokens": 181,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.683369700000185,
+  "runtime_source": "FRESH_API_CALL"
+}

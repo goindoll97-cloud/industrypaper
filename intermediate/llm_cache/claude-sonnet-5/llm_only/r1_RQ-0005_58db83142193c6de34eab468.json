@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0005",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 104-40-5 (4-nonylphenol) is directly listed as an official enumerated member of the Nonylphenol/Nonylphenol ethoxylates catalog entry, matching exactly on CAS and SMILES structure.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10170,
+  "output_tokens": 140,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.1400434999995923,
+  "runtime_source": "FRESH_API_CALL"
+}

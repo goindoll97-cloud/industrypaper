@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0017",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "CAS 120-51-4 (benzyl benzoate) hydrolyzes to benzoic acid; however, benzyl benzoate itself is an ester, not a salt of benzoic acid. Reviewing structure: C1=CC=C(C=C1)COC(=O)C2=CC=CC=C2 is benzyl ester of benzoic acid, which is not strictly a salt. Given catalog only covers 'acid and its salts', this is ambiguous but closest structural match is the benzoate moiety.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10543,
+  "output_tokens": 220,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8689694000004238,
+  "runtime_source": "FRESH_API_CALL"
+}

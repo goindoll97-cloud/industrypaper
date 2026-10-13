@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0083",
+  "status": "FOUND",
+  "target_id": "PS::77-92-9",
+  "reason": "CAS 68-04-2 is trisodium citrate, the sodium salt of citric acid (SMILES shows citrate anion with 3 Na+), matching the catalog scope 'Citric acid and its salts' under PS::77-92-9.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10197,
+  "output_tokens": 133,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2125993999998173,
+  "runtime_source": "FRESH_API_CALL"
+}

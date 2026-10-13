@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0084",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 68083-41-0 is explicitly listed as an official enumerated member (malachite green oxalate/related salt form) under CG::MG_SALTS, matching candidate CAS and SMILES structure exactly.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10676,
+  "output_tokens": 127,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.771295900000041,
+  "runtime_source": "FRESH_API_CALL"
+}

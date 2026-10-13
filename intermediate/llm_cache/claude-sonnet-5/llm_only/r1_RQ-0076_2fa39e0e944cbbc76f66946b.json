@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0076",
+  "status": "FOUND",
+  "target_id": "PS::64-19-7",
+  "reason": "Calcium acetate (CAS 62-54-4) is a salt of acetic acid, matching catalog entry PS::64-19-7 'Acetic acid and its salts' (SMILES shows acetate anions with Ca2+ cation).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10174,
+  "output_tokens": 132,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.577933900000062,
+  "runtime_source": "FRESH_API_CALL"
+}

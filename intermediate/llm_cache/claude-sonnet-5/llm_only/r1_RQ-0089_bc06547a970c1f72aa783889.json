@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0089",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 77-58-7 is dibutyltin dilaurate, a tributyltin-related organotin compound (tributyltin/trialkyltin compound category) matching the catalog scope for tributyltin compounds and related alkyltin esters; structurally it is a dibutyltin diester analogous to other members listed under CG::TBT_TRIALKYLTIN (e.g., 3090-36-6 tributyltin laurate).",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10197,
+  "output_tokens": 206,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5647134000000733,
+  "runtime_source": "FRESH_API_CALL"
+}

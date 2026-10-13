@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0024",
+  "status": "FOUND",
+  "target_id": "CG::LEAD_COMPOUNDS",
+  "reason": "Lead sulfide (CAS 1314-87-0, PbS) is an inorganic lead compound, falling under the broad 'Lead and its compounds' regulatory scope; although not individually enumerated, it is a lead salt covered by the catalog's lead compound category similar to other listed lead salts.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10526,
+  "output_tokens": 161,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.567809299998771,
+  "runtime_source": "FRESH_API_CALL"
+}

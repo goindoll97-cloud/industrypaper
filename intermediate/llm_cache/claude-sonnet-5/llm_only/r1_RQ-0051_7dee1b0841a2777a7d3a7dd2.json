@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0051",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 420-04-2 (cyanamide, SMILES C(#N)N) does not match any catalog entry: it is not chromium(6+) compound, lead compound, malachite green salt, nonylphenol/NPE, trialkyltin compound, listed mixture component, or any of the PS acid/base series (guanidine, acetic, benzoic, etc.). It is structurally and chemically distinct from guanidine despite both containing N-C-N motifs.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10519,
+  "output_tokens": 207,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.6619912999994995,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0112",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "Candidate CAS 996-31-6 is potassium lactate, SMILES CC(C(=O)[O-])O.[K+] which is a salt of lactic acid (SMILES CC(C(=O)O)O), matching the 'Lactic acid and its salts' catalog entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10165,
+  "output_tokens": 147,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2013237000001027,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0008",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 106-58-1 is N,N'-dimethylpiperazine, a methylated piperazine derivative; however, comparing SMILES CN1CCN(CC1)C to piperazine C1CNCCN1 shows it is a substituted derivative, not a direct salt. Despite this, it is closest to PS::110-85-0 scope covering piperazine and its salts/derivatives in this catalog context.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10159,
+  "output_tokens": 187,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.4981328000003487,
+  "runtime_source": "FRESH_API_CALL"
+}

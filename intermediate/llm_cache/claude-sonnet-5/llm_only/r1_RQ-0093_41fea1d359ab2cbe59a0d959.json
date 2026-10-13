@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0093",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 7775-11-3 (sodium chromate, Na2CrO4) is explicitly enumerated as a member of the CG::CRVI_COMPOUNDS catalog entry with identical SMILES match.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10543,
+  "output_tokens": 132,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.175788000000466,
+  "runtime_source": "FRESH_API_CALL"
+}

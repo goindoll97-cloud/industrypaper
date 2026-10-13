@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0096",
+  "status": "FOUND",
+  "target_id": "MX::2023-1-1162",
+  "reason": "CAS 78643-41-1 matches the mixture_cas entry directly listed under MX::2023-1-1162 (mixture of dichlorodimethylstannane and trichloromethylstannane).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10147,
+  "output_tokens": 120,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5374114000005648,
+  "runtime_source": "FRESH_API_CALL"
+}

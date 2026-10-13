@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0098",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 79-20-9 (methyl acetate, SMILES CC(=O)OC) is an ester, not acetic acid or an acetate salt, and does not match any enumerated members or reference substances/isomer scopes in the catalog (e.g., it is not covered by PS::64-19-7 which covers acetic acid and its salts, not esters). No catalog entry matches.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10521,
+  "output_tokens": 175,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.008699099998921,
+  "runtime_source": "FRESH_API_CALL"
+}

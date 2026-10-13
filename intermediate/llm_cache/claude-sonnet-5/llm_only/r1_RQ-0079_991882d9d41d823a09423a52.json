@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0079",
+  "status": "FOUND",
+  "target_id": "PS::64-19-7",
+  "reason": "CAS 64-19-7 and SMILES CC(=O)O exactly match the reference substance acetic acid in target PS::64-19-7 (Acetic acid and its salts).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10154,
+  "output_tokens": 112,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3818907999993826,
+  "runtime_source": "FRESH_API_CALL"
+}

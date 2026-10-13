@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0087",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "Tributyltin iodide (CAS 7342-47-4, SMILES CCCC[Sn](CCCC)(CCCC)I) is a tributyltin compound, matching the regulatory scope of trialkyltin hydroxide/oxide and tributyltin compounds category, which covers tributyltin halides analogous to the enumerated tributyltin chloride and fluoride members.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10535,
+  "output_tokens": 189,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9150092999989283,
+  "runtime_source": "FRESH_API_CALL"
+}

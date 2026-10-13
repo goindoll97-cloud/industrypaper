@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0055",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 50-01-1 is guanidine hydrochloride (C(=N)(N)N.Cl), a salt of guanidine, matching the PS::113-00-8 scope 'Guanidine and its salts'.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10160,
+  "output_tokens": 125,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.9521881000000576,
+  "runtime_source": "FRESH_API_CALL"
+}

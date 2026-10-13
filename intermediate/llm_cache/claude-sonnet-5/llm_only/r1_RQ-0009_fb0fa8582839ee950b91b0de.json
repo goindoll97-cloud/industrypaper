@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0009",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 106-65-0 (dimethyl succinate) is an ester of succinic acid, not succinic acid itself or its salt. It does not match any enumerated members or substance scopes in the catalog (Lead, Chromium(VI), Malachite green salts, Nonylphenol/NPE, TBT/trialkyltin, mixtures, or the simple acids/salts list which requires the acid or its salts, not esters).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10162,
+  "output_tokens": 195,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9500066999999035,
+  "runtime_source": "FRESH_API_CALL"
+}

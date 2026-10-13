@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0067",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 57-00-1 is creatine (N-methylguanidinoacetic acid), SMILES CN(CC(=O)O)C(=N)N. This is not simply guanidine or a guanidine salt (which would retain the unsubstituted guanidine moiety as a cation paired with an acid anion); it is a distinct organic acid with an N-methyl-N-carboxymethyl substituted guanidine group fused into one molecule, not a salt of guanidine and another acid. It also does not match any other catalog reference substance (succinic, oxalic, lactic, acetic, benzoic, salicylic, citric acids, piperazine) nor any enumerated member in the Cr(VI), Lead, Malachite green, Nonylphenol, or TBT lists, nor any mixture entry.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10530,
+  "output_tokens": 319,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.7678168999991613,
+  "runtime_source": "FRESH_API_CALL"
+}

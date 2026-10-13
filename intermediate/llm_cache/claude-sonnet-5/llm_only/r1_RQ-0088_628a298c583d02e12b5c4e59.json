@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0088",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate is sodium chloride (CAS 7647-14-5, NaCl), which does not match any catalog target. It is not a chromium(VI) compound, lead compound, malachite green salt, nonylphenol, tributyltin compound, mixture entry, or any listed acid/salt reference substance.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10159,
+  "output_tokens": 151,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.401858000000175,
+  "runtime_source": "FRESH_API_CALL"
+}

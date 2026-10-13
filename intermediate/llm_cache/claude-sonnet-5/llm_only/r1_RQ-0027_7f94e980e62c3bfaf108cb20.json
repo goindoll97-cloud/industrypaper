@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0027",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 140-66-9 is 4-tert-octylphenol (p-(1,1,3,3-tetramethylbutyl)phenol), structurally distinct from nonylphenol (nonyl chain) and does not match any catalog entry's enumerated members or reference substances (not chromium, lead, malachite green, nonylphenol, tributyltin, or any mixture/simple acid/base entries).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10543,
+  "output_tokens": 188,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.685761200000343,
+  "runtime_source": "FRESH_API_CALL"
+}

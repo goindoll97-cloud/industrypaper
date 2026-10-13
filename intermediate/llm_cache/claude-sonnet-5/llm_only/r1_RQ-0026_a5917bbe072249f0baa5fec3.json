@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0026",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 136-83-4 matches an enumerated member of the NONYLPHENOL_NPE catalog with identical SMILES CCCCCCCCCC1=CC=CC=C1O (4-nonylphenol, branched/linear isomer).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10534,
+  "output_tokens": 144,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.1554329999999027,
+  "runtime_source": "FRESH_API_CALL"
+}

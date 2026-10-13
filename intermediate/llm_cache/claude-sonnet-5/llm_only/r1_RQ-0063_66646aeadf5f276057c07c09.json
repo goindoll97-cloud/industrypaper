@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0063",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 553-90-2 (dimethyl oxalate, COC(=O)C(=O)OC) is an ester of oxalic acid, not oxalic acid or its salt itself, and does not match any enumerated member or reference substance across the catalog (chromium compounds, lead compounds, malachite green salts, nonylphenols, tributyltin compounds, or listed mixtures/parent substances).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10160,
+  "output_tokens": 187,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 5.3159373999997115,
+  "runtime_source": "FRESH_API_CALL"
+}

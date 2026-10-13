@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0018",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 123-25-1 (diethyl succinate, CCOC(=O)CCC(=O)OCC) is an ester, not succinic acid or its salt. It does not match PS::110-15-6 (succinic acid reference requires free acid form, not ester) nor any other catalog entry including chromium, lead, malachite green, nonylphenol, TBT, or mixture targets.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10531,
+  "output_tokens": 182,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 12.752636799999891,
+  "runtime_source": "FRESH_API_CALL"
+}

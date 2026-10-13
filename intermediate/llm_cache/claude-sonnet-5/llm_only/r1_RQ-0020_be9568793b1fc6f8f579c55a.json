@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0020",
+  "status": "FOUND",
+  "target_id": "PS::64-19-7",
+  "reason": "Potassium acetate (CAS 127-08-2) is a salt of acetic acid (CH3COO- K+), matching the catalog entry PS::64-19-7 'Acetic acid and its salts' with ALL_STEREOISOMERS scope (no stereocenters present).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10527,
+  "output_tokens": 145,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.413813700000901,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0111",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 99-96-7 is 4-hydroxybenzoic acid, which does not match any catalog target. It is not a chromium, lead, malachite green, nonylphenol, or tributyltin compound, nor does it match any of the listed simple organic acid salts (succinic, piperazine, guanidine, oxalic, lactic, acetic, benzoic, salicylic, citric) or mixtures.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10533,
+  "output_tokens": 185,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.8882838999998057,
+  "runtime_source": "FRESH_API_CALL"
+}

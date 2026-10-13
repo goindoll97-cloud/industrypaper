@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0013",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 110-94-1 (glutaric acid, C(CC(=O)O)CC(=O)O) is not an enumerated member of any catalog target. It is structurally distinct from succinic acid (PS::110-15-6, one fewer CH2 group) and does not match any other listed substance or mixture component.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10164,
+  "output_tokens": 153,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.6515282000000298,
+  "runtime_source": "FRESH_API_CALL"
+}

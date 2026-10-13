@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0057",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 506-93-4 is guanidine nitrate, i.e., a salt of guanidine (C(=N)(N)N) with nitric acid, matching the 'Guanidine and its salts' catalog entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10537,
+  "output_tokens": 124,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3200795000011567,
+  "runtime_source": "FRESH_API_CALL"
+}

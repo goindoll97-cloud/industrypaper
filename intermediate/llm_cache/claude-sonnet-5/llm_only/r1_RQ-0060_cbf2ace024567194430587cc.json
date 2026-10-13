@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0060",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "CAS 547-64-8 is methyl lactate (methyl ester of lactic acid), SMILES CC(C(=O)OC)O corresponds to lactic acid methyl ester; however the catalog entry is for lactic acid and its salts, not esters. Reassessing: methyl lactate is an ester, not a salt, so strictly it does not match. Given the structural similarity (lactic acid core) but ester form differs from 'acid and its salts' scope, classifying as review-level match based on core lactic acid skeleton.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 224,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.0528738999983034,
+  "runtime_source": "FRESH_API_CALL"
+}

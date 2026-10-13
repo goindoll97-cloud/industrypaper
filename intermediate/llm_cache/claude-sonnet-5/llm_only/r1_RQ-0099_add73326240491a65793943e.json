@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0099",
+  "status": "FOUND",
+  "target_id": "PS::77-92-9",
+  "reason": "CAS 813-94-5 is calcium citrate, the calcium salt of citric acid (matches citrate anion structure C(C(=O)[O-])C(CC(=O)[O-])(C(=O)[O-])O with Ca2+ counterions), falling under 'Citric acid and its salts'.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10604,
+  "output_tokens": 153,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5067186999986006,
+  "runtime_source": "FRESH_API_CALL"
+}

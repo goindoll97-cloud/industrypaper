@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0103",
+  "status": "FOUND",
+  "target_id": "PS::77-92-9",
+  "reason": "CAS 866-84-2 is tripotassium citrate, the potassium salt of citric acid (C(C(=O)[O-])C(CC(=O)[O-])(C(=O)[O-])O with K+ counterions), matching the catalog entry for Citric acid and its salts.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10194,
+  "output_tokens": 146,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6700018999999884,
+  "runtime_source": "FRESH_API_CALL"
+}

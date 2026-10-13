@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0019",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 123-56-8 (succinimide) does not match any catalog entries; it is not chromium, lead, malachite green, nonylphenol, organotin compound, nor any listed mixture or simple carboxylic acid reference substance.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10160,
+  "output_tokens": 129,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.1192401999996946,
+  "runtime_source": "FRESH_API_CALL"
+}

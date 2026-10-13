@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0001",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10025-73-7 is chromium(III) chloride... wait, SMILES shows Cl[Cr](Cl)Cl which is CrCl3, but the catalog targets chromium(6+) compounds. However, CAS 10025-73-7 is actually chromic chloride (Cr3+), not matching any enumerated member exactly; closest match is 18540-29-9 [Cr+6] generic chromium(6+) ion entry representing the whole Cr(VI) class, but structural mismatch (Cr+3 vs Cr+6) makes this unreliable.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 250,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 3.973765099999582,
+  "runtime_source": "FRESH_API_CALL"
+}

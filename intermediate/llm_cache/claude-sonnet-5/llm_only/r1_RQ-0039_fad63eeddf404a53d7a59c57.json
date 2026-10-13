@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0039",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "Candidate CAS 18917-89-0 is magnesium benzoate, i.e. the magnesium salt of benzoic acid (two benzoate anions + Mg2+), matching the catalog entry 'Benzoic acid and its salts' with ALL_STEREOISOMERS scope (benzoic acid has no stereocenters).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10571,
+  "output_tokens": 164,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6496289000006072,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0084",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 68083-41-0 is explicitly listed as an enumerated member of the Malachite green salts catalog entry, matching the candidate's CAS and malachite green cation SMILES structure.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10310,
+  "output_tokens": 119,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.7168687000003047,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0005",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 104-40-5 (4-nonylphenol, para-nonylphenol with linear nonyl chain) is explicitly listed as a member of the NONYLPHENOL_NPE catalog entry, matching both CAS and SMILES.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10536,
+  "output_tokens": 142,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.456444100000226,
+  "runtime_source": "FRESH_API_CALL"
+}

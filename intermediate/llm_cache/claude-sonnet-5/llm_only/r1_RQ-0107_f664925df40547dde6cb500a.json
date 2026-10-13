@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0107",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Ethyl benzoate (CAS 93-89-0) is an ester, not matching any catalog entries. It is not benzoic acid itself (though related), not a salt, and does not match any enumerated members of chromium, lead, malachite green, nonylphenol, tributyltin, or mixture entries, nor the parent substance list which only covers benzoic acid and its salts, not esters.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10166,
+  "output_tokens": 179,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.517663800000264,
+  "runtime_source": "FRESH_API_CALL"
+}

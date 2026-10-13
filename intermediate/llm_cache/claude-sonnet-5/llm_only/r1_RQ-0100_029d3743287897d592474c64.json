@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0100",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "Calcium lactate (CAS 814-80-2) is the calcium salt of lactic acid (CH3CH(OH)COO-)2Ca2+, matching the 'Lactic acid and its salts' catalog entry with ALL_STEREOISOMERS scope.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10548,
+  "output_tokens": 143,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.437663499998962,
+  "runtime_source": "FRESH_API_CALL"
+}

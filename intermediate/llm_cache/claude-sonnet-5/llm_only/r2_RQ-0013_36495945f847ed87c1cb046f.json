@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0013",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 110-94-1 (glutaric acid, SMILES C(CC(=O)O)CC(=O)O) does not match any catalog entries. It is similar to succinic acid (PS::110-15-6) but has an extra CH2 group, making it a distinct chemical (glutaric acid, not succinic acid). No exact match found in the regulatory catalog.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10164,
+  "output_tokens": 172,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 3.1005019000003813,
+  "runtime_source": "FRESH_API_CALL"
+}

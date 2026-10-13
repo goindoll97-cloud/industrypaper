@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0012",
+  "status": "FOUND",
+  "target_id": "PS::110-15-6",
+  "reason": "CAS 110-15-6 (succinic acid) exactly matches the reference substance listed under PS::110-15-6, with identical SMILES C(CC(=O)O)C(=O)O.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10163,
+  "output_tokens": 116,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.5659937999998874,
+  "runtime_source": "FRESH_API_CALL"
+}

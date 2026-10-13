@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0061",
+  "status": "FOUND",
+  "target_id": "CG::MG_SALTS",
+  "reason": "CAS 548-62-9 with SMILES matches Malachite green chloride salt structure, listed under MG_SALTS catalog (matches 569-64-2 structurally as malachite green chloride).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10214,
+  "output_tokens": 120,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6252292999997735,
+  "runtime_source": "FRESH_API_CALL"
+}

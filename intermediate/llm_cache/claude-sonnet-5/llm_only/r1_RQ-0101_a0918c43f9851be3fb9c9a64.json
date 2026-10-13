@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0101",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "Candidate CAS 824-35-1 is calcium benzoate, the calcium salt of benzoic acid (C6H5COO- x2, Ca2+), matching the catalog scope 'Benzoic acid and its salts' (PS::65-85-0).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10204,
+  "output_tokens": 138,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.1974513999994087,
+  "runtime_source": "FRESH_API_CALL"
+}

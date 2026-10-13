@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0017",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Benzyl benzoate (CAS 120-51-4) is an ester of benzoic acid, not benzoic acid or a salt thereof, and does not match any enumerated members or mixture/compound classes in the catalog (not a chromium, lead, malachite green, nonylphenol, or organotin compound, nor a listed mixture).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10177,
+  "output_tokens": 161,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.772024699999747,
+  "runtime_source": "FRESH_API_CALL"
+}

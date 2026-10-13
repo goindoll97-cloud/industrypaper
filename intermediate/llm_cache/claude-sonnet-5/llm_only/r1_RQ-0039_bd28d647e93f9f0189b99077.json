@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0039",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "Candidate is magnesium bis(benzoate), a salt of benzoic acid (two benzoate anions with Mg2+ counterion), matching PS::65-85-0 which covers benzoic acid and its salts.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10205,
+  "output_tokens": 124,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6739965000006123,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0002",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 10049-05-5 (chromium(III) chloride, CrCl2/CrCl3-type Cr-Cl compound) is not listed among the enumerated Chromium(6+) compound members of CG::CRVI_COMPOUNDS, nor does it match any other catalog entry's enumerated members or reference substances. The SMILES 'Cl[Cr]Cl' indicates a Cr(II) or Cr(III) chloride, not a hexavalent chromium compound, so it falls outside the Cr(6+) scope.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 232,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 3.1481549000000086,
+  "runtime_source": "FRESH_API_CALL"
+}

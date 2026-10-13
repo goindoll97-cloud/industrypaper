@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0110",
+  "status": "FOUND",
+  "target_id": "PS::77-92-9",
+  "reason": "CAS 99-14-9 SMILES C(C(CC(=O)O)C(=O)O)C(=O)O corresponds to tricarballylic acid, but structurally it matches citric acid's tricarboxylic backbone minus the hydroxyl; however, comparing to catalog, closest valid match is citric acid analog family with 3 carboxylic acid groups similar to reference 77-92-9 (citric acid and its salts), though lacking OH group this is actually propane-1,2,3-tricarboxylic acid, a structural analog not an exact match; given catalog only covers citric acid among tricarboxylic acids, no exact structural match exists so classify as NOT_FOUND.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10538,
+  "output_tokens": 279,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 4.2787828000000445,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0070",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "Candidate CAS 582-25-2 is potassium benzoate, a salt of benzoic acid (SMILES shows benzoate anion with K+ counterion), matching PS::65-85-0 'Benzoic acid and its salts'.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10173,
+  "output_tokens": 132,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.2504910999996355,
+  "runtime_source": "FRESH_API_CALL"
+}

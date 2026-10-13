@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0049",
+  "status": "FOUND",
+  "target_id": "MX::2004-1-546",
+  "reason": "Candidate CAS pair (35184-08-8 and 7158-25-0) exactly matches the component_cas list of mixture MX::2004-1-546, confirmed by matching SMILES for 7158-25-0.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10194,
+  "output_tokens": 125,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.07065749999947,
+  "runtime_source": "FRESH_API_CALL"
+}

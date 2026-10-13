@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0100",
+  "status": "FOUND",
+  "target_id": "PS::50-21-5",
+  "reason": "CAS 814-80-2 is calcium lactate, a salt of lactic acid (CC(C(=O)[O-])O.[Ca+2]), matching the 'Lactic acid and its salts' reference scope.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10182,
+  "output_tokens": 124,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.020994000000428,
+  "runtime_source": "FRESH_API_CALL"
+}

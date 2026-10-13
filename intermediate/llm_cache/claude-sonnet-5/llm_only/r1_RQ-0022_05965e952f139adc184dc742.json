@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0022",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 127-17-3 (pyruvic acid, CH3-CO-COOH) does not match any catalog entry. It is not an enumerated member of the chromium, lead, malachite green, nonylphenol, or tributyltin lists, nor is it a mixture component, nor does it match any PS acid/salt reference substance (oxalic, acetic, lactic, benzoic, salicylic, citric, succinic acids differ structurally from pyruvic acid).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 204,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.9237856999989162,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0008",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 106-58-1 with SMILES CN1CCN(CC1)C is N,N'-dimethylpiperazine, a salt-forming derivative/related structure of piperazine (C1CNCCN1). However, exact match check: the structure is actually 1,4-dimethylpiperazine, which is an N-alkylated derivative, not a salt of piperazine itself. Reassessing, piperazine and its salts scope covers piperazine core with counterions, not N-substituted analogs, but given catalog constraints this is the closest and only plausible match for the piperazine ring core.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 243,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.5447243999997227,
+  "runtime_source": "FRESH_API_CALL"
+}

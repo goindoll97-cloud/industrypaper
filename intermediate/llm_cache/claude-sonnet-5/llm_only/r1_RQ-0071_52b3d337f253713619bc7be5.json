@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0071",
+  "status": "FOUND",
+  "target_id": "PS::144-62-7",
+  "reason": "Potassium oxalate (CAS 583-52-8) is a salt of oxalic acid (C(=O)(C(=O)[O-])[O-].[K+].[K+]), matching the 'Oxalic acid and its salts' catalog entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10174,
+  "output_tokens": 135,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.651694499999394,
+  "runtime_source": "FRESH_API_CALL"
+}

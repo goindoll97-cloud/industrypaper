@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0007",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 106-57-0 (glycine anhydride / 2,5-diketopiperazine) does not match any catalog entries including enumerated chromium, lead, malachite green, nonylphenol, TBT compounds, mixtures, or the listed acid/salt parent substances.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10163,
+  "output_tokens": 143,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.4266004000000976,
+  "runtime_source": "FRESH_API_CALL"
+}

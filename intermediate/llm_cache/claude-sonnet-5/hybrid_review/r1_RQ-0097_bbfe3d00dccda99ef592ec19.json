@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0097",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 79-09-4 is propionic acid (CCC(=O)O), which does not match any catalog target. It is not an enumerated member of the chromium, lead, malachite green, nonylphenol, or tributyltin groups, not part of any mixture entries, and not an acid matching the propiedades list (acetic, lactic, oxalic, citric, benzoic, salicylic, succinic, piperazine, guanidine) despite structural similarity to acetic acid - propionic acid is a distinct substance not covered by PS::64-19-7 (acetic acid) scope.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10521,
+  "output_tokens": 240,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.85316530000091,
+  "runtime_source": "FRESH_API_CALL"
+}

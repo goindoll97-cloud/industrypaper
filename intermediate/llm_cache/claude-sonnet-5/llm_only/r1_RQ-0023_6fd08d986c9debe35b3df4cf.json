@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0023",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 1308-38-9 (chromium(III) oxide, Cr2O3) is commonly represented but given SMILES O=[Cr]O[Cr]=O depicts a chromium oxide species; within the catalog's Chromium(6+) compounds list, CAS 1333-82-0 (chromium trioxide, CrO3) is the closest enumerated hexavalent chromium oxide analog, and 1308-38-9 is widely classified under Chromium compounds regulatory scope covering chromium oxides including Cr(VI) species in this catalog's intended coverage.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 251,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.4026001000001997,
+  "runtime_source": "FRESH_API_CALL"
+}

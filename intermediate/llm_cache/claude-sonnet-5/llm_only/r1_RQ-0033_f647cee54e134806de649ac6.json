@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0033",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 144-29-6 is piperazine citrate salt, composed of piperazine (matches PS::110-85-0 reference substance) combined with citric acid. Since piperazine is listed under 'Piperazine and its salts', this salt form falls under that entry.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10597,
+  "output_tokens": 139,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3876920999991853,
+  "runtime_source": "FRESH_API_CALL"
+}

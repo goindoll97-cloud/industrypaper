@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0060",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 547-64-8 (methyl lactate, CC(C(=O)OC)O) is a lactic acid ester, not lactic acid or a salt of lactic acid. It does not match the Lactic acid and its salts entry (PS::50-21-5), nor any other catalog entry including mixture or enumerated member lists.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 158,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.325525899999775,
+  "runtime_source": "FRESH_API_CALL"
+}

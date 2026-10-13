@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0062",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Benzamide (CAS 55-21-0) does not match any catalog target. It is not a chromium, lead, malachite green, nonylphenol, or trialkyltin compound, nor does it match any mixture or acid/salt scope in the catalog.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10166,
+  "output_tokens": 133,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 7.4927576000000045,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0089",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 77-58-7 (dilaurate dibutyltin, structurally a dibutyltin dicarboxylate) matches the TBT_TRIALKYLTIN category which covers tributyl/dibutyl tin compounds; the SMILES shows a tin atom bonded to two butyl groups and two laurate esters, consistent with trialkyltin compound class covered under this regulatory scope.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10563,
+  "output_tokens": 196,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.7421947000002547,
+  "runtime_source": "FRESH_API_CALL"
+}

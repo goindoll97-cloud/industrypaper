@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0023",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 1308-38-9 (chromium(III) oxide, Cr2O3, represented here as O=[Cr]O[Cr]=O) corresponds to chromium oxide species; the catalog scope 'Chromium(6+) compounds' covers chromium oxo compounds generically and this CAS is closely associated with chromium oxide forms listed under the enumerated Cr(VI) members (e.g., CrO3 1333-82-0). Matching based on chromium-oxygen compound class within the enumerated catalog.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10163,
+  "output_tokens": 233,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.28075170000011,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0068",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 57-13-6 is urea (C(=O)(N)N), which does not match any catalog entries including chromium, lead, malachite green, nonylphenol, tributyltin compounds, listed mixtures, or the simple organic acids/amines list (acetic, benzoic, citric, lactic, oxalic, salicylic, succinic acid, guanidine, piperazine).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10156,
+  "output_tokens": 181,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.151606299999912,
+  "runtime_source": "FRESH_API_CALL"
+}

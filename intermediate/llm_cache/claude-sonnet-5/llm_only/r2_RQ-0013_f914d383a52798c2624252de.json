@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0013",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 110-94-1 (glutaric acid, C(CC(=O)O)CC(=O)O) does not match any catalog target. It is not succinic acid (butanedioic, 4 carbons) nor any other listed acid; it is a 5-carbon dicarboxylic acid not covered by any entry in the catalog.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10530,
+  "output_tokens": 159,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.5085658000007243,
+  "runtime_source": "FRESH_API_CALL"
+}

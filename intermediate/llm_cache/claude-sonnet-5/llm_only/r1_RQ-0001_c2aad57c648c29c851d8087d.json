@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0001",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10025-73-7 (chromium(III) chloride... actually CrCl3, Cl[Cr](Cl)Cl) represents a chromium compound; matches catalog scope for Chromium(6+)/chromium compounds group as the closest regulatory category despite oxidation state discrepancy, given no better match exists elsewhere in catalog.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10163,
+  "output_tokens": 177,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.8107159000001047,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0028",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 141-78-6 (ethyl acetate, SMILES CCOC(=O)C) is an ester, not acetic acid or one of its salts. It does not match any enumerated catalog member or any regulatory scope (esters are not 'salts' of acetic acid). No catalog target applies.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 153,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.281210299999657,
+  "runtime_source": "FRESH_API_CALL"
+}

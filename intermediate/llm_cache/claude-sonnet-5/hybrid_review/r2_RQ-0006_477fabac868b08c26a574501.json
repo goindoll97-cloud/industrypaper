@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0006",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 104-43-8 (4-dodecylphenol, CCCCCCCCCCCCC1=CC=C(C=C1)O) is a para-alkylphenol closely matching the nonylphenol family structure type; however, exact chain length (C12 vs C9) differs from enumerated members like 104-40-5 (nonylphenol). Given the catalog's broad scope for nonylphenols/ethoxylates and structural similarity, but no exact match to the C9 chain members listed, classification as nonylphenol family member is based on closest structural analogy among enumerated catalog entries.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10539,
+  "output_tokens": 254,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 3.152921900000365,
+  "runtime_source": "FRESH_API_CALL"
+}

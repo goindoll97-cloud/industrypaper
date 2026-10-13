@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0109",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate 97-64-3 is ethyl lactate (CCOC(=O)C(C)O), an ester of lactic acid, not lactic acid or a salt thereof. It does not match any enumerated catalog member or reference substance (esters are not covered by the 'and its salts' scope), nor does it match any other catalog category (chromium, lead, malachite green, nonylphenol, tributyltin, or named mixtures).",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10526,
+  "output_tokens": 193,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.7438397000005352,
+  "runtime_source": "FRESH_API_CALL"
+}

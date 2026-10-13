@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0007",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 106-57-0 (glycine anhydride / 2,5-diketopiperazine, SMILES C1C(=O)NCC(=O)N1) does not match any catalog entry: not a chromium, lead, malachite green, nonylphenol, or tributyltin compound, not part of any listed mixture, and not an acid/salt listed in the PS:: entries.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 174,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.3979999999992287,
+  "runtime_source": "FRESH_API_CALL"
+}

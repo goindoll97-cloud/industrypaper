@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0016",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Methyl salicylate (CAS 119-36-8, SMILES COC(=O)C1=CC=CC=C1O) does not match any catalog target. It is structurally related to salicylic acid but is an ester, not salicylic acid or its salt, so it does not fall under PS::69-72-7. No other catalog entry corresponds to this compound.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10165,
+  "output_tokens": 168,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3128843000004053,
+  "runtime_source": "FRESH_API_CALL"
+}

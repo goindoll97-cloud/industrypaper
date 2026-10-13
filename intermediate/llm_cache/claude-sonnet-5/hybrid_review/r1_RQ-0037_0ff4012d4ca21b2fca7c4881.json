@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0037",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 1806-26-4 (4-nonylphenol) SMILES CCCCCCCCC1=CC=C(C=C1)O matches the nonylphenol structural class covered by CG::NONYLPHENOL_NPE, consistent with other listed nonylphenol isomers (e.g., CAS 104-40-5, 136-83-4) with linear/branched nonyl chain on phenol ring.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10536,
+  "output_tokens": 197,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.8764095999995334,
+  "runtime_source": "FRESH_API_CALL"
+}

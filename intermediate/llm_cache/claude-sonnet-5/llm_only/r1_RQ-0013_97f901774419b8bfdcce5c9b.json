@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0013",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 110-94-1 is glutaric acid (pentanedioic acid, HOOC-CH2CH2CH2-COOH), matching SMILES C(CC(=O)O)CC(=O)O. No catalog entry covers glutaric acid: it is not succinic acid (C4 diacid) nor any other listed acid/salt, and it does not match any metal compound, mixture, or other enumerated substance in the catalog.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10530,
+  "output_tokens": 194,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.781678600000305,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0009",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 106-65-0 (dimethyl succinate, COC(=O)CCC(=O)OC) is an ester of succinic acid, not succinic acid or its salt itself, and does not match any enumerated members or mixture components in the catalog. No catalog entry covers esters of succinic acid.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10162,
+  "output_tokens": 154,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 2.3523732000003292,
+  "runtime_source": "FRESH_API_CALL"
+}

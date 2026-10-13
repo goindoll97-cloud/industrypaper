@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0046",
+  "status": "FOUND",
+  "target_id": "MX::2020-1-975",
+  "reason": "CAS 2550-59-6 and 3100-36-5 match exactly the component_cas entries (7-cyclohexadecen-1-one and 8-cyclohexadecen-1-one) of mixture target MX::2020-1-975.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10190,
+  "output_tokens": 132,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.4222544000003836,
+  "runtime_source": "FRESH_API_CALL"
+}

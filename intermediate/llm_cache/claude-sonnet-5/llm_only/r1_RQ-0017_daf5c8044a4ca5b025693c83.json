@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0017",
+  "status": "FOUND",
+  "target_id": "PS::65-85-0",
+  "reason": "Candidate CAS 120-51-4 (benzyl benzoate) is an ester of benzoic acid; however, the catalog entry PS::65-85-0 covers benzoic acid and its salts, not esters. Re-examining: benzyl benzoate is not a salt of benzoic acid, so it does not strictly match. No other catalog target matches this structure, so NOT_FOUND is more accurate.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10543,
+  "output_tokens": 185,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.674131600000692,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0092",
+  "status": "FOUND",
+  "target_id": "CG::LEAD_COMPOUNDS",
+  "reason": "CAS 7758-95-4 (PbCl2, lead chloride) is a lead compound; the regulatory scope 'Lead and its compounds' covers all lead compounds even though it is not explicitly enumerated, as lead dichloride is a lead compound covered by the general scope.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10525,
+  "output_tokens": 155,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.456855299999006,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0098",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Methyl acetate (CAS 79-20-9, SMILES CC(=O)OC) is an ester of acetic acid, not acetic acid or one of its salts, and does not match any other catalog entry including chromium, lead, malachite green, nonylphenol, trialkyltin compounds, or any mixture definition.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10521,
+  "output_tokens": 156,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 4.850028500000917,
+  "runtime_source": "FRESH_API_CALL"
+}

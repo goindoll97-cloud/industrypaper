@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0105",
+  "status": "FOUND",
+  "target_id": "CG::NONYLPHENOL_NPE",
+  "reason": "CAS 9016-45-9 is explicitly listed as an official enumerated member of the Nonylphenol/Nonylphenol ethoxylates catalog entry, with matching SMILES (nonylphenol ethoxylate structure).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10543,
+  "output_tokens": 139,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.9970381000002817,
+  "runtime_source": "FRESH_API_CALL"
+}

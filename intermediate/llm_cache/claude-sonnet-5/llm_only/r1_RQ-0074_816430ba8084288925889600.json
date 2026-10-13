@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0074",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 60-35-5 (acetamide, SMILES CC(=O)N) does not match any catalog entry: not a chromium(VI) compound, lead compound, malachite green salt, nonylphenol/NPE, trialkyltin compound, any mixture entry, or any acid/salt reference substance in the PS:: group.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10154,
+  "output_tokens": 164,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.324215699999513,
+  "runtime_source": "FRESH_API_CALL"
+}

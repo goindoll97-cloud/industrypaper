@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0030",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 142-63-2 is piperazine hexahydrate (SMILES shows piperazine ring with water molecules), which is a hydrate/salt form of piperazine, matching PS::110-85-0 'Piperazine and its salts'.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10167,
+  "output_tokens": 133,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.43777129999944,
+  "runtime_source": "FRESH_API_CALL"
+}

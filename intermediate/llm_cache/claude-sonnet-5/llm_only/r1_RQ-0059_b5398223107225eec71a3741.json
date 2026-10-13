@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0059",
+  "status": "FOUND",
+  "target_id": "PS::69-72-7",
+  "reason": "CAS 54-21-7 is sodium salicylate, the sodium salt of salicylic acid, matching catalog entry PS::69-72-7 covering 'Salicylic acid and its salts'. SMILES shows the salicylate anion with Na+ counterion, consistent with the reference acid structure.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10543,
+  "output_tokens": 153,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.4891526000010344,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0002",
+  "status": "FOUND",
+  "target_id": "CG::CRVI_COMPOUNDS",
+  "reason": "CAS 10049-05-5 (chromium(III) chloride is actually CrCl3, but given SMILES 'Cl[Cr]Cl' represents chromium dichloride; however CAS 10049-05-5 is chromium(III) chloride) matches chromium compound category; candidate is a chromium chloride species falling under the Chromium(6+) compounds enumerated group context as closest matching regulatory class among provided options.",
+  "confidence": "LOW",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10159,
+  "output_tokens": 200,
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 3.1456911000004766,
+  "runtime_source": "FRESH_API_CALL"
+}

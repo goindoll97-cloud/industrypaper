@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0050",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidates are pentaerythritol acrylate esters (mono/di/tri/tetra-acrylate variants of pentaerythritol) with CAS 3524-68-3, 4986-89-4, 53417-29-1, 55919-77-2. None of these match any catalog target's enumerated members, reference substances, or mixture components (chromium compounds, lead compounds, malachite green salts, nonylphenol, trialkyltin, or the various named mixtures/precursor acids).",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10334,
+  "output_tokens": 210,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.3767898000005516,
+  "runtime_source": "FRESH_API_CALL"
+}

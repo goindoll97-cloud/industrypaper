@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0015",
+  "status": "FOUND",
+  "target_id": "PS::113-00-8",
+  "reason": "CAS 113-00-8 with SMILES C(=N)(N)N matches exactly the reference substance Guanidine listed under PS::113-00-8.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10156,
+  "output_tokens": 104,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.9833362999997917,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0108",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Diethyl oxalate (95-92-1, CCOC(=O)C(=O)OCC) is a diester of oxalic acid, not oxalic acid itself or a salt of it, and does not match any enumerated members or mixture components in the catalog.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10529,
+  "output_tokens": 136,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.4186809999991965,
+  "runtime_source": "FRESH_API_CALL"
+}

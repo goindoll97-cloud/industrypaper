@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0013",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 110-94-1 is glutaric acid (pentanedioic acid, C(CC(=O)O)CC(=O)O), which does not match any catalog entry. No glutaric acid target exists in the catalog; it is structurally distinct from succinic acid (C4 diacid) listed in PS::110-15-6.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10530,
+  "output_tokens": 158,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.5316801000008127,
+  "runtime_source": "FRESH_API_CALL"
+}

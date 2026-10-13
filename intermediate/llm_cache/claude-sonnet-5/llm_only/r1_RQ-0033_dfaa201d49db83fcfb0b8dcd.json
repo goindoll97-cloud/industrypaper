@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0033",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 144-29-6 is piperazine citrate, a salt of piperazine (SMILES shows piperazine + citric acid). Catalog PS::110-85-0 covers piperazine and its salts, matching this component.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10231,
+  "output_tokens": 126,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.4439375000001746,
+  "runtime_source": "FRESH_API_CALL"
+}

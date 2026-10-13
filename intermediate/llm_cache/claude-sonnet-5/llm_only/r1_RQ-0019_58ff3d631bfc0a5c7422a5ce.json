@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0019",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 123-56-8 (succinimide, C1CC(=O)NC1=O) does not match any enumerated members or reference substances in the catalog. It is structurally distinct from succinic acid (PS::110-15-6) as it is a cyclic imide, not an acid/salt, and is not listed in any mixture or compound group.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10526,
+  "output_tokens": 164,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.6019037000005483,
+  "runtime_source": "FRESH_API_CALL"
+}

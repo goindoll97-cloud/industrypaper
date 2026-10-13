@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0010",
+  "status": "FOUND",
+  "target_id": "PS::110-85-0",
+  "reason": "CAS 109-01-3 (N-methylpiperazine, CN1CCNCC1) is a derivative/salt-equivalent of piperazine core structure, but more precisely it is a substituted piperazine. The piperazine ring with N-methyl substitution matches piperazine scope (C1CNCCN1) as the free base skeleton is piperazine; 1-methylpiperazine is commonly classified as a piperazine derivative covered under 'Piperazine and its salts' regulatory scope.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10522,
+  "output_tokens": 219,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 2,
+  "call_status": "OK",
+  "elapsed_sec": 6.186679800001002,
+  "runtime_source": "FRESH_API_CALL"
+}

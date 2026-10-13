@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0034",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 1461-25-2 (tetrabutyltin) is a tributyltin-related trialkyltin compound; SMILES CCCC[Sn](CCCC)(CCCC)CCCC matches the tributyltin compound category covered by CG::TBT_TRIALKYLTIN, which broadly covers tributyltin compounds.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10538,
+  "output_tokens": 178,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.4135827999998583,
+  "runtime_source": "FRESH_API_CALL"
+}

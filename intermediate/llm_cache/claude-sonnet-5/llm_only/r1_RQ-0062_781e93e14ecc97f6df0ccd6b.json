@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0062",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Candidate CAS 55-21-0 (benzamide, C6H5C(=O)NH2) does not match any catalog target. It is not a salt/acid listed in PS:: entries, not a chromium, lead, malachite green, nonylphenol, or organotin compound, and does not match any mixture component.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10532,
+  "output_tokens": 151,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.7756064999994123,
+  "runtime_source": "FRESH_API_CALL"
+}

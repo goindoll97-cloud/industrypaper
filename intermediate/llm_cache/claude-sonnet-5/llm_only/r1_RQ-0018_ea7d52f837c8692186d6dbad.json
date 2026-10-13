@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0018",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Diethyl succinate (CAS 123-25-1) is a diester of succinic acid, not itself succinic acid or a salt thereof. It does not match any enumerated member or reference substance in the catalog, including PS::110-15-6 which covers succinic acid and its salts but not esters.",
+  "confidence": "MEDIUM",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10165,
+  "output_tokens": 148,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.3793776000002254,
+  "runtime_source": "FRESH_API_CALL"
+}

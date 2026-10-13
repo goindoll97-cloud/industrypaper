@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0050",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "The candidate substances (pentaerythritol mono/di/tri/tetra-acrylates) do not match any catalog entry. They are not chromium, lead, malachite green, nonylphenol, or tributyltin compounds, nor do they match any mixture definitions or the simple carboxylic/organic acid parent substances listed in the PS:: entries.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10700,
+  "output_tokens": 166,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.927876499999911,
+  "runtime_source": "FRESH_API_CALL"
+}

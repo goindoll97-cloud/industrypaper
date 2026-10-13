@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0085",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "CAS 6915-15-7 is malic acid (C(C(C(=O)O)O)C(=O)O), which does not match any catalog entry. None of the enumerated targets (chromium compounds, lead compounds, malachite green salts, nonylphenol/NPE, tributyltin compounds, listed mixtures, or the simple acid/salt reference substances like succinic, oxalic, citric, benzoic, lactic, acetic, salicylic acid) correspond to malic acid.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10167,
+  "output_tokens": 212,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.851651099999799,
+  "runtime_source": "FRESH_API_CALL"
+}

@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0028",
+  "status": "NOT_FOUND",
+  "target_id": "",
+  "reason": "Ethyl acetate (CAS 141-78-6) does not match any catalog entry's enumerated members, mixture components, or reference substances in the provided regulatory catalog.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10156,
+  "output_tokens": 109,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 1.9209591999997429,
+  "runtime_source": "FRESH_API_CALL"
+}

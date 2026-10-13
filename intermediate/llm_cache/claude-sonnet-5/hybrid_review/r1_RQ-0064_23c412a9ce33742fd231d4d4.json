@@ -1,0 +1,18 @@
+{
+  "query_id": "RQ-0064",
+  "status": "FOUND",
+  "target_id": "CG::TBT_TRIALKYLTIN",
+  "reason": "CAS 56-36-0 is tributyltin acetate (CCCC[Sn](CCCC)(CCCC)OC(=O)C), a tributyltin compound covered by the TBT_TRIALKYLTIN catalog scope which includes tributyl tin compounds generally.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10540,
+  "output_tokens": 156,
+  "api_attempts": 1,
+  "unparseable_responses": 0,
+  "stop_reason": "end_turn",
+  "condition": "HYBRID_REVIEW",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 2.797015399999509,
+  "runtime_source": "FRESH_API_CALL"
+}

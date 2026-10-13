@@ -1,0 +1,15 @@
+{
+  "query_id": "RQ-0048",
+  "status": "FOUND",
+  "target_id": "MX::97-1-127",
+  "reason": "The three candidate CAS numbers (3084-48-8, 31160-64-2, 78-50-2) exactly match the component_cas list of the mixture target MX::97-1-127, which enumerates trihexylphosphine oxide, tri-n-octylphosphine oxide, and monooctyldihexylphosphine oxide; SMILES structures also align with trialkylphosphine oxides.",
+  "confidence": "HIGH",
+  "model_returned": "claude-sonnet-5",
+  "input_tokens": 10270,
+  "output_tokens": 182,
+  "condition": "LLM_ONLY",
+  "repeat": 1,
+  "call_status": "OK",
+  "elapsed_sec": 3.0761069000000134,
+  "runtime_source": "FRESH_API_CALL"
+}
