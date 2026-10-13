@@ -1,0 +1,168 @@
+{
+  "protocol": "STUDY2_RETRIEVAL_DATASET_V2_1",
+  "frozen_at_utc": "2026-10-01T13:46:32.491767+00:00",
+  "source_validation_protocol": "VALIDATION_V2_THREE_CATEGORY",
+  "source_validation_frozen_at_utc": "2026-10-01T07:14:58.501345+00:00",
+  "source_validation_n_pairwise": 132,
+  "retrieval_query_n": 112,
+  "regulatory_catalog_target_n": 29,
+  "query_mode_counts": {
+    "SINGLE_CAS": 103,
+    "COMPONENT_CAS_SET": 9
+  },
+  "gold_status_counts": {
+    "FOUND": 60,
+    "NOT_FOUND": 52
+  },
+  "catalog_type_counts": {
+    "MIXTURE": 15,
+    "PARENT_SALT": 9,
+    "CHEMICAL_GROUP": 5
+  },
+  "retrieval_scope_review_required": 52,
+  "retrieval_scope_review_approved": 52,
+  "exact_hit_conflicts_resolved_by_note": 0,
+  "gold_overrides": [],
+  "excluded_no_cas_pairwise_rows": 12,
+  "excluded_no_cas_unique_targets": 7,
+  "candidate_input_policy": "retrieval_INPUT.csv contains only an opaque query_id and CAS identifier(s). No candidate names, row-specific target scope, category, or GOLD information is supplied.",
+  "catalog_policy": "Catalog target identity is built independently of retrieval GOLD. Named-mixture component CAS sets come from frozen target scope fields; an official mixture CAS is included only when independently verified in reference/mixture_regulatory_reference.csv from an official regulatory source. No mixture CAS is inferred from a GOLD MATCH candidate.",
+  "gold_review_policy": "Every derived NOT_FOUND or MULTI_TARGET retrieval claim requires explicit researcher review against all frozen catalog targets before freeze.",
+  "external_data_policy": "Both LLM-only and Hybrid may use the same PubChem-derived SMILES only. PubChem names, titles, synonyms, classifications, and regulatory annotations are not model inputs.",
+  "checks": [
+    {
+      "check": "validation_v2_frozen_132",
+      "status": "PASS",
+      "details": "132"
+    },
+    {
+      "check": "validation_v2_audit_pass",
+      "status": "PASS",
+      "details": "PASS"
+    },
+    {
+      "check": "retrieval_input_columns_minimal",
+      "status": "PASS",
+      "details": "['query_id', 'cas_inputs']"
+    },
+    {
+      "check": "retrieval_input_query_unique",
+      "status": "PASS",
+      "details": "112"
+    },
+    {
+      "check": "retrieval_input_signature_unique",
+      "status": "PASS",
+      "details": "112"
+    },
+    {
+      "check": "retrieval_input_gold_same_queries",
+      "status": "PASS",
+      "details": "input=112, gold=112"
+    },
+    {
+      "check": "catalog_target_unique",
+      "status": "PASS",
+      "details": "29"
+    },
+    {
+      "check": "catalog_three_target_types",
+      "status": "PASS",
+      "details": "['CHEMICAL_GROUP', 'MIXTURE', 'PARENT_SALT']"
+    },
+    {
+      "check": "catalog_29_targets",
+      "status": "PASS",
+      "details": "29"
+    },
+    {
+      "check": "mixture_official_cas_from_independent_reference",
+      "status": "PASS",
+      "details": "reference=[('MX::2023-1-1162', '78643-41-1')], catalog=[('MX::2023-1-1162', '78643-41-1')]"
+    },
+    {
+      "check": "mixture_official_cas_basis_independent",
+      "status": "PASS",
+      "details": "[{'target_id': 'MX::2023-1-1162', 'official_mixture_cas': '78643-41-1', 'source_name': 'Korea Law Information Center'}]"
+    },
+    {
+      "check": "all_query_cas_checksum_valid",
+      "status": "PASS",
+      "details": "[]"
+    },
+    {
+      "check": "gold_targets_exist_in_catalog_or_not_found",
+      "status": "PASS",
+      "details": "[]"
+    },
+    {
+      "check": "no_multitarget_gold",
+      "status": "PASS",
+      "details": "[]"
+    },
+    {
+      "check": "no_target_or_label_columns_in_input",
+      "status": "PASS",
+      "details": "[]"
+    },
+    {
+      "check": "retrieval_queries_nontrivial",
+      "status": "PASS",
+      "details": "112"
+    },
+    {
+      "check": "cas_set_queries_present_for_named_mixtures",
+      "status": "PASS",
+      "details": "multi-CAS queries=9"
+    },
+    {
+      "check": "cas_unavailable_cases_documented",
+      "status": "PASS",
+      "details": "12"
+    },
+    {
+      "check": "retrieval_gold_review_query_coverage",
+      "status": "PASS",
+      "details": "required_review=52, expected=52"
+    },
+    {
+      "check": "retrieval_gold_researcher_signoff_complete",
+      "status": "PASS",
+      "details": "approved=52, pending=0, rejected=0"
+    },
+    {
+      "check": "exact_hit_conflicts_resolved",
+      "status": "PASS",
+      "details": "[]"
+    },
+    {
+      "check": "parent_salt_isomer_scope_explicit",
+      "status": "PASS",
+      "details": "['ALL_STEREOISOMERS']"
+    },
+    {
+      "check": "catalog_identity_basis_present",
+      "status": "PASS",
+      "details": "['FROZEN_REGULATORY_GROUP_REFERENCE', 'FROZEN_TARGET_REFERENCE_FIELDS', 'FROZEN_TARGET_SCOPE_AND_COMPONENT_FIELDS', 'FROZEN_TARGET_SCOPE_AND_COMPONENT_FIELDS+INDEPENDENT_OFFICIAL_MIXTURE_CAS_REFERENCE']"
+    }
+  ],
+  "sha256": {
+    "00_build_retrieval_benchmark.py": "35877575c100b0bc9eadc8b22e1cc4e3c60305ac1c650adf402e9fc04a43b816",
+    "00c_apply_mixture_regulatory_reference.py": "255c172fb309f6d223ff81603f88af4da1d96d14804e33607a4f0c2d4081acf0",
+    "reference/mixture_regulatory_reference.csv": "fc95fd75051128190f2ed587bca874f11ab24ab058dcc41f7654dbc4f22af5c2",
+    "data/mixture_regulatory_reference_applied.csv": "de9f00c1cfbb7b0509887e5c0a59db9ebfcc6764704acf3ad389c76bf286a46c",
+    "00a_apply_cas_corrections.py": "0f1275bc1e1f65822758f54da7b2f3f2d85c1ce4cbb30cd0498572a54b99d6c9",
+    "00b_apply_gold_overrides.py": "06adbee63f9c79dfc8f2b10080bc2ce17524d2e7f6271607bd394a9909c2378a",
+    "review/retrieval_gold_overrides.csv": "904ec59cb42c02e95730680f865f525bcc6538aaab5370694e6fc064600628da",
+    "01a_prepare_retrieval_gold_review.py": "80ff19c2385b52f80c2f0160399e41a602ff29acfa47ecbf2f9f2e92cc853fc7",
+    "01b_retrieval_gold_signoff.py": "edfc55e114c837f6a757d9564e92cf52a35d33dc936bd0325712163379f9a6a9",
+    "retrieval_build_manifest.json": "28ffdbfb473277e68650bb897fcc446599b07b3165b64f7e8611a61bde2b30c7",
+    "regulatory_catalog.csv": "177497b6aa1d9688836a72f160dde722512e92595e65bdc6cf5c1ad432276f6e",
+    "retrieval_INPUT.csv": "1e6e34249e852370d8f8dd917a42b66947a41a10a1fd070c82c32511b5c86c71",
+    "retrieval_GOLD.csv": "c8fe5673cbd6fa25057f2b730d1c64abcd87ba1bf61dd5315ab9a2e298d4db2b",
+    "retrieval_EXCLUDED_NO_CAS.csv": "5c8d2eb4637ecb3924c481895500bc62a0a4c2aa4209da25760c89b347fe40c0",
+    "retrieval_CAS_CORRECTIONS.csv": "f50414b8a0263431ca83106a697066bce4cb32e612ec0854bfd091904cb561b3",
+    "review/retrieval_gold_manual_review.csv": "dfd79f7d057df7a640dd72d4d60d174bb8df01ce1e709f6b759d5bcc6a54f9d9",
+    "../validation_v2/VALIDATION_V2_FREEZE.json": "38bce6a1f90ba3ea086e54b3821eb7a233175dd902d50750e1e983d283f40d2a"
+  }
+}
