@@ -5,7 +5,7 @@
 This is an **additional experiment**, not a replacement for the original Claude study.
 
 - Same 112 CAS query cases and 29 regulatory targets.
-- Same original Claude system prompt and exact user prompt (verified against 224 saved prompt manifest rows).
+- Same original Claude system prompt and exact user prompt (verified against 175 saved prompt manifest rows).
 - Same frozen Hybrid preflight: 49 direct decisions and 63 review cases.
 - Default Ollama model: qwen3:8b, five repetitions for every query.
 - **Paired response design:** for each repetition the SAME Ollama response is reused for the LLM-only arm and the Hybrid review arm. Thus 112 x 5 = **560 calls**, not two separately sampled arms.
