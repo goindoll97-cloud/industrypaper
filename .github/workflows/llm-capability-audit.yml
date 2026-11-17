@@ -1,0 +1,25 @@
+name: LLM capability study baseline audit
+on:
+  push:
+    paths:
+      - "llm_capability_study/**"
+      - "data/retrieval_INPUT.csv"
+      - "data/retrieval_GOLD.csv"
+      - "data/regulatory_catalog.csv"
+      - "intermediate/shared_pubchem_smiles.csv"
+      - "review/retrieval_gold_manual_review.csv"
+      - ".github/workflows/llm-capability-audit.yml"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Syntax check
+        run: python -m py_compile llm_capability_study/audit_baseline.py
+      - name: Audit frozen baseline and review signoffs
+        run: python llm_capability_study/audit_baseline.py
