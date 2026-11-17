@@ -1,3 +1,94 @@
+# 2026-11-17: Gold 확정 전 검증 절차 (우선 실행)
+
+**현재 Gold 데이터셋은 아직 논문용으로 고정된 상태가 아닙니다. 독립 검토자 두 명은 필수 조건이 아니며, 물질별 공식 근거 대조와 Gold 정합성 확인이 기준입니다.**
+29개 규제항목 안에서의 식별 성능을 검증하는 연구이며, 국내 모든 법령의 비규제 여부를 판정하는 것이 아닙니다.
+기존 112건은 읽기 전용 역사적 기준자료로 보존합니다.
+
+- [검토 중인 Pull Request #14](https://github.com/goindoll97-cloud/industrypaper/pull/14)
+- 이 브랜치의 신규 후보 244건 중 ADJUDICATED 193건, EXCLUDED 51건
+- **182건의 법적 근거 문구에 원문 대조 필요가 남아 있음**. 이들의 검증이 완료되었다는 뜻이 아닙니다.
+- 고정 규제항목 29개 정의의 독립된 공식 출처 확인도 별도로 필요합니다.
+- 경고 문구만 지우거나 PENDING을 VERIFIED로 바꾸어 검증 완료로 표시하지 마세요. 검토자 2명의 별도 서명 파일은 필수로 요구하지 않습니다.
+
+
+## 현재 GitHub에 있는 법적 자료와 없는 자료
+
+- `data/regulatory_catalog.csv`: **29개 규제항목의 범위·CAS 목록** 보유. 이 파일은 원문 법령 PDF가 아닙니다.
+- `candidates/catalog_source_registry.csv`: 법제처 공식 링크가 **물질군 5개와 지정 혼합물 1개**에 기재됨. 나머지 23개 target에는 공식 출처 링크가 기록되지 않았습니다. 29개 전체가 아직 PENDING입니다.
+- `reference/mixture_regulatory_reference.csv` 및 `data/mixture_regulatory_reference_applied.csv`: `MX::2023-1-1162` 1건의 법제처 고시 별표 링크 수록.
+- `review/retrieval_gold_manual_review.csv`: 기존 112건의 Gold 검토 이력이며 법령 원문 파일은 아닙니다.
+- **추가 원문이 필요한 대상:** PS 모체·염류 9개 및 공식 출처가 없는 MX 혼합물 14개 항목. 5개 물질군도 이미 있는 공식 링크의 시행판·조항을 다시 검증해야 합니다.
+- 법제처 API에서 내려받은 고시 **PDF·HWP·HTML·XML·엑셀**을 주시면 기존 자료와 대조할 수 있습니다. 2인 독립 검토는 요구하지 않습니다.
+
+## A. GitHub Actions에서 자동 점검 (로컬 없이 진행 가능)
+
+1. PR #14의 Checks 또는 [Actions 화면](https://github.com/goindoll97-cloud/industrypaper/actions/workflows/llm-capability-audit.yml)에서 LLM capability study baseline audit를 엽니다.
+2. 성공한 실행의 Artifacts에서 gold-readiness-draft를 내려받습니다.
+3. 아래 파일을 확인합니다.
+   - review_audit_output/legal_review_summary.json: 보류된 근거 및 CAS 이상
+   - review_audit_output/legal_review_queue.csv: 우선순위별 법적 검토 대기열
+   - ci_readiness_draft/composition_report.json: 조립 오류, 중복, 표본 구성, Gold 확정 준비 여부
+4. **CI 통과는 기계적 점검의 성공이지 182건 법적 범위 확인의 완료가 아닙니다.**
+
+## B. 이미 생성된 검토용 자료
+
+- [우선순위별 미대조 182건 CSV](candidates/legal_review_queue_2026-11-17.csv)
+- [규제항목 29개 공식 출처 검토표](candidates/catalog_source_registry.csv)
+- [혼합물 18건 + 일반 20건 감사기록](candidates/review_audit_2026-11-17.md)
+
+**검토 순서:** 규제대상 범위 판정 사례(SCOPE_POSITIVE), 경계형 비대상(NEGATIVE_SCOPE_NEAR_MISS),
+일반 비대상(NEGATIVE_SCOPE_GENERAL), CAS 직접 일치 양성(EXACT_CAS_POSITIVE).
+
+- 정답인 경우: 검증한 고시명, 발령번호 및 시행일, 별표·조항, CAS 정체성 또는 염류/물질군 근거를 review_sheet.csv의 human_legal_basis에 기재
+- 비대상인 경우: 단순한 CAS 미등재가 아니라 동결된 29개 규제범위 어디에도 포함되지 않음을 확인
+- 경계 사례: human_review_status를 EXCLUDED로 변경하고 사유 기재
+- catalog_source_registry.csv: 검증자 이름, 검증일, 신뢰할 공식 출처 URL/문서 식별정보를 남긴 뒤에만 verification_status=VERIFIED 처리
+- 9개 PS 항목과 일부 MX 항목은 공식 근거가 아직 명시되지 않았으므로 우선 보완
+
+**중요한 카탈로그 문제:** MX::97-1-127의 설명에는 3084-48-0이 들어 있지만 CAS 체크디지트가
+성립하지 않습니다. 카탈로그 성분 목록의 3084-48-8과 다릅니다.
+공식 문서에도 같은 오타가 있을 수 있으므로 원문 및 실제 물질정보를 대조하고,
+기존 112건 및 동결 카탈로그는 자동 변경하지 마세요.
+
+## C. 로컬에서 재현하는 경우 (저장소 최상위 폴더에서)
+
+PR 수정내용이 들어 있는 브랜치를 사용해야 합니다. main에서 실행하면 변경 전 데이터가 사용됩니다.
+
+~~~powershell
+git fetch origin review/cas-gold-audit-2026-11-17
+git switch --track origin/review/cas-gold-audit-2026-11-17
+# 같은 이름의 로컬 브랜치가 이미 있으면 git switch review/cas-gold-audit-2026-11-17
+conda activate chemprop
+python -m pip install rdkit
+
+python llm_capability_study/tests/test_validation_pipeline.py
+python llm_capability_study/tests/test_gold_readiness.py
+python llm_capability_study/audit_gold_readiness.py
+python llm_capability_study/build_validation_dataset.py --version local_audit_draft
+~~~
+
+실행 결과를 함께 보려면 다음 **두 파일**을 이 대화에 업로드해 주세요.
+
+- llm_capability_study/candidates/review_audit_output/legal_review_summary.json
+- llm_capability_study/validation_dataset/local_audit_draft/composition_report.json
+
+오류로 중단되면 터미널 마지막 30줄을 보내주세요. 인증 토큰 등은 제외합니다.
+
+## D. 최종 동결은 지금 실행하지 마세요
+
+182개 물질별 법적 근거, 29개 규제항목 출처, 구조 및 CAS 중복 검토가
+완료된 후 오류가 없는 경우에만 아래를 실행합니다.
+
+~~~powershell
+python llm_capability_study/build_validation_dataset.py --version v2_verified --freeze
+~~~
+
+빌더는 고시 원문 미대조, 출처 형식 미비, 29개 항목 출처검토 미승인, CAS·구조 오류가 남아 있으면
+동결을 거부합니다. 이 자동 게이트만으로 법적 정답의 실질적 정확성이 보증되지는 않습니다.
+이미 동결된 버전은 덮어쓰지 못하게 보호합니다.
+
+---
+
 # 검증물질 데이터셋 구축: 한 폴더, 한 검토표
 
 지금은 LLM을 평가하는 단계가 아니라 **정답이 검증된 평가자료를 완성하는 단계**입니다. 수집·사전검토는 명령 하나로 끝나고, 결과는 `candidates/` 폴더 하나에만 쌓입니다.
@@ -32,7 +123,7 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
 | **`review_sheet.csv`** | **여기에 정답을 채웁니다.** 후보 1건당 1행. 수집 정보, 자동 사전검토 결과(`auto_*`), 사람이 채울 열(`human_*`)이 한 파일에 있고, 이 파일이 후보 목록 자체이기도 합니다 |
 | `summary.json` | 건수, 출처별·분류별 집계, 목표 대비 부족분, 제외된 후보와 사유(`dropped_candidates`), 성분 CAS가 없는 혼합물 6개의 PubChem 후보(`mixture_name_resolution`), 카탈로그 경고 |
 
-`_sources/`는 첫 실행 때 가져오는 이전 배치 원본이며 이후에는 쓰이지 않습니다. 수집 중간 파일과 PubChem 응답 캐시는 `collection_output\_work\`(A=균형 수집, B=경계 프로브)에만 쌓이며 열어볼 필요가 없고 Git에도 올라가지 않습니다.
+`_sources/`는 첫 실행 때 가져오는 이전 배치 원본이며 이후에는 쓰이지 않습니다. 수집 중간 파일과 PubChem 응답 캐시는 `collection_output\_work`(A=균형 수집, B=경계 프로브)에만 쌓이며 열어볼 필요가 없고 Git에도 올라가지 않습니다.
 
 `case_id`는 `CAND-0001`부터 한 가지 체계로 붙고, 이전 배치의 번호는 `legacy_case_id`에 남아 있습니다.
 
@@ -57,7 +148,7 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
     python build_validation_dataset.py                       # 초안 점검 (기본으로 candidates\review_sheet.csv 사용)
     python build_validation_dataset.py --version v1 --freeze # 오류가 없을 때 고정
 
-결과(`validation_dataset\<version>\`, 파일 4개 + 고정 시 1개):
+결과(`validation_dataset\<version>`, 파일 4개 + 고정 시 1개):
 
 | 파일 | 내용 |
 | --- | --- |

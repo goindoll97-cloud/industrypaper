@@ -1,0 +1,26 @@
+{
+  "experiment": "2026-5 hazardous-substance classification and concentration threshold assessment",
+  "source_date": "2026-11-18",
+  "uploaded_to_repository": false,
+  "expected_files": [
+    {
+      "path": "data/2026_5_LLM_Validation_Set.xlsx",
+      "original_name": "2026_5_LLM_Validation_Set.xlsx",
+      "size_bytes": 201621,
+      "sha256": "83954384d8fbb553321ee755c7d98d48b5537c65aebd8e4a29fb07ac382536ed"
+    },
+    {
+      "path": "data/2026_5_LLM_GOLD_Answer_Key.xlsx",
+      "original_name": "2026_5_LLM_GOLD_Answer_Key.xlsx",
+      "size_bytes": 222678,
+      "sha256": "af8a59462c7d181b563203a54ee7c9ab110bcf7c4693c4130f92b8703c9fa64e"
+    },
+    {
+      "path": "reference/2026-5_official_annex.xlsx",
+      "original_name": "2026-5_(별표) 인체등유해성물질 목록(전체)(2).xlsx",
+      "size_bytes": 163742,
+      "sha256": "a79fef57b5c935d5bd25b64d8b41d5eba0dcb4e44b473bd0892e9ba3e5cd7585"
+    }
+  ],
+  "note": "Files are available in this ChatGPT conversation but need to be committed to GitHub before a repository-based run. SHA values identify the originally produced files."
+}

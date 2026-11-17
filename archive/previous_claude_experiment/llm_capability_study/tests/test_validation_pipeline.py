@@ -18,7 +18,7 @@ import prereview_candidates as pre  # noqa: E402
 from collect_pubchem_candidates import read_csv  # noqa: E402
 
 SHEET_FIELDS = ["case_id", "cas_inputs", "source_category", "candidate_stratum", "difficulty_tag", "smiles",
-                "human_gold_target_id", "human_legal_basis", "human_review_status"]
+                "human_gold_target_id", "human_legal_basis", "human_review_status", "source_batch"]
 
 
 def write_sheet(path, rows):
@@ -112,6 +112,7 @@ class TestBuilderGates(unittest.TestCase):
                     baseline_input=str(ROOT / "data/retrieval_INPUT.csv"),
                     baseline_gold=str(ROOT / "data/retrieval_GOLD.csv"),
                     smiles=str(ROOT / "intermediate/shared_pubchem_smiles.csv"),
+                    catalog_source_registry=str(tmp / "catalog_source_registry.csv"),
                     target_min=300, target_max=400, min_per_category=30,
                     allow_structure_duplicates=False, freeze=False)
         base.update(kw)
@@ -123,7 +124,8 @@ class TestBuilderGates(unittest.TestCase):
             sheet = tmp / "batch1" / "sheet.csv"
             good = dict(case_id="A-1", cas_inputs="56-40-6", source_category="GENERAL_CHEMICAL",
                         smiles="C(C(=O)O)N", human_gold_target_id="NOT_FOUND",
-                        human_legal_basis="29-target catalog checked", human_review_status="ADJUDICATED")
+                        human_legal_basis="29-target catalog checked", human_review_status="ADJUDICATED",
+                        source_batch="balanced_v2")
             write_sheet(sheet, [
                 good,
                 {**good, "case_id": "A-2", "cas_inputs": "56-41-7", "human_review_status": "PENDING"},
@@ -148,6 +150,8 @@ class TestBuilderGates(unittest.TestCase):
             self.assertEqual(gold["RQ-0114"]["gold_target_id"], "PS::50-21-5|PS::64-19-7")
             self.assertEqual(gold["RQ-0114"]["n_gold_targets"], "2")
             self.assertFalse((out / "held_not_included.csv").exists())
+            meta = {r["query_id"]: r for r in read_csv(out / "validation_METADATA.csv")}
+            self.assertEqual(meta["RQ-0113"]["source_batch"], "balanced_v2")
 
     def test_model_input_has_no_labels_or_names(self):
         with tempfile.TemporaryDirectory() as d:
@@ -192,9 +196,63 @@ class TestBuilderGates(unittest.TestCase):
             self.assertIn("DUPLICATE_CAS_SET", joined)  # already a baseline mixture
             self.assertIn("GOLD_DIFFERS_FROM_CATALOG_MIXTURE_SET", joined)
 
+    def test_unverified_legal_basis_blocks_freeze(self):
+        with tempfile.TemporaryDirectory() as d:
+            tmp = Path(d)
+            sheet = tmp / "sheet.csv"
+            write_sheet(sheet, [dict(case_id="T-1", cas_inputs="506-26-3",
+                                     source_category="GENERAL_CHEMICAL",
+                                     human_gold_target_id="NOT_FOUND",
+                                     human_legal_basis="초안, 고시 원문 대조 필요",
+                                     human_review_status="ADJUDICATED")])
+            report, out = bvd.build(self.args(tmp, [str(sheet)], freeze=True))
+            self.assertEqual(report["n_legal_basis_pending"], 1)
+            self.assertFalse(report["frozen"])
+            self.assertIn("UNVERIFIED_LEGAL_BASIS T-1", report["errors"])
+            self.assertFalse((out / "VALIDATION_DATASET_FREEZE.json").exists())
+
+    def test_exact_catalog_overlap_must_include_all_ids(self):
+        catalog = pre.load_catalog(ROOT / "data/regulatory_catalog.csv")
+        row = dict(query_id="RQ-9999", cas_inputs="12656-85-8",
+                   gold_target_id="CG::CRVI_COMPOUNDS", origin="NEW_ADJUDICATED",
+                   smiles="")
+        errors, _ = bvd.run_checks([row], catalog)
+        self.assertTrue(any("GOLD_DIFFERS_FROM_EXACT_CATALOG_CAS" in x for x in errors))
+
+    def test_source_registry_requires_signoff(self):
+        with tempfile.TemporaryDirectory() as d:
+            catalog_ids = set(pre.load_catalog(ROOT / "data/regulatory_catalog.csv"))
+            pending = bvd.catalog_source_pending(Path(d) / "absent.csv", catalog_ids)
+            self.assertEqual(len(pending), 29)
+
+
+    def test_freeze_not_blocked_by_absent_independent_reviewer_files(self):
+        with tempfile.TemporaryDirectory() as d:
+            tmp = Path(d)
+            sheet = tmp / "review" / "sheet.csv"
+            write_sheet(sheet, [dict(
+                case_id="T-1", cas_inputs="506-26-3", source_category="GENERAL_CHEMICAL",
+                human_gold_target_id="NOT_FOUND",
+                human_legal_basis="법적 근거 검토용 고시 제2025-28호 (test fixture)",
+                human_review_status="ADJUDICATED")])
+            report, _ = bvd.build(self.args(tmp, [str(sheet)]))
+            self.assertEqual(report["n_new_included"], 1)
+            self.assertNotIn("n_independent_review_issues", report)
+            self.assertEqual(report["n_legal_basis_pending"], 0)
+            self.assertEqual(report["n_catalog_source_pending"], 29)
+
+
     def test_freeze_writes_manifest_when_clean(self):
         with tempfile.TemporaryDirectory() as d:
             tmp = Path(d)
+            registry = tmp / "catalog_source_registry.csv"
+            with registry.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=["target_id", "verification_status", "verified_by", "verified_on", "verification_notes"])
+                writer.writeheader()
+                for target in read_csv(ROOT / "data/regulatory_catalog.csv"):
+                    writer.writerow({"target_id": target["target_id"], "verification_status": "VERIFIED",
+                                     "verified_by": "test-fixture", "verified_on": "2026-11-17",
+                                     "verification_notes": "synthetic test fixture; not a real legal source"})
             report, out = bvd.build(self.args(tmp, [], freeze=True))
             self.assertTrue(report["frozen"])
             manifest = json.loads((out / "VALIDATION_DATASET_FREEZE.json").read_text(encoding="utf-8"))

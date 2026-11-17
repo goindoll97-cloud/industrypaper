@@ -1,0 +1,9 @@
+# Current 2026-5 study
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.DS_Store
+.ipynb_checkpoints/
+results/.tmp/

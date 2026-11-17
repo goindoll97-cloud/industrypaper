@@ -20,7 +20,7 @@ Important distinction: this tests *identification within a specified catalog*, N
 1. **Target universe:** keep the original 29 regulatory target IDs frozen for the primary comparison, including their exact regulatory scope and isomer interpretation. If the catalog is expanded, treat it as a SEPARATE benchmark: a new catalog changes the question and the prompt.
 2. **Chemical input:** retain the original CAS-only/candidate SMILES plus the whole fixed catalog design. Do not expose candidate name, synonyms, source group, GOLD answers or reviewer notes to the tested LLM.
 3. **Outcome:** exact target ID, `NOT_FOUND` (only from the 29-target catalog), or `REVIEW` when a decision is not justified. RE​VIEW is an abstention, not automatically correct.
-4. **Gold standard:** legal scope comes from a documented regulatory source, identity from verified CAS and/or molecular structure evidence. Two reviewers should independently verify proposed labels and document disagreements BEFORE any model predictions are inspected.
+4. **Gold standard:** legal scope comes from a documented regulatory source, identity from verified CAS and/or molecular structure evidence. Every proposed Gold label must receive documented, source-based researcher adjudication BEFORE any model predictions are inspected. An independent second reviewer is optional, not a required dataset-freeze condition; the lack of independent agreement evidence must be disclosed as a study limitation.
 5. **Dataset separation:** existing 112 cases are a frozen historical baseline. New cases are a separately labelled extension/holdout. Do not amend the old 112 labels or revise the test set after seeing model output.
 6. **Model comparison:** freeze prompts, complete model identifiers and digests, quantization, decoding settings, maximum context, and evaluation date. Use the same accessible regulatory information for all models; ensure the prompt fits each model's context. Larger parameter count is not an established ranking of regulatory competence.
 7. **Repeated answers:** target **5 independent samples per case per model** initially; report per-case prediction agreement and accuracy separately. Do not count repeats as independent chemical cases.
@@ -57,7 +57,7 @@ For each candidate use the fields in `new_cases_template.csv`:
 - `gold_target_id`: one of the 29 target IDs when FOUND, or NOT_FOUND; leave blank for REVIEW_PENDING
 - `regulatory_source_url` and `regulatory_source_date`: immutable evidence and version of the regulatory source
 - `identity_evidence_url`, `smiles`, `smiles_qc_status`: identity and structure provenance
-- `reviewer1_status`, `reviewer2_status`, `adjudication_status`: independent label verification
+- `reviewer1_status`, `reviewer2_status`, `adjudication_status`: optional second-review fields; the required case-level legal/chemical basis is documented in `human_legal_basis` of the reviewer sheet.
 - `notes_human_only`: research notes (NEVER exposed to tested models)
 
 The template intentionally starts **without fabricated chemical rows**. The evaluator should reject pending/unverified rows rather than silently counting them.
@@ -65,6 +65,11 @@ The template intentionally starts **without fabricated chemical rows**. The eval
 ## Immediate next steps
 
 1. Run `python llm_capability_study/audit_baseline.py`; inspect `llm_capability_study/output/baseline_summary.json` and `baseline_inventory.csv`.
-2. Fill first 40-60 rows of `new_cases_template.csv` in a separate working copy, with verifiable legal/identity evidence and independent expert review.
+2. Adjudicate the first 40-60 rows in a separate working copy using verifiable legal and identity evidence. Independent expert review may be added but is not mandatory.
 3. Freeze a versioned expansion dataset, then implement the LLM-only run/scoring protocol for the extended sample. Model fitting or prompt tuning should use a different development set, not the evaluation set.
 4. Report Claude only on the 112 historical cases; Claude was not repeated and has NO results for the expansion.
+
+## Protocol amendment log
+
+- **2026-11-17 — Independent reviewer requirement changed:** the initial plan asked for two independent reviewers to verify new labels. The dataset-freeze gate now requires **documented official legal scope, chemical identity, adjudication evidence and a versioned audit trail**, not two distinct reviewer files. Optional second review remains beneficial but is not enforced. This change was recorded **before running the new Study 3 LLM comparison**; it does not retroactively verify the Gold labels and must be stated in the manuscript's limitations.
+- The frozen historical 112-case baseline, target universe of 29 IDs, and the model-input anti-leakage rules are unchanged.

@@ -12,7 +12,9 @@ The 112 baseline files in data/ are read-only; nothing here modifies them.
 
 Model-visible file: validation_INPUT.csv (query_id, cas_inputs, smiles) -- no names, strata or labels.
 Analysis files: validation_GOLD.csv, validation_METADATA.csv, composition_report.json.
---freeze writes VALIDATION_DATASET_FREEZE.json (hashes) only if there are no errors.
+--freeze writes VALIDATION_DATASET_FREEZE.json only if there are no errors
+and each new included row has a documented, non-draft legal reference.
+This syntactic evidence gate is NOT a substitute for source-based legal validation.
 """
 from __future__ import annotations
 
@@ -20,6 +22,7 @@ import argparse
 import csv
 import hashlib
 import json
+import re
 import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
@@ -82,7 +85,9 @@ def gate_new_rows(sheet_paths, catalog_ids):
             status = (r.get("human_review_status") or "").strip().upper()
             target = (r.get("human_gold_target_id") or "").strip()
             basis = (r.get("human_legal_basis") or "").strip()
-            rec = {**r, "source_batch": batch}
+            # Preserve the collection batch recorded for this case. The CSV lives
+            # in candidates/, which is a folder name, not a meaningful source batch.
+            rec = {**r, "source_batch": (r.get("source_batch") or "").strip() or batch}
             if status == EXCLUDE:
                 excluded.append({**rec, "reason": "EXCLUDED_BY_REVIEWER"})
             elif status != INCLUDE:
@@ -99,6 +104,44 @@ def gate_new_rows(sheet_paths, catalog_ids):
                     rec["human_gold_target_id"] = "|".join(parts)
                     included.append(rec)
     return included, excluded, held
+
+
+def legal_evidence_pending(basis):
+    """Conservative freeze gate: a draft note is not legal source verification.
+
+    This verifies documentation presence, NOT the substance of a legal claim.
+    Source quality and target membership still require documented researcher adjudication.
+    """
+    text = (basis or "").strip()
+    if not text or any(term in text for term in (
+        "고시 원문 대조 필요",
+        "공식 고시 원문과 대조 필요",
+        "29개 항목 범위 대조(초안)",
+        "출처 확인(초안)",
+    )):
+        return True
+    # A source name/version or an explicit URL is the minimum auditable trail.
+    has_source = bool(re.search(r"https?://|고시\s*제\d{4}[-–]\d+호", text))
+    return not has_source
+
+
+def catalog_source_pending(registry_path, catalog_ids):
+    """A separate, explicit provenance gate for all 29 frozen target definitions."""
+    path = Path(registry_path)
+    if not path.is_file():
+        return sorted(catalog_ids)
+    entries = {r["target_id"]: r for r in read_csv(path)}
+    pending = []
+    for target_id in sorted(catalog_ids):
+        r = entries.get(target_id, {})
+        verified = (r.get("verification_status") or "").strip().upper() == "VERIFIED"
+        named_reviewer = bool((r.get("verified_by") or "").strip())
+        dated = bool((r.get("verified_on") or "").strip())
+        documented = bool((r.get("source_candidate_url") or "").strip()
+                          or (r.get("verification_notes") or "").strip())
+        if not (verified and named_reviewer and dated and documented):
+            pending.append(target_id)
+    return pending
 
 
 def to_dataset_row(rec, query_id):
@@ -137,12 +180,12 @@ def run_checks(rows, catalog, allow_structure_duplicates=False):
         # contradiction with exact catalog CAS (single-CAS rows)
         if len(sig) == 1:
             exact = {tid for tid, sg in pre_signals(sig[0], catalog) if sg == "EXACT"}
-            if exact and not (set(r["gold_target_id"].split("|")) & exact):
+            if exact and not exact.issubset(set(r["gold_target_id"].split("|"))):
                 msg = f"GOLD_DIFFERS_FROM_EXACT_CATALOG_CAS {r['query_id']} {sig[0]} gold={r['gold_target_id']} exact={sorted(exact)}"
                 (errors if new else warnings).append(msg)
         if len(sig) > 1:  # component-CAS set equal to a catalog mixture must carry that mixture as Gold
             same = {tid for tid, t in catalog.items() if t["type"] == "MIXTURE" and t["components"] == set(sig)}
-            if same and r["gold_target_id"] not in same:
+            if same and not same.issubset(set(r["gold_target_id"].split("|"))):
                 msg = f"GOLD_DIFFERS_FROM_CATALOG_MIXTURE_SET {r['query_id']} gold={r['gold_target_id']} set={sorted(same)}"
                 (errors if new else warnings).append(msg)
         if pre.HAVE_RDKIT and len(sig) == 1 and r["smiles"]:
@@ -192,7 +235,9 @@ def build(args):
     smiles_by_cas = {r["cas"]: r["smiles"] for r in read_csv(Path(args.smiles)) if r.get("smiles")}
     baseline = load_baseline(Path(args.baseline_input), Path(args.baseline_gold), smiles_by_cas)
     included, excluded, held = gate_new_rows(args.reviewed, set(catalog))
+    source_pending = catalog_source_pending(args.catalog_source_registry, set(catalog))
     included.sort(key=lambda r: (r["source_batch"], r["case_id"]))
+    legal_pending = [r for r in included if legal_evidence_pending(r["human_legal_basis"])]
     next_id = max(int(r["query_id"].split("-")[1]) for r in baseline) + 1
     new_rows = [to_dataset_row(r, f"RQ-{next_id + i:04d}") for i, r in enumerate(included)]
     rows = baseline + new_rows
@@ -202,6 +247,11 @@ def build(args):
         "version": args.version, "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "n_new_included": len(new_rows), "n_new_excluded_by_reviewer": len(excluded),
         "n_new_held": len(held), "held_by_reason": dict(Counter(h["reason"] for h in held)),
+        "n_legal_basis_pending": len(legal_pending),
+        "legal_basis_pending_case_ids": [r["case_id"] for r in legal_pending],
+        "gold_ready_for_freeze": not bool(legal_pending or source_pending),
+        "n_catalog_source_pending": len(source_pending),
+        "catalog_source_pending_target_ids": source_pending,
         "excluded_cases": [{k: e.get(k, "") for k in ("case_id", "cas_inputs", "source_batch", "reason")}
                            for e in excluded],
         "held_cases": [{k: h.get(k, "") for k in ("case_id", "cas_inputs", "human_review_status",
@@ -210,10 +260,17 @@ def build(args):
         "frozen": False,
     })
     out = Path(args.out) / args.version
+    if args.freeze and (out / "VALIDATION_DATASET_FREEZE.json").exists():
+        raise FileExistsError(f"Already frozen: {out}. Use a new --version; never overwrite a freeze.")
     write(out / "validation_INPUT.csv", rows, INPUT_FIELDS)
     write(out / "validation_GOLD.csv", rows, GOLD_FIELDS)
     write(out / "validation_METADATA.csv", rows, META_FIELDS)
     if args.freeze:
+        if legal_pending:
+            errors.extend(f"UNVERIFIED_LEGAL_BASIS {r['case_id']}" for r in legal_pending)
+        if source_pending:
+            errors.extend(f"UNVERIFIED_CATALOG_SOURCE {tid}" for tid in source_pending)
+        report["errors"] = errors
         if errors:
             report["freeze_refused"] = "errors present; fix them before --freeze"
         else:
@@ -226,6 +283,7 @@ def build(args):
                                     "retrieval_GOLD.csv": sha256(args.baseline_gold)},
                 "reviewed_sheet_sha256": {str(p): sha256(p) for p in args.reviewed},
                 "catalog_sha256": sha256(args.catalog),
+                "catalog_source_registry_sha256": sha256(args.catalog_source_registry),
                 "rule": "Gold must be fixed before any model prediction is viewed; do not edit after freeze.",
             }
             (out / "VALIDATION_DATASET_FREEZE.json").write_text(
@@ -246,6 +304,8 @@ def main():
     p.add_argument("--baseline-input", default=str(ROOT / "data/retrieval_INPUT.csv"))
     p.add_argument("--baseline-gold", default=str(ROOT / "data/retrieval_GOLD.csv"))
     p.add_argument("--smiles", default=str(ROOT / "intermediate/shared_pubchem_smiles.csv"))
+    p.add_argument("--catalog-source-registry",
+                   default=str(HERE / "candidates/catalog_source_registry.csv"))
     p.add_argument("--target-min", type=int, default=300)
     p.add_argument("--target-max", type=int, default=400)
     p.add_argument("--min-per-category", type=int, default=30)
@@ -262,9 +322,13 @@ def main():
     print(f"shortfall to {args.target_min}: {report['shortfall_to_target_min']}")
     if report["categories_below_planning_minimum"]:
         print("below planning minimum:", report["categories_below_planning_minimum"])
-    for e in report["errors"]:
+    for e in report["errors"][:15]:
         print("ERROR:", e)
+    if len(report["errors"]) > 15:
+        print(f"... {len(report['errors']) - 15} more errors in composition_report.json")
     print(f"warnings: {len(report['warnings'])}  frozen: {report['frozen']}")
+    print(f"unverified legal bases: {report['n_legal_basis_pending']} / {report['n_new_included']} new rows")
+    print(f"unverified catalog source definitions: {report['n_catalog_source_pending']} / {len(report['found_cases_per_target']) + len(report['targets_without_any_found_case'])} targets")
     if report.get("freeze_refused"):
         print("FREEZE REFUSED:", report["freeze_refused"])
     sys.exit(1 if report["errors"] and args.freeze else 0)
