@@ -57,7 +57,7 @@ For each candidate use the fields in `new_cases_template.csv`:
 - `gold_target_id`: one of the 29 target IDs when FOUND, or NOT_FOUND; leave blank for REVIEW_PENDING
 - `regulatory_source_url` and `regulatory_source_date`: immutable evidence and version of the regulatory source
 - `identity_evidence_url`, `smiles`, `smiles_qc_status`: identity and structure provenance
-- `reviewer1_status`, `reviewer2_status`, `adjudication_status`: independent label verification
+- `reviewer1_status`, `reviewer2_status`, `adjudication_status`: optional second-review fields; the required case-level legal/chemical basis is documented in `human_legal_basis` of the reviewer sheet.
 - `notes_human_only`: research notes (NEVER exposed to tested models)
 
 The template intentionally starts **without fabricated chemical rows**. The evaluator should reject pending/unverified rows rather than silently counting them.
