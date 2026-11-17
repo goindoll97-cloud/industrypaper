@@ -131,15 +131,23 @@ class TestBuilderGates(unittest.TestCase):
                 {**good, "case_id": "A-4", "cas_inputs": "56-84-8", "human_gold_target_id": "PS::50-21-5|PS::64-19-7"},
                 {**good, "case_id": "A-5", "cas_inputs": "56-87-1", "human_gold_target_id": "PS::NOPE"},
                 {**good, "case_id": "A-6", "cas_inputs": "50-99-7", "human_review_status": "EXCLUDED"},
+                {**good, "case_id": "A-7", "cas_inputs": "50-78-2", "human_gold_target_id": "NOT_FOUND|PS::64-19-7"},
             ])
             report, out = bvd.build(self.args(tmp, [str(sheet)]))
-            self.assertEqual(report["n_new_included"], 1)
+            self.assertEqual(report["n_new_included"], 2)
             self.assertEqual(report["n_new_excluded_by_reviewer"], 1)
             self.assertEqual(report["n_new_held"], 4)
-            self.assertEqual(report["n_total"], 113)
-            gold = read_csv(out / "validation_GOLD.csv")
-            self.assertEqual(gold[-1]["query_id"], "RQ-0113")
-            self.assertEqual(gold[-1]["gold_status"], "NOT_FOUND")
+            self.assertEqual(report["n_total"], 114)
+            self.assertEqual(report["multi_target_cases"], 1)
+            self.assertEqual({h["reason"] for h in report["held_cases"]},
+                             {"STATUS_PENDING", "ADJUDICATED_BUT_TARGET_OR_LEGAL_BASIS_EMPTY", "UNKNOWN_TARGET_ID",
+                              "NOT_FOUND_MIXED_WITH_TARGETS"})
+            self.assertEqual(report["excluded_cases"][0]["case_id"], "A-6")
+            gold = {g["query_id"]: g for g in read_csv(out / "validation_GOLD.csv")}
+            self.assertEqual(gold["RQ-0113"]["gold_status"], "NOT_FOUND")
+            self.assertEqual(gold["RQ-0114"]["gold_target_id"], "PS::50-21-5|PS::64-19-7")
+            self.assertEqual(gold["RQ-0114"]["n_gold_targets"], "2")
+            self.assertFalse((out / "held_not_included.csv").exists())
 
     def test_model_input_has_no_labels_or_names(self):
         with tempfile.TemporaryDirectory() as d:

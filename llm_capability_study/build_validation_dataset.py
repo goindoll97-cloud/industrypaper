@@ -3,8 +3,10 @@
 """Assemble the validation dataset: frozen 112 baseline cases + human-adjudicated new cases.
 
 Gate: a new row enters the dataset ONLY if the reviewer sheet says
-    human_review_status == ADJUDICATED  and  human_gold_target_id is a catalog target or NOT_FOUND
+    human_review_status == ADJUDICATED  and  human_gold_target_id is NOT_FOUND, one catalog target,
+    or several catalog targets joined by "|" (overlap cases: the model must find ALL of them)
     and  human_legal_basis is filled.
+Hard-to-adjudicate cases are simply left EXCLUDED / HOLD and never enter the dataset.
 Everything else (PENDING / HOLD / EXCLUDED / unknown) is reported but never included.
 The 112 baseline files in data/ are read-only; nothing here modifies them.
 
@@ -33,7 +35,7 @@ import prereview_candidates as pre  # noqa: E402
 INCLUDE = "ADJUDICATED"
 EXCLUDE = "EXCLUDED"
 INPUT_FIELDS = ["query_id", "cas_inputs", "smiles"]
-GOLD_FIELDS = ["query_id", "gold_target_id", "gold_status", "source_categories", "source_case_ids",
+GOLD_FIELDS = ["query_id", "gold_target_id", "gold_status", "n_gold_targets", "source_categories", "source_case_ids",
                "query_mode", "gold_derivation", "legal_basis", "origin"]
 META_FIELDS = ["query_id", "origin", "source_batch", "source_category", "candidate_stratum",
                "difficulty_tag", "discovery_method", "pubchem_title_human_only"]
@@ -61,6 +63,7 @@ def load_baseline(input_path, gold_path, smiles_by_cas):
             "query_id": r["query_id"], "cas_inputs": r["cas_inputs"],
             "smiles": smiles_by_cas.get(cas[0], "") if len(cas) == 1 else "",
             "gold_target_id": g["gold_target_id"], "gold_status": g["gold_status"],
+            "n_gold_targets": 0 if g["gold_status"] == "NOT_FOUND" else len(g["gold_target_id"].split("|")),
             "source_categories": g["source_categories"], "source_case_ids": g["source_case_ids"],
             "query_mode": g["query_mode"], "gold_derivation": "FROZEN_BASELINE:" + g["gold_derivation"],
             "legal_basis": "", "origin": "BASELINE_FROZEN", "source_batch": "baseline",
@@ -86,12 +89,15 @@ def gate_new_rows(sheet_paths, catalog_ids):
                 held.append({**rec, "reason": f"STATUS_{status or 'EMPTY'}"})
             elif not target or not basis:
                 held.append({**rec, "reason": "ADJUDICATED_BUT_TARGET_OR_LEGAL_BASIS_EMPTY"})
-            elif "|" in target:
-                held.append({**rec, "reason": "MULTI_TARGET_GOLD_NEEDS_RULE"})
-            elif target != "NOT_FOUND" and target not in catalog_ids:
-                held.append({**rec, "reason": "UNKNOWN_TARGET_ID"})
             else:
-                included.append(rec)
+                parts = sorted({t.strip() for t in target.split("|") if t.strip()})
+                if "NOT_FOUND" in parts and len(parts) > 1:
+                    held.append({**rec, "reason": "NOT_FOUND_MIXED_WITH_TARGETS"})
+                elif any(t != "NOT_FOUND" and t not in catalog_ids for t in parts):
+                    held.append({**rec, "reason": "UNKNOWN_TARGET_ID"})
+                else:
+                    rec["human_gold_target_id"] = "|".join(parts)
+                    included.append(rec)
     return included, excluded, held
 
 
@@ -102,6 +108,7 @@ def to_dataset_row(rec, query_id):
         "query_id": query_id, "cas_inputs": rec["cas_inputs"],
         "smiles": rec.get("smiles", "") if len(cas) == 1 else "",
         "gold_target_id": target, "gold_status": "NOT_FOUND" if target == "NOT_FOUND" else "FOUND",
+        "n_gold_targets": 0 if target == "NOT_FOUND" else len(target.split("|")),
         "source_categories": rec.get("source_category", ""), "source_case_ids": rec["case_id"],
         "query_mode": "SINGLE_CAS" if len(cas) == 1 else "COMPONENT_CAS_SET",
         "gold_derivation": "HUMAN_ADJUDICATED_LEGAL_REVIEW", "legal_basis": rec["human_legal_basis"].strip(),
@@ -130,7 +137,7 @@ def run_checks(rows, catalog, allow_structure_duplicates=False):
         # contradiction with exact catalog CAS (single-CAS rows)
         if len(sig) == 1:
             exact = {tid for tid, sg in pre_signals(sig[0], catalog) if sg == "EXACT"}
-            if exact and r["gold_target_id"] not in exact:
+            if exact and not (set(r["gold_target_id"].split("|")) & exact):
                 msg = f"GOLD_DIFFERS_FROM_EXACT_CATALOG_CAS {r['query_id']} {sig[0]} gold={r['gold_target_id']} exact={sorted(exact)}"
                 (errors if new else warnings).append(msg)
         if pre.HAVE_RDKIT and len(sig) == 1 and r["smiles"]:
@@ -155,13 +162,14 @@ def composition(rows, catalog, target_min, target_max, min_per_category):
     by_origin = Counter(r["origin"] for r in rows)
     by_category = Counter(r["source_categories"] or "UNSPECIFIED" for r in rows)
     by_cat_status = Counter((r["source_categories"] or "UNSPECIFIED", r["gold_status"]) for r in rows)
-    found_per_target = Counter(r["gold_target_id"] for r in rows if r["gold_status"] == "FOUND")
+    found_per_target = Counter(t for r in rows if r["gold_status"] == "FOUND" for t in r["gold_target_id"].split("|"))
     total = len(rows)
     short = {c: min_per_category - n for c, n in by_category.items() if n < min_per_category}
     return {
         "n_total": total, "target_range": [target_min, target_max],
         "shortfall_to_target_min": max(0, target_min - total),
         "within_target_range": target_min <= total <= target_max,
+        "multi_target_cases": sum(1 for r in rows if int(r["n_gold_targets"]) > 1),
         "by_origin": dict(by_origin), "by_category": dict(by_category),
         "by_category_and_status": {f"{c}|{s}": n for (c, s), n in sorted(by_cat_status.items())},
         "found_share": round(sum(1 for r in rows if r["gold_status"] == "FOUND") / total, 3) if total else 0,
@@ -189,6 +197,10 @@ def build(args):
         "version": args.version, "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "n_new_included": len(new_rows), "n_new_excluded_by_reviewer": len(excluded),
         "n_new_held": len(held), "held_by_reason": dict(Counter(h["reason"] for h in held)),
+        "excluded_cases": [{k: e.get(k, "") for k in ("case_id", "cas_inputs", "source_batch", "reason")}
+                           for e in excluded],
+        "held_cases": [{k: h.get(k, "") for k in ("case_id", "cas_inputs", "human_review_status",
+                                                  "human_gold_target_id", "reason")} for h in held],
         "errors": errors, "warnings": warnings,
         "frozen": False,
     })
@@ -196,9 +208,6 @@ def build(args):
     write(out / "validation_INPUT.csv", rows, INPUT_FIELDS)
     write(out / "validation_GOLD.csv", rows, GOLD_FIELDS)
     write(out / "validation_METADATA.csv", rows, META_FIELDS)
-    write(out / "excluded_by_reviewer.csv", excluded, ["case_id", "cas_inputs", "source_batch", "human_legal_basis", "reason"])
-    write(out / "held_not_included.csv", held,
-          ["case_id", "cas_inputs", "source_batch", "human_review_status", "human_gold_target_id", "reason"])
     if args.freeze:
         if errors:
             report["freeze_refused"] = "errors present; fix them before --freeze"
