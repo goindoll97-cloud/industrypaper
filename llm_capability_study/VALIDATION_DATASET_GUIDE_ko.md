@@ -46,7 +46,9 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
 | `human_legal_basis` | 근거: 고시 이름·개정일·조항 또는 URL, 화학적 동일성 근거 |
 | `human_review_status` | `ADJUDICATED`(검토 완료, 데이터셋에 포함) / `EXCLUDED`(제외) / `PENDING`·`HOLD`(보류) |
 
-- 빌더는 `ADJUDICATED`이면서 정답과 법적 근거가 모두 채워진 행만 포함합니다. 정답에 항목 ID를 둘 이상 적으면(`A|B`) 보류됩니다.
+- 빌더는 `ADJUDICATED`이면서 정답과 법적 근거가 모두 채워진 행만 포함합니다.
+- **규제항목이 겹치는 물질은 겹치는 그대로 정답을 적습니다.** 해당하는 항목 ID를 `|`로 모두 적으면(예: `CG::LEAD_COMPOUNDS|PS::64-19-7`) 모델이 모두 찾아야 정답으로 보는 고난도 문항이 됩니다. 후보는 `auto_possible_target_ids`와 `auto_multi_target_overlap`을 참고하세요. `NOT_FOUND`는 다른 항목과 함께 적을 수 없습니다.
+- **정답을 확정하기 어려운 후보는 `EXCLUDED`로 두고 빼면 됩니다.** `AMBIGUOUS` 분류나 근거를 확인하지 못한 후보가 해당합니다. 제외·보류된 행의 목록과 사유는 `composition_report.json`의 `excluded_cases`, `held_cases`에 나옵니다.
 - `auto_prereview_class`는 **검토 우선순위일 뿐 정답이 아닙니다.** `NOT_FOUND`는 자동으로 붙지 않습니다. `legal_basis_verification_required`는 항상 `YES`입니다.
 - `review_priority=HIGH`부터 보세요. 같은 물질이 다른 CAS로 겹치는 후보(`DUPLICATE_STRUCTURE_OF_...` 플래그)는 하나만 남기고 나머지는 `EXCLUDED`로 두면 됩니다.
 
@@ -55,7 +57,17 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
     python build_validation_dataset.py                       # 초안 점검 (기본으로 candidates\review_sheet.csv 사용)
     python build_validation_dataset.py --version v1 --freeze # 오류가 없을 때 고정
 
-결과(`validation_dataset\<version>\`): `validation_INPUT.csv`(모델에 줄 `query_id, cas_inputs, smiles`만), `validation_GOLD.csv`, `validation_METADATA.csv`, `composition_report.json`(건수, 유형별 구성, 300~400건 대비 부족분, 오류와 경고). 기존 112건은 그대로 두고 `ADJUDICATED` 행만 `RQ-0113`부터 이어 붙입니다. 고정 후에는 정답을 고치지 않습니다.
+결과(`validation_dataset\<version>\`, 파일 4개 + 고정 시 1개):
+
+| 파일 | 내용 |
+| --- | --- |
+| `validation_INPUT.csv` | 모델에 줄 `query_id, cas_inputs, smiles`만 |
+| `validation_GOLD.csv` | 정답(`gold_target_id`, 다중이면 `A|B`, `n_gold_targets`), 근거, 출처 |
+| `validation_METADATA.csv` | 분석용 출처·층·이름(모델에 주지 않음) |
+| `composition_report.json` | 건수, 유형별 구성, 300~400건 대비 부족분, 다중 정답 문항 수, 제외·보류 목록, 오류와 경고 |
+| `VALIDATION_DATASET_FREEZE.json` | `--freeze` 성공 시에만. 파일 해시 |
+
+기존 112건은 그대로 두고 `ADJUDICATED` 행만 `RQ-0113`부터 이어 붙입니다. 고정 후에는 정답을 고치지 않습니다.
 
 ## 5. 혼합물 방침
 
