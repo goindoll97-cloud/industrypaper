@@ -13,10 +13,10 @@
 
 ## 현재 GitHub에 있는 법적 자료와 없는 자료
 
-- \`data/regulatory_catalog.csv\`: **29개 규제항목의 범위·CAS 목록** 보유. 이 파일은 원문 법령 PDF가 아닙니다.
-- \`candidates/catalog_source_registry.csv\`: 법제처 공식 링크가 **물질군 5개와 지정 혼합물 1개**에 기재됨. 나머지 23개 target에는 공식 출처 링크가 기록되지 않았습니다. 29개 전체가 아직 PENDING입니다.
-- \`reference/mixture_regulatory_reference.csv\` 및 \`data/mixture_regulatory_reference_applied.csv\`: \`MX::2023-1-1162\` 1건의 법제처 고시 별표 링크 수록.
-- \`review/retrieval_gold_manual_review.csv\`: 기존 112건의 Gold 검토 이력이며 법령 원문 파일은 아닙니다.
+- `data/regulatory_catalog.csv`: **29개 규제항목의 범위·CAS 목록** 보유. 이 파일은 원문 법령 PDF가 아닙니다.
+- `candidates/catalog_source_registry.csv`: 법제처 공식 링크가 **물질군 5개와 지정 혼합물 1개**에 기재됨. 나머지 23개 target에는 공식 출처 링크가 기록되지 않았습니다. 29개 전체가 아직 PENDING입니다.
+- `reference/mixture_regulatory_reference.csv` 및 `data/mixture_regulatory_reference_applied.csv`: `MX::2023-1-1162` 1건의 법제처 고시 별표 링크 수록.
+- `review/retrieval_gold_manual_review.csv`: 기존 112건의 Gold 검토 이력이며 법령 원문 파일은 아닙니다.
 - **추가 원문이 필요한 대상:** PS 모체·염류 9개 및 공식 출처가 없는 MX 혼합물 14개 항목. 5개 물질군도 이미 있는 공식 링크의 시행판·조항을 다시 검증해야 합니다.
 - 법제처 API에서 내려받은 고시 **PDF·HWP·HTML·XML·엑셀**을 주시면 기존 자료와 대조할 수 있습니다. 2인 독립 검토는 요구하지 않습니다.
 
@@ -123,7 +123,7 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
 | **`review_sheet.csv`** | **여기에 정답을 채웁니다.** 후보 1건당 1행. 수집 정보, 자동 사전검토 결과(`auto_*`), 사람이 채울 열(`human_*`)이 한 파일에 있고, 이 파일이 후보 목록 자체이기도 합니다 |
 | `summary.json` | 건수, 출처별·분류별 집계, 목표 대비 부족분, 제외된 후보와 사유(`dropped_candidates`), 성분 CAS가 없는 혼합물 6개의 PubChem 후보(`mixture_name_resolution`), 카탈로그 경고 |
 
-`_sources/`는 첫 실행 때 가져오는 이전 배치 원본이며 이후에는 쓰이지 않습니다. 수집 중간 파일과 PubChem 응답 캐시는 `collection_output\_work\`(A=균형 수집, B=경계 프로브)에만 쌓이며 열어볼 필요가 없고 Git에도 올라가지 않습니다.
+`_sources/`는 첫 실행 때 가져오는 이전 배치 원본이며 이후에는 쓰이지 않습니다. 수집 중간 파일과 PubChem 응답 캐시는 `collection_output\_work`(A=균형 수집, B=경계 프로브)에만 쌓이며 열어볼 필요가 없고 Git에도 올라가지 않습니다.
 
 `case_id`는 `CAND-0001`부터 한 가지 체계로 붙고, 이전 배치의 번호는 `legacy_case_id`에 남아 있습니다.
 
@@ -148,7 +148,7 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
     python build_validation_dataset.py                       # 초안 점검 (기본으로 candidates\review_sheet.csv 사용)
     python build_validation_dataset.py --version v1 --freeze # 오류가 없을 때 고정
 
-결과(`validation_dataset\<version>\`, 파일 4개 + 고정 시 1개):
+결과(`validation_dataset\<version>`, 파일 4개 + 고정 시 1개):
 
 | 파일 | 내용 |
 | --- | --- |
