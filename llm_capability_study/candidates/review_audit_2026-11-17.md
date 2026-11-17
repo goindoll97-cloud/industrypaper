@@ -22,24 +22,24 @@
 
 | Case | 성분 CAS | Gold | 검토 결과 | 판정 근거 |
 |---|---|---|---|---|
-| CAND-0227 | 26172-55-4\|2682-20-4 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0228 | 584-84-9\|91-08-7 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0229 | 121-14-2\|606-20-2 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0230 | 10061-01-5\|10061-02-6 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0231 | 33213-65-9\|959-98-8 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0232 | 101-68-8\|2536-05-2\|5873-54-1 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0233 | 106-42-3\|108-38-3\|95-47-6 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0234 | 106-44-5\|108-39-4\|95-48-7 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0235 | 134237-50-6\|134237-51-7\|134237-52-8 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0236 | 319-84-6\|319-85-7\|319-86-8\|58-89-9 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0237 | 108-67-8\|526-73-8\|95-63-6 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0238 | 106-46-7\|541-73-1\|95-50-1 | NOT_FOUND | 카탈로그의 명시 CAS와 성분 직접 일치 없음; 포괄범위는 별도 확인 대상 |
-| CAND-0239 | 10309-95-2\|65-85-0 | CG::MG_SALTS\|PS::65-85-0 | 10309-95-2, 65-85-0의 지정된 target별 CAS 직접 일치. 합성 질의임 |
-| CAND-0240 | 10294-40-3\|11066-49-2 | CG::CRVI_COMPOUNDS\|CG::NONYLPHENOL_NPE | 10294-40-3, 11066-49-2의 지정된 target별 CAS 직접 일치. 합성 질의임 |
-| CAND-0241 | 10099-74-8\|10294-40-3 | CG::CRVI_COMPOUNDS\|CG::LEAD_COMPOUNDS | 10099-74-8, 10294-40-3의 지정된 target별 CAS 직접 일치. 합성 질의임 |
-| CAND-0242 | 1067-97-6\|11066-49-2 | CG::NONYLPHENOL_NPE\|CG::TBT_TRIALKYLTIN | 1067-97-6, 11066-49-2의 지정된 target별 CAS 직접 일치. 합성 질의임 |
-| CAND-0243 | 10099-74-8\|1067-97-6 | CG::LEAD_COMPOUNDS\|CG::TBT_TRIALKYLTIN | 10099-74-8, 1067-97-6의 지정된 target별 CAS 직접 일치. 합성 질의임 |
-| CAND-0244 | 144-62-7\|69-72-7 | PS::144-62-7\|PS::69-72-7 | 144-62-7, 69-72-7의 지정된 target별 CAS 직접 일치. 합성 질의임 |
+| CAND-0227 | 26172-55-4\|2682-20-4 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0228 | 584-84-9\|91-08-7 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0229 | 121-14-2\|606-20-2 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0230 | 10061-01-5\|10061-02-6 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0231 | 33213-65-9\|959-98-8 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0232 | 101-68-8\|2536-05-2\|5873-54-1 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0233 | 106-42-3\|108-38-3\|95-47-6 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0234 | 106-44-5\|108-39-4\|95-48-7 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0235 | 134237-50-6\|134237-51-7\|134237-52-8 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0236 | 319-84-6\|319-85-7\|319-86-8\|58-89-9 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0237 | 108-67-8\|526-73-8\|95-63-6 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0238 | 106-46-7\|541-73-1\|95-50-1 | NOT_FOUND | 유지 | 명시 CAS 직접 일치 없음; 포괄범위는 별도 검토 |
+| CAND-0239 | 10309-95-2\|65-85-0 | CG::MG_SALTS\|PS::65-85-0 | 유지 | 각 성분의 Gold target별 CAS 직접 일치(합성 질의) |
+| CAND-0240 | 10294-40-3\|11066-49-2 | CG::CRVI_COMPOUNDS\|CG::NONYLPHENOL_NPE | 유지 | 각 성분의 Gold target별 CAS 직접 일치(합성 질의) |
+| CAND-0241 | 10099-74-8\|10294-40-3 | CG::CRVI_COMPOUNDS\|CG::LEAD_COMPOUNDS | 유지 | 각 성분의 Gold target별 CAS 직접 일치(합성 질의) |
+| CAND-0242 | 1067-97-6\|11066-49-2 | CG::NONYLPHENOL_NPE\|CG::TBT_TRIALKYLTIN | 유지 | 각 성분의 Gold target별 CAS 직접 일치(합성 질의) |
+| CAND-0243 | 10099-74-8\|1067-97-6 | CG::LEAD_COMPOUNDS\|CG::TBT_TRIALKYLTIN | 유지 | 각 성분의 Gold target별 CAS 직접 일치(합성 질의) |
+| CAND-0244 | 144-62-7\|69-72-7 | PS::144-62-7\|PS::69-72-7 | 유지 | 각 성분의 Gold target별 CAS 직접 일치(합성 질의) |
 
 ## 2순위: 일반 위험표본 20건
 
@@ -48,26 +48,26 @@
 
 | Case | CAS | 물질명 | 기존 Gold | 수정 상태 | 핵심 근거 |
 |---|---|---|---|---|---|
-| CAND-0068 | 557-05-1 | Zinc Stearate | NOT_FOUND | Zn 스테아르산염으로 Pb 화합물이 아님. 금속 양이온까지 확인 |
-| CAND-0073 | 603-48-5 | Leucocrystal Violet | NOT_FOUND | 류코크리스탈 바이올렛은 말라카이트 그린 염과 다른 분자 |
-| CAND-0081 | 683-18-1 | Dibutyltin dichloride | NOT_FOUND | 디부틸주석: 트리알킬주석·트리부틸주석이 아님 |
-| CAND-0089 | 110-89-4 | Piperidine | NOT_FOUND | 피페리딘(한 개 N)과 피페라진(두 개 N)은 다름 |
-| CAND-0103 | 10101-53-8 | Chromic Sulfate | NOT_FOUND | Cr(III) 황산염으로 Cr(VI) 항목 제외 |
-| CAND-0118 | 2923-18-4 | Sodium Trifluoroacetate | NOT_FOUND | 트리플루오로아세트산염은 아세트산염이 아닌 별개의 카르복실산염 |
-| CAND-0121 | 13548-38-4 | Chromic nitrate | NOT_FOUND | Cr(III) 질산염으로 Cr(VI) 항목 제외 |
-| CAND-0124 | 1987-50-4 | 4-n-Heptylphenol | NOT_FOUND | 헵틸페놀(7C 치환기), 노닐페놀(9C 치환기)과 다름 |
-| CAND-0128 | 79-11-8 | Chloroacetic Acid | NOT_FOUND | 클로로아세트산은 아세트산 자체나 그 염이 아님 |
-| CAND-0129 | 99-94-5 | P-Toluic Acid | NOT_FOUND | p-톨루산은 벤조산의 메틸 치환 유도체이며 벤조산염 아님 |
-| CAND-0136 | 320-77-4 | Isocitric Acid | NOT_FOUND | 이소시트르산은 시트르산의 위치이성질체이며 입체이성질체 아님 |
-| CAND-0211 | 818-08-6 | Dibutyltin oxide | NOT_FOUND | 산화디부틸주석으로 트리알킬주석 산화물 아님 |
-| CAND-0061 | 6094-40-2 | Piperazine, hydrochloride (1:?) | PS::110-85-0 | 피페라진 염산염; 피페라진의 염류. PS 공식 원문 추가 확인 필요 |
-| CAND-0093 | 631-61-8 | Ammonium Acetate | PS::64-19-7 | 아세트산암모늄은 아세트산의 염. PS 공식 원문 추가 확인 필요 |
-| CAND-0111 | 2016-36-6 | Choline Salicylate | PS::69-72-7 | 살리실산콜린은 살리실산의 염. PS 공식 원문 추가 확인 필요 |
-| CAND-0120 | 3522-50-7 | Ferric citrate | PS::77-92-9 | 시트르산철(III)은 시트르산의 염. PS 공식 원문 추가 확인 필요 |
-| CAND-0007 | 10309-95-2 | Malachite green cation | CG::MG_SALTS | 고시 별표3 06-5-1에 CAS 10309-95-2 직접 등재 |
-| CAND-0063 | 13477-01-5 | Barium dichromate | CG::CRVI_COMPOUNDS | 중크롬산바륨은 Cr(VI) 화합물이며 06-5-10 포괄범위 검토 |
-| CAND-0125 | 1066-45-1 | Trimethyltin chloride | CG::TBT_TRIALKYLTIN | 직접 등재 CAS 미확인; 06-5-4 포괄범위 해석 불확실하여 EXCLUDED |
-| CAND-0147 | 11119-70-3 | Lead Chromate | CG::CRVI_COMPOUNDS\|CG::LEAD_COMPOUNDS | 납크롬산염으로 Pb 및 Cr(VI) 관련 규제범위 중첩 |
+| CAND-0068 | 557-05-1 | Zinc Stearate | NOT_FOUND | ADJUDICATED | Zn 스테아르산염; Pb 화합물이 아님 |
+| CAND-0073 | 603-48-5 | Leucocrystal Violet | NOT_FOUND | ADJUDICATED | 류코크리스탈 바이올렛은 말라카이트 그린 염이 아님 |
+| CAND-0081 | 683-18-1 | Dibutyltin dichloride | NOT_FOUND | ADJUDICATED | 디부틸주석; 트리알킬주석 아님 |
+| CAND-0089 | 110-89-4 | Piperidine | NOT_FOUND | ADJUDICATED | 피페리딘(질소 1)과 피페라진(질소 2) 구별 |
+| CAND-0103 | 10101-53-8 | Chromic Sulfate | NOT_FOUND | ADJUDICATED | 황산크롬(III)은 Cr(VI) 대상 아님 |
+| CAND-0118 | 2923-18-4 | Sodium Trifluoroacetate | NOT_FOUND | ADJUDICATED | 트리플루오로아세트산염은 아세트산염 아님 |
+| CAND-0121 | 13548-38-4 | Chromic nitrate | NOT_FOUND | ADJUDICATED | 질산크롬(III)은 Cr(VI) 대상 아님 |
+| CAND-0124 | 1987-50-4 | 4-n-Heptylphenol | NOT_FOUND | ADJUDICATED | 헵틸페놀은 노닐페놀과 다른 치환기 |
+| CAND-0128 | 79-11-8 | Chloroacetic Acid | NOT_FOUND | ADJUDICATED | 클로로아세트산은 아세트산염 아님 |
+| CAND-0129 | 99-94-5 | P-Toluic Acid | NOT_FOUND | ADJUDICATED | p-톨루산은 벤조산염 아님 |
+| CAND-0136 | 320-77-4 | Isocitric Acid | NOT_FOUND | ADJUDICATED | 이소시트르산은 시트르산의 위치이성질체 |
+| CAND-0211 | 818-08-6 | Dibutyltin oxide | NOT_FOUND | ADJUDICATED | 산화디부틸주석은 트리알킬주석 아님 |
+| CAND-0061 | 6094-40-2 | Piperazine, hydrochloride (1:?) | PS::110-85-0 | ADJUDICATED | 피페라진 염산염(PS 원문 추가 확인 필요) |
+| CAND-0093 | 631-61-8 | Ammonium Acetate | PS::64-19-7 | ADJUDICATED | 아세트산암모늄(PS 원문 추가 확인 필요) |
+| CAND-0111 | 2016-36-6 | Choline Salicylate | PS::69-72-7 | ADJUDICATED | 살리실산콜린(PS 원문 추가 확인 필요) |
+| CAND-0120 | 3522-50-7 | Ferric citrate | PS::77-92-9 | ADJUDICATED | 시트르산철(III)(PS 원문 추가 확인 필요) |
+| CAND-0007 | 10309-95-2 | Malachite green cation | CG::MG_SALTS | ADJUDICATED | 공식 세부목록 06-5-1 직접 CAS 등재 |
+| CAND-0063 | 13477-01-5 | Barium dichromate | CG::CRVI_COMPOUNDS | ADJUDICATED | Cr(VI) 화합물(06-5-10 범위) |
+| CAND-0125 | 1066-45-1 | Trimethyltin chloride | CG::TBT_TRIALKYLTIN | EXCLUDED | 포괄적 염류 범위 해석 불확실하여 EXCLUDED |
+| CAND-0147 | 11119-70-3 | Lead Chromate | CG::CRVI_COMPOUNDS\|CG::LEAD_COMPOUNDS | ADJUDICATED | Pb 화합물 및 Cr(VI) 화합물 중첩 |
 
 ## 전체 카탈로그 직접 CAS 교차검증
 
