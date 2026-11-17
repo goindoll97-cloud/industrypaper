@@ -77,6 +77,7 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
 
 ## 5-1. 혼합물만 따로 추가 수집
 
+    python collect_mixtures.py --builtin                      # 공식·권위 자료로 성분 CAS를 확인한 실제 이성질체 혼합물 12건(카탈로그 밖, NOT_FOUND 초안) 추가
     python collect_mixtures.py --online                       # 성분 CAS가 없는 카탈로그 혼합물 6개: 성분 이름 → PubChem CAS
     python collect_mixtures.py --input mixtures_input.csv     # 공식 자료에서 직접 찾은 실제 혼합물 (NOT_FOUND 사례 포함)
 

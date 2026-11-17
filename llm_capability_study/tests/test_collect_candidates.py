@@ -15,7 +15,7 @@ sys.path.insert(0, str(HERE))
 import collect_candidates as cc  # noqa: E402
 import collect_mixtures as cm  # noqa: E402
 import prereview_candidates as pre  # noqa: E402
-from collect_pubchem_candidates import read_csv  # noqa: E402
+from collect_pubchem_candidates import cas_list, read_csv, valid_cas  # noqa: E402
 
 SOURCES = HERE / "candidates" / "_sources"
 
@@ -174,6 +174,22 @@ class TestMixtures(unittest.TestCase):
             self.assertEqual(by["67-56-1|67-64-1"]["human_review_status"], "PENDING")
             # rerun is idempotent: same component set is not added twice
             self.assertEqual(cm.collect(margs)["rows_added"], 0)
+
+    def test_builtin_list_is_clean(self):
+        baseline = {tuple(sorted(cas_list(r["cas_inputs"]))) for r in read_csv(ROOT / "data/retrieval_INPUT.csv")}
+        catalog = pre.load_catalog(ROOT / "data/regulatory_catalog.csv")
+        seen = set()
+        for name, cas, source in cm.OFFICIAL_MIXTURES:
+            parts = cas_list(cas)
+            sig = tuple(sorted(parts))
+            self.assertGreaterEqual(len(parts), 2, name)
+            self.assertTrue(all(valid_cas(c) for c in parts), name)
+            self.assertNotIn(sig, baseline, name)
+            self.assertNotIn(sig, seen, name)
+            seen.add(sig)
+            self.assertTrue(source, name)
+            for t in catalog.values():  # outside the 29 targets: no overlap with any catalog CAS
+                self.assertFalse(set(parts) & (t["reference"] | t["members"] | t["components"] | t["mixture_cas"]), name)
 
     def test_name_resolution_needs_unique_cas(self):
         base = {"scope_text": "Mixture of A and B", "pubchem_title": "", "pubchem_smiles": "", "status": ""}

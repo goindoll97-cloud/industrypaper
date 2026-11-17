@@ -1,11 +1,11 @@
 {
-  "created_at_utc": "2026-11-17T12:42:28.540758+00:00",
+  "created_at_utc": "2026-11-17T12:48:46.393486+00:00",
   "prereview_version": "prereview_v1",
   "rdkit_available": true,
-  "n_candidates": 226,
+  "n_candidates": 238,
   "by_class": {
     "EXACT_CAS_MATCH": 39,
-    "POSSIBLE_OUT_OF_SCOPE": 168,
+    "POSSIBLE_OUT_OF_SCOPE": 180,
     "POSSIBLE_PARENT_SALT": 9,
     "POSSIBLE_GROUP_MEMBER": 8,
     "AMBIGUOUS": 2
@@ -13,7 +13,7 @@
   "by_priority": {
     "MEDIUM": 29,
     "HIGH": 74,
-    "LOW": 123
+    "LOW": 135
   },
   "by_stratum_and_class": {
     "BOUNDARY_PROBE": {
@@ -26,6 +26,9 @@
     },
     "INDEPENDENT_GENERAL": {
       "POSSIBLE_OUT_OF_SCOPE": 82
+    },
+    "MIXTURE_COLLECTION": {
+      "POSSIBLE_OUT_OF_SCOPE": 12
     },
     "NEAR_CATALOG": {
       "POSSIBLE_PARENT_SALT": 3,
@@ -58,22 +61,44 @@
   "near_neighbor_threshold": 0.5,
   "gold_labels_assigned": 0,
   "disclaimer": "auto_* values are review priorities, not legal conclusions or Gold labels. NOT_FOUND is never assigned automatically.",
-  "pool_size": 226,
+  "pool_size": 238,
   "baseline_cases": 112,
   "target_total": 300,
   "overshoot": 1.2,
   "target_candidate_rows": 226,
-  "potential_total_if_all_adjudicated": 338,
+  "potential_total_if_all_adjudicated": 350,
   "shortfall_candidate_rows": 0,
   "by_source_batch": {
     "balanced_v2": 78,
     "boundary_v1": 65,
     "boundary": 1,
-    "balanced": 82
+    "balanced": 82,
+    "mixture": 12
   },
   "dropped_by_reason": {},
   "collection_passes": [],
   "mode": "OFFLINE_REBUILD",
   "rows_with_reviewer_input": 226,
-  "dropped_candidates": []
+  "dropped_candidates": [],
+  "mixture_collection": {
+    "created_at_utc": "2026-11-17T12:48:46.397959+00:00",
+    "rows_added": 12,
+    "added_cas_sets": [
+      "26172-55-4|2682-20-4",
+      "584-84-9|91-08-7",
+      "121-14-2|606-20-2",
+      "10061-01-5|10061-02-6",
+      "33213-65-9|959-98-8",
+      "101-68-8|2536-05-2|5873-54-1",
+      "106-42-3|108-38-3|95-47-6",
+      "106-44-5|108-39-4|95-48-7",
+      "134237-50-6|134237-51-7|134237-52-8",
+      "319-84-6|319-85-7|319-86-8|58-89-9",
+      "108-67-8|526-73-8|95-63-6",
+      "106-46-7|541-73-1|95-50-1"
+    ],
+    "dropped": [],
+    "input_problems": [],
+    "unresolved_catalog_components": []
+  }
 }
