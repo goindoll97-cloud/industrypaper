@@ -7,7 +7,7 @@
     python collect_mixtures.py --input mixtures_input.csv      # real mixtures YOU found in an official source
     python collect_mixtures.py --online --input mixtures_input.csv
 
-Two sources, no mixture is ever invented:
+Sources (--builtin/--online/--input are real mixtures; --pairs is explicitly synthetic and labelled so):
   1. Catalog mixtures that have no component CAS (6 of them): each component NAME is looked up in PubChem;
      a mixture row "CAS_A|CAS_B" is added only when every component resolves to exactly ONE CAS.
      Such rows are marked MIXTURE_NAME_RESOLVED_NEEDS_OFFICIAL_CAS: confirm the CAS in the official notice.
@@ -115,6 +115,34 @@ def rows_from_resolution(resolved):
     return rows, unresolved
 
 
+def synthetic_pairs(pool, n):
+    """Two-component queries built from single CAS that each match a DIFFERENT catalog target exactly.
+    Gold is deterministic (A|B); the model must report both. Labelled synthetic -- not real products."""
+    by_target = {}
+    for r in sorted(pool, key=lambda r: r["case_id"]):
+        ids = [t for t in (r.get("auto_exact_target_ids") or "").split("|") if t]
+        if (r.get("human_review_status") == "PROPOSED" and len(ids) == 1 and "|" not in r["cas_inputs"]
+                and r.get("auto_multi_target_overlap") == "NO" and ids[0] not in by_target):
+            by_target[ids[0]] = r["cas_inputs"]
+    targets = sorted(by_target)
+    cats = {t: t.split("::")[0] for t in targets}
+    out, i = [], 0
+    while len(out) < n and i < len(targets) * 2:
+        a, b = targets[i % len(targets)], targets[(i * 7 + 3) % len(targets)]
+        i += 1
+        if a != b and cats[a] != cats[b] or (a != b and i > len(targets)):
+            out.append((a, b))
+    seen, rows = set(), []
+    for a, b in out:
+        key = tuple(sorted((a, b)))
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(mixture_row([by_target[a], by_target[b]], f"Synthetic pair {a} + {b}", "|".join(key),
+                                "MIXTURE_SYNTHETIC_PAIR", "constructed from catalog-listed CAS; not a real product"))
+    return rows
+
+
 def collect(args, online_resolved=None):
     """Append mixture rows to the review sheet and refresh the pre-review. Returns a report dict."""
     out = args.out
@@ -131,6 +159,8 @@ def collect(args, online_resolved=None):
     new_rows, problems, unresolved = [], [], []
     if getattr(args, "builtin", False):
         new_rows += [mixture_row(cas_list(c), n, "", "MIXTURE_OFFICIAL_LIST", src) for n, c, src in OFFICIAL_MIXTURES]
+    if getattr(args, "pairs", 0):
+        new_rows += synthetic_pairs(pool, args.pairs)
     if args.input:
         rows, probs = rows_from_input(args.input)
         new_rows += rows
@@ -171,6 +201,8 @@ def collect(args, online_resolved=None):
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--online", action="store_true", help="resolve catalog mixture component names in PubChem")
+    p.add_argument("--pairs", type=int, default=0,
+                   help="add N synthetic two-component queries whose components match different catalog targets (gold A|B)")
     p.add_argument("--builtin", action="store_true",
                    help="add the curated real mixtures with official component CAS (OFFICIAL_MIXTURES)")
     p.add_argument("--input", default="", help="CSV: mixture_name, component_cas (A|B), source")
@@ -185,7 +217,7 @@ def main():
     p.add_argument("--smiles", default=str(ROOT / "intermediate/shared_pubchem_smiles.csv"))
     args = p.parse_args()
     args.out, args.stages, args.sources = Path(args.out), Path(args.stages), Path(args.sources)
-    if not (args.online or args.input or args.builtin):
+    if not (args.online or args.input or args.builtin or args.pairs):
         p.error("--builtin, --online, --input 중 하나는 필요합니다.")
 
     resolved = None
