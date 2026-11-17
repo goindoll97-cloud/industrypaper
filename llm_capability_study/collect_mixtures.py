@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """Gather MIXTURE validation candidates into the same review sheet (candidates/review_sheet.csv).
 
+    python collect_mixtures.py --builtin                       # curated real mixtures with official component CAS
     python collect_mixtures.py --online                        # name -> CAS for the catalog mixtures without component CAS
     python collect_mixtures.py --input mixtures_input.csv      # real mixtures YOU found in an official source
     python collect_mixtures.py --online --input mixtures_input.csv
@@ -35,6 +36,36 @@ import collect_candidates as cc  # noqa: E402
 import collect_boundary_candidates as cbc  # noqa: E402
 import prereview_candidates as pre  # noqa: E402
 from collect_pubchem_candidates import PubChem, RequestBudget, cas_list, read_csv  # noqa: E402
+
+
+# Real mixtures with official or authoritative component CAS (none is invented). All are outside the 29-target catalog.
+# (name, component CAS, source)
+OFFICIAL_MIXTURES = [
+    ("CMIT/MIT 3:1 (methylchloroisothiazolinone + methylisothiazolinone)", "26172-55-4|2682-20-4",
+     "EU Reg. 1223/2009 Annex V entry 39; CLP index 613-167-00-5; mixture CAS 55965-84-9"),
+    ("Toluene diisocyanate isomers (2,4-TDI + 2,6-TDI)", "584-84-9|91-08-7",
+     "ECHA CLP index 615-006-00-4; mixed isomers CAS 26471-62-5 (ISOPA TDI safety summary)"),
+    ("Dinitrotoluene isomers (2,4-DNT + 2,6-DNT)", "121-14-2|606-20-2",
+     "IARC Monographs (NCBI NBK424337); EPA IRIS 2,4-/2,6-dinitrotoluene mixture; CAS 25321-14-6"),
+    ("1,3-Dichloropropene cis + trans", "10061-01-5|10061-02-6",
+     "IPCS INCHEM HSG 76; ECHA CLH 1,3-dichloropropene CAS 542-75-6"),
+    ("Technical endosulfan isomers (alpha + beta)", "959-98-8|33213-65-9",
+     "Stockholm Convention Annex A, Part VI (technical endosulfan CAS 115-29-7 and related isomers)"),
+    ("Methylenediphenyl diisocyanate isomers (4,4'- + 2,4'- + 2,2'-MDI)", "101-68-8|5873-54-1|2536-05-2",
+     "REACH Annex XVII entry 56 (MDI CAS 26447-40-5 and specific isomers)"),
+    ("Xylene isomers (o- + m- + p-xylene)", "95-47-6|108-38-3|106-42-3",
+     "CLP index 601-022-00-9 (mixed isomers CAS 1330-20-7; INRS FicheTox 77)"),
+    ("Cresol isomers (o- + m- + p-cresol)", "95-48-7|108-39-4|106-44-5",
+     "CLP index 604-004-00-9 (mixed isomers CAS 1319-77-3; BAM dangerous goods database)"),
+    ("Hexabromocyclododecane diastereomers (alpha + beta + gamma)", "134237-50-6|134237-51-7|134237-52-8",
+     "Stockholm Convention Annex A decision SC-6/13 (HBCDD definition)"),
+    ("Technical hexachlorocyclohexane isomers (alpha + beta + gamma + delta)", "319-84-6|319-85-7|58-89-9|319-86-8",
+     "EPA IRIS t-HCH (CAS 608-73-1); ATSDR Toxicological Profile for HCH"),
+    ("Trimethylbenzene isomers (1,2,3- + 1,2,4- + 1,3,5-)", "526-73-8|95-63-6|108-67-8",
+     "OSHA chemical data 25551-13-7 (mixed isomers)"),
+    ("Dichlorobenzene isomers (1,2- + 1,3- + 1,4-)", "95-50-1|541-73-1|106-46-7",
+     "ATSDR Dichlorobenzenes (mixed isomers CAS 25321-22-6)"),
+]
 
 
 def mixture_row(components, name, target, method, source):
@@ -98,6 +129,8 @@ def collect(args, online_resolved=None):
         dedup.keep(r)
 
     new_rows, problems, unresolved = [], [], []
+    if getattr(args, "builtin", False):
+        new_rows += [mixture_row(cas_list(c), n, "", "MIXTURE_OFFICIAL_LIST", src) for n, c, src in OFFICIAL_MIXTURES]
     if args.input:
         rows, probs = rows_from_input(args.input)
         new_rows += rows
@@ -138,6 +171,8 @@ def collect(args, online_resolved=None):
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--online", action="store_true", help="resolve catalog mixture component names in PubChem")
+    p.add_argument("--builtin", action="store_true",
+                   help="add the curated real mixtures with official component CAS (OFFICIAL_MIXTURES)")
     p.add_argument("--input", default="", help="CSV: mixture_name, component_cas (A|B), source")
     p.add_argument("--max-requests", type=int, default=300)
     p.add_argument("--target-total", type=int, default=300)
@@ -150,8 +185,8 @@ def main():
     p.add_argument("--smiles", default=str(ROOT / "intermediate/shared_pubchem_smiles.csv"))
     args = p.parse_args()
     args.out, args.stages, args.sources = Path(args.out), Path(args.stages), Path(args.sources)
-    if not args.online and not args.input:
-        p.error("--online 또는 --input 중 하나는 필요합니다.")
+    if not (args.online or args.input or args.builtin):
+        p.error("--builtin, --online, --input 중 하나는 필요합니다.")
 
     resolved = None
     if args.online:
