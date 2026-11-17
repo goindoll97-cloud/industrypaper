@@ -144,8 +144,16 @@ def load_frozen():
     qids = [r["query_id"] for r in queries]
     if len(set(qids)) != 112 or len(queries) != 112 or len(catalog) != 29:
         raise RuntimeError("Expected 112 unique queries and 29 catalog targets.")
-    if set(gates) != set(qids) or len(manifest) != 224:
+    if set(gates) != set(qids) or len(manifest) != 175:
         raise RuntimeError("The frozen Hybrid gate or Claude prompt manifest is incomplete.")
+    # 112 LLM-only prompts plus 63 Hybrid-review prompts (49 direct cases need no review prompt).
+    expected_pairs = {(qid, "LLM_ONLY") for qid in qids} | {
+        (qid, "HYBRID_REVIEW") for qid in qids
+        if gates[qid]["gate_status"] == "REVIEW"
+    }
+    actual_pairs = {(r["query_id"], r["condition"]) for r in manifest}
+    if actual_pairs != expected_pairs:
+        raise RuntimeError("Claude prompt manifest condition/query pairs differ from frozen gate.")
     for r in manifest:
         qid = r["query_id"]
         if qid not in prompts or htext(prompts[qid]) != r["prompt_sha256"]:
