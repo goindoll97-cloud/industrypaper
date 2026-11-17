@@ -39,10 +39,10 @@ jobs:
           ONLINE=""
           CANDIDATES="60"
           REQUESTS="200"
-          if [[ "\${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            CANDIDATES="\${{ inputs.max_candidates }}"
-            REQUESTS="\${{ inputs.max_requests }}"
-            if [[ "\${{ inputs.online }}" == "true" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            CANDIDATES="${{ inputs.max_candidates }}"
+            REQUESTS="${{ inputs.max_requests }}"
+            if [[ "${{ inputs.online }}" == "true" ]]; then
               ONLINE="--online"
             fi
           fi
