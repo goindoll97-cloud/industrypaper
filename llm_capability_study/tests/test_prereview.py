@@ -101,5 +101,22 @@ class TestBatchEndToEnd(unittest.TestCase):
         self.assertIn("MX::97-1-127", ids)
 
 
+BOUNDARY = HERE / "candidate_batches/boundary_v1/boundary_v1_candidates_from_prereview.csv"
+
+
+@unittest.skipUnless(pr.HAVE_RDKIT and BOUNDARY.is_file(), "RDKit or committed boundary batch missing")
+class TestBoundaryBatchPriority(unittest.TestCase):
+    def test_unconfirmed_hint_alone_does_not_raise_priority(self):
+        results, _, summary = pr.run(read_csv(BOUNDARY), ROOT / "data/regulatory_catalog.csv",
+                                     ROOT / "data/retrieval_INPUT.csv",
+                                     ROOT / "intermediate/shared_pubchem_smiles.csv")
+        by_id = {r["case_id"]: r for r in results}
+        self.assertEqual(len(results), 65)
+        self.assertEqual(by_id["BND-0001"]["review_priority"], "LOW")    # sodium molybdate
+        self.assertEqual(by_id["BND-0003"]["review_priority"], "HIGH")   # dibutyltin dichloride, near neighbour
+        self.assertEqual(by_id["BND-0047"]["auto_prereview_class"], "POSSIBLE_GROUP_MEMBER")  # trimethyltin chloride
+        self.assertEqual(summary["gold_labels_assigned"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -384,7 +384,11 @@ def analyse(row, ctx, own_keys):
             reasons.append(why)
 
     if cls == "POSSIBLE_OUT_OF_SCOPE":
-        priority = "HIGH" if near_targets or "COLLECTION_HINT_NOT_CONFIRMED" in flags \
+        # Boundary probes are built to sit near a target, so an unconfirmed collection hint
+        # carries no information there and must not raise the priority by itself.
+        hint_unconfirmed = ("COLLECTION_HINT_NOT_CONFIRMED" in flags
+                            and row.get("candidate_stratum") != "BOUNDARY_PROBE")
+        priority = "HIGH" if near_targets or hint_unconfirmed \
             or any(f.startswith("DUPLICATE_STRUCTURE_OF_BASELINE") for f in flags) else "LOW"
     elif cls == "EXACT_CAS_MATCH":
         priority = "HIGH" if overlap or any(f.startswith("EXACT_CAS_BUT") or f.startswith("DUPLICATE")
