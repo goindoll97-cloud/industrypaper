@@ -1,0 +1,389 @@
+{
+  "n_total": 306,
+  "target_range": [
+    300,
+    400
+  ],
+  "shortfall_to_target_min": 0,
+  "within_target_range": true,
+  "multi_target_cases": 10,
+  "by_origin": {
+    "BASELINE_FROZEN": 112,
+    "NEW_ADJUDICATED": 194
+  },
+  "by_category": {
+    "CHEMICAL_GROUP": 86,
+    "MIXTURE": 28,
+    "PARENT_SALT": 78,
+    "GENERAL_CHEMICAL": 57,
+    "BOUNDARY_CANDIDATE": 57
+  },
+  "by_category_and_status": {
+    "BOUNDARY_CANDIDATE|FOUND": 7,
+    "BOUNDARY_CANDIDATE|NOT_FOUND": 50,
+    "CHEMICAL_GROUP|FOUND": 48,
+    "CHEMICAL_GROUP|NOT_FOUND": 38,
+    "GENERAL_CHEMICAL|NOT_FOUND": 57,
+    "MIXTURE|FOUND": 15,
+    "MIXTURE|NOT_FOUND": 13,
+    "PARENT_SALT|FOUND": 42,
+    "PARENT_SALT|NOT_FOUND": 36
+  },
+  "found_share": 0.366,
+  "categories_below_planning_minimum": {
+    "MIXTURE": {
+      "count": 28,
+      "short_by": 2
+    }
+  },
+  "planning_minimum_per_category": 30,
+  "targets_without_any_found_case": [
+    "MX::2017-886",
+    "MX::2017-887",
+    "MX::2017-890",
+    "MX::2017-891",
+    "MX::2017-892",
+    "MX::2026-1-1328"
+  ],
+  "found_cases_per_target": {
+    "CG::CRVI_COMPOUNDS": 14,
+    "CG::LEAD_COMPOUNDS": 17,
+    "CG::MG_SALTS": 7,
+    "CG::NONYLPHENOL_NPE": 9,
+    "CG::TBT_TRIALKYLTIN": 13,
+    "MX::2004-1-546": 1,
+    "MX::2010-1-603": 1,
+    "MX::2017-1-787": 1,
+    "MX::2017-1-789": 1,
+    "MX::2017-1-801": 1,
+    "MX::2018-1-877": 1,
+    "MX::2020-1-975": 1,
+    "MX::2023-1-1162": 1,
+    "MX::97-1-127": 1,
+    "PS::110-15-6": 4,
+    "PS::110-85-0": 5,
+    "PS::113-00-8": 4,
+    "PS::144-62-7": 7,
+    "PS::50-21-5": 5,
+    "PS::64-19-7": 8,
+    "PS::65-85-0": 6,
+    "PS::69-72-7": 7,
+    "PS::77-92-9": 7
+  },
+  "note": "Category minimum is a planning heuristic set by --min-per-category, not a statistical power result.",
+  "version": "v1",
+  "created_at_utc": "2026-11-17T13:04:34.727210+00:00",
+  "n_new_included": 194,
+  "n_new_excluded_by_reviewer": 50,
+  "n_new_held": 0,
+  "held_by_reason": {},
+  "excluded_cases": [
+    {
+      "case_id": "CAND-0001",
+      "cas_inputs": "10034-82-9",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0011",
+      "cas_inputs": "25154-52-3",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0015",
+      "cas_inputs": "110-85-0",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0066",
+      "cas_inputs": "18256-98-9",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0071",
+      "cas_inputs": "129-73-7",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0075",
+      "cas_inputs": "4366-31-8",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0076",
+      "cas_inputs": "95646-62-1",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0077",
+      "cas_inputs": "129-72-6",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0090",
+      "cas_inputs": "74-79-3",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0101",
+      "cas_inputs": "1115-70-4",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0102",
+      "cas_inputs": "65-49-6",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0107",
+      "cas_inputs": "76-87-9",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0109",
+      "cas_inputs": "95-96-5",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0110",
+      "cas_inputs": "108-24-7",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0116",
+      "cas_inputs": "13121-70-5",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0117",
+      "cas_inputs": "2582-30-1",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0126",
+      "cas_inputs": "108-30-5",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0145",
+      "cas_inputs": "10588-01-9",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0161",
+      "cas_inputs": "42845-45-4",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0162",
+      "cas_inputs": "2280-44-6",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0163",
+      "cas_inputs": "25718-94-9",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0164",
+      "cas_inputs": "114303-55-8",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0165",
+      "cas_inputs": "7705-14-8",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0166",
+      "cas_inputs": "55279-75-9",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0167",
+      "cas_inputs": "77810-22-1",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0168",
+      "cas_inputs": "6347-01-9",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0169",
+      "cas_inputs": "25191-17-7",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0170",
+      "cas_inputs": "519-41-5",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0171",
+      "cas_inputs": "14336-88-0",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0172",
+      "cas_inputs": "15356-70-4",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0173",
+      "cas_inputs": "27073-41-2",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0174",
+      "cas_inputs": "8003-15-4",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0175",
+      "cas_inputs": "92004-84-7",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0176",
+      "cas_inputs": "7004-03-7",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0177",
+      "cas_inputs": "21368-68-3",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0178",
+      "cas_inputs": "25086-18-4",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0179",
+      "cas_inputs": "35296-72-1",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0180",
+      "cas_inputs": "21675-61-6",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0194",
+      "cas_inputs": "7542-23-6",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0195",
+      "cas_inputs": "10031-16-0",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0196",
+      "cas_inputs": "51731-04-5",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0200",
+      "cas_inputs": "137198-51-7",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0208",
+      "cas_inputs": "25134-02-5",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0213",
+      "cas_inputs": "29367-11-1",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0217",
+      "cas_inputs": "20763-88-6",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0218",
+      "cas_inputs": "54-17-1",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0219",
+      "cas_inputs": "18875-39-3",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0220",
+      "cas_inputs": "26006-39-3",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0221",
+      "cas_inputs": "6898-94-8",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    },
+    {
+      "case_id": "CAND-0222",
+      "cas_inputs": "89-78-1",
+      "source_batch": "candidates",
+      "reason": "EXCLUDED_BY_REVIEWER"
+    }
+  ],
+  "held_cases": [],
+  "errors": [],
+  "warnings": [
+    "SMILES_MISSING RQ-0003 10101-63-0",
+    "SMILES_MISSING RQ-0096 78643-41-1"
+  ],
+  "frozen": false
+}
