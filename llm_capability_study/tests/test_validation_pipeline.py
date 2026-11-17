@@ -226,6 +226,37 @@ class TestBuilderGates(unittest.TestCase):
             self.assertEqual(len(pending), 29)
 
 
+    def test_two_independent_reviewers_must_match_gold_and_have_sources(self):
+        with tempfile.TemporaryDirectory() as d:
+            tmp = Path(d)
+            files = [tmp / "r1.csv", tmp / "r2.csv"]
+            fields = ["case_id", "reviewer_id", "reviewed_on", "reviewed_target_id",
+                      "official_legal_source", "chemical_identity_source", "decision"]
+            for i, filename in enumerate(files, 1):
+                with filename.open("w", encoding="utf-8", newline="") as handle:
+                    w = csv.DictWriter(handle, fieldnames=fields)
+                    w.writeheader()
+                    w.writerow({
+                        "case_id": "T-1", "reviewer_id": f"expert-{i}",
+                        "reviewed_on": "2026-11-17", "reviewed_target_id": "NOT_FOUND",
+                        "official_legal_source": "notice-reference",
+                        "chemical_identity_source": "identity-reference",
+                        "decision": "CONFIRMED",
+                    })
+            included = [{"case_id": "T-1", "human_gold_target_id": "NOT_FOUND"}]
+            self.assertEqual(bvd.independent_review_issues(included, *files), [])
+            with files[1].open("w", encoding="utf-8", newline="") as handle:
+                w = csv.DictWriter(handle, fieldnames=fields)
+                w.writeheader()
+                w.writerow({"case_id": "T-1", "reviewer_id": "expert-1",
+                            "reviewed_on": "2026-11-17", "reviewed_target_id": "CG::MG_SALTS",
+                            "official_legal_source": "notice-reference",
+                            "chemical_identity_source": "identity-reference",
+                            "decision": "CONFIRMED"})
+            issues = " ".join(bvd.independent_review_issues(included, *files))
+            self.assertIn("REVIEW_TARGET_DISAGREEMENT_2", issues)
+            self.assertIn("REVIEWERS_NOT_INDEPENDENT", issues)
+
     def test_freeze_writes_manifest_when_clean(self):
         with tempfile.TemporaryDirectory() as d:
             tmp = Path(d)
