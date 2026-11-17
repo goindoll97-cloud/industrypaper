@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - "llm_capability_study/collect_pubchem_candidates.py"
+      - "llm_capability_study/independent_pubchem_sources.py"
+      - "llm_capability_study/tests/**"
       - ".github/workflows/pubchem-candidate-collector.yml"
   workflow_dispatch:
     inputs:
@@ -13,11 +15,11 @@ on:
         default: true
       max_candidates:
         description: "Maximum new candidate rows"
-        default: "60"
+        default: "100"
         type: string
       max_requests:
         description: "Maximum new PubChem HTTP attempts"
-        default: "200"
+        default: "350"
         type: string
 
 jobs:
@@ -34,18 +36,20 @@ jobs:
       - name: Reuse cached PubChem responses from prior runs
         uses: actions/cache@v4
         with:
-          path: llm_capability_study/collection_output/pubchem_http_cache
+          path: llm_capability_study/collection_output/balanced_v2/pubchem_http_cache
           key: pubchem-review-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
             pubchem-review-${{ runner.os }}-
       - name: Python syntax check
         run: python -m py_compile llm_capability_study/collect_pubchem_candidates.py
+      - name: Unit tests for general/independent sampling and CAS checks
+        run: python -m unittest discover -s llm_capability_study/tests -p 'test_*.py'
       - name: Archived-catalog preview or rate-limited live PubChem collection
         shell: bash
         run: |
           ONLINE=""
-          CANDIDATES="60"
-          REQUESTS="200"
+          CANDIDATES="100"
+          REQUESTS="350"
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             CANDIDATES="${{ inputs.max_candidates }}"
             REQUESTS="${{ inputs.max_requests }}"
@@ -61,9 +65,9 @@ jobs:
         with:
           name: pubchem-candidate-review
           path: |
-            llm_capability_study/collection_output/candidates_for_review.csv
-            llm_capability_study/collection_output/mixture_research_gaps.csv
-            llm_capability_study/collection_output/collection_summary.json
-            llm_capability_study/collection_output/pubchem_http_cache/
+            llm_capability_study/collection_output/balanced_v2/candidates_for_review.csv
+            llm_capability_study/collection_output/balanced_v2/mixture_research_gaps.csv
+            llm_capability_study/collection_output/balanced_v2/collection_summary.json
+            llm_capability_study/collection_output/balanced_v2/pubchem_http_cache/
           if-no-files-found: error
           retention-days: 30
