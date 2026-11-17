@@ -1,44 +1,47 @@
 {
-  "created_at_utc": "2026-11-17T08:07:49.310897+00:00",
+  "created_at_utc": "2026-11-17T12:42:28.540758+00:00",
   "prereview_version": "prereview_v1",
   "rdkit_available": true,
-  "n_candidates": 143,
+  "n_candidates": 226,
   "by_class": {
-    "EXACT_CAS_MATCH": 22,
-    "POSSIBLE_OUT_OF_SCOPE": 106,
-    "POSSIBLE_PARENT_SALT": 8,
-    "POSSIBLE_GROUP_MEMBER": 5,
+    "EXACT_CAS_MATCH": 39,
+    "POSSIBLE_OUT_OF_SCOPE": 168,
+    "POSSIBLE_PARENT_SALT": 9,
+    "POSSIBLE_GROUP_MEMBER": 8,
     "AMBIGUOUS": 2
   },
   "by_priority": {
-    "MEDIUM": 18,
-    "HIGH": 43,
-    "LOW": 82
+    "MEDIUM": 29,
+    "HIGH": 74,
+    "LOW": 123
   },
   "by_stratum_and_class": {
     "BOUNDARY_PROBE": {
-      "POSSIBLE_OUT_OF_SCOPE": 57,
+      "POSSIBLE_OUT_OF_SCOPE": 58,
       "POSSIBLE_PARENT_SALT": 6,
       "POSSIBLE_GROUP_MEMBER": 2
     },
     "CATALOG_LISTED": {
-      "EXACT_CAS_MATCH": 20
+      "EXACT_CAS_MATCH": 36
     },
     "INDEPENDENT_GENERAL": {
-      "POSSIBLE_OUT_OF_SCOPE": 40
+      "POSSIBLE_OUT_OF_SCOPE": 82
     },
     "NEAR_CATALOG": {
-      "POSSIBLE_PARENT_SALT": 2,
-      "EXACT_CAS_MATCH": 2,
-      "POSSIBLE_GROUP_MEMBER": 3,
-      "POSSIBLE_OUT_OF_SCOPE": 9,
+      "POSSIBLE_PARENT_SALT": 3,
+      "EXACT_CAS_MATCH": 3,
+      "POSSIBLE_GROUP_MEMBER": 6,
+      "POSSIBLE_OUT_OF_SCOPE": 28,
       "AMBIGUOUS": 2
     }
   },
   "multi_target_overlap_case_ids": [
     "CAND-0074",
     "CAND-0075",
-    "CAND-0077"
+    "CAND-0077",
+    "CAND-0147",
+    "CAND-0149",
+    "CAND-0156"
   ],
   "catalog_warnings": [
     {
@@ -55,20 +58,22 @@
   "near_neighbor_threshold": 0.5,
   "gold_labels_assigned": 0,
   "disclaimer": "auto_* values are review priorities, not legal conclusions or Gold labels. NOT_FOUND is never assigned automatically.",
-  "pool_size": 143,
+  "pool_size": 226,
   "baseline_cases": 112,
   "target_total": 300,
   "overshoot": 1.2,
   "target_candidate_rows": 226,
-  "potential_total_if_all_adjudicated": 255,
-  "shortfall_candidate_rows": 83,
+  "potential_total_if_all_adjudicated": 338,
+  "shortfall_candidate_rows": 0,
   "by_source_batch": {
     "balanced_v2": 78,
-    "boundary_v1": 65
+    "boundary_v1": 65,
+    "boundary": 1,
+    "balanced": 82
   },
   "dropped_by_reason": {},
   "collection_passes": [],
   "mode": "OFFLINE_REBUILD",
-  "rows_with_reviewer_input": 0,
+  "rows_with_reviewer_input": 226,
   "dropped_candidates": []
 }
