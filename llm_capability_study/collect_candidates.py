@@ -38,11 +38,11 @@ import prereview_candidates as pre  # noqa: E402
 from collect_pubchem_candidates import EXTRA, TEMPLATE, cas_list, read_csv, valid_cas  # noqa: E402
 
 POOL_FIELDS = TEMPLATE + EXTRA + ["legacy_case_id", "source_batch"]
-SHEET_FIELDS = pre.OUT_FIELDS + ["legacy_case_id", "source_batch"]
+SHEET_FIELDS = pre.OUT_FIELDS + ["legacy_case_id", "source_batch", "pubchem_cid"]
 HUMAN_COLS = ["human_gold_target_id", "human_legal_basis", "human_review_status"]
 SEED_ORDER = ["balanced_v2_candidates_for_review.csv", "boundary_v1_candidates_from_prereview.csv"]
 DEFAULT_OUT = HERE / "candidates"
-DEFAULT_STAGES = HERE / "collection_output" / "_stages"
+DEFAULT_STAGES = HERE / "collection_output" / "_work"
 
 
 # ------------------------------------------------------------------ pure helpers
@@ -144,8 +144,10 @@ def write_csv(path, rows, fields):
 # ------------------------------------------------------------------ PubChem stages (subprocess)
 def import_legacy_cache(stages, collection_root):
     """Re-use PubChem responses saved by earlier per-batch runs (saves requests)."""
-    for legacy, stage in (("balanced_v2", "A"), ("boundary_v1", "B")):
-        src = collection_root / legacy / "pubchem_http_cache"
+    sources = [(collection_root / legacy / "pubchem_http_cache", stage)
+               for legacy, stage in (("balanced_v2", "A"), ("boundary_v1", "B"))]
+    sources += [(collection_root / "_stages" / stage / "pubchem_http_cache", stage) for stage in ("A", "B")]
+    for src, stage in sources:
         dst = stages / stage / "pubchem_http_cache"
         if src.is_dir():
             dst.mkdir(parents=True, exist_ok=True)
@@ -189,7 +191,7 @@ def stage_b(args, pool_csv, need):
 
 # ------------------------------------------------------------------ main flow
 def load_pool(out, sources):
-    pool_file = out / "candidates_for_review.csv"
+    pool_file = out / "review_sheet.csv"
     if pool_file.is_file():
         return read_csv(pool_file), False
     return [], True  # first run: import earlier batches
@@ -229,7 +231,7 @@ def run(args):
             need = target_rows - len(pool)
             if need <= 0:
                 break
-            pool_csv = out / "candidates_for_review.csv"
+            pool_csv = args.stages / "pool.csv"  # scratch copy handed to the stages as exclude-file
             write_csv(pool_csv, pool, POOL_FIELDS)
             before = len(pool)
             if pass_no == 1:
@@ -249,22 +251,15 @@ def run(args):
                 break  # nothing new is available: stop honestly instead of looping
 
     previous_sheet = read_csv(out / "review_sheet.csv") if (out / "review_sheet.csv").is_file() else []
-    if previous_sheet:
-        shutil.copy2(out / "review_sheet.csv", out / "review_sheet.previous.csv")
     results, hits, summary = pre.run(pool, catalog_path, baseline_path, smiles_path)
     meta = {r["case_id"]: r for r in pool}
     for r in results:
         r["legacy_case_id"] = meta[r["case_id"]]["legacy_case_id"]
         r["source_batch"] = meta[r["case_id"]]["source_batch"]
+        r["pubchem_cid"] = meta[r["case_id"]]["pubchem_cid"]
     results = carry_over_human(results, previous_sheet)
 
-    write_csv(out / "candidates_for_review.csv", pool, POOL_FIELDS)
     write_csv(out / "review_sheet.csv", results, SHEET_FIELDS)
-    write_csv(out / "review_target_hits.csv", hits, pre.HIT_FIELDS)
-    write_csv(out / "dropped_candidates.csv", dropped,
-              ["case_id", "cas_inputs", "source_batch", "reason", "pubchem_title_human_only"])
-    for name, src in extra_files.items():
-        shutil.copy2(src, out / name)
 
     n_base = len(baseline_rows)
     summary.update({
@@ -277,7 +272,11 @@ def run(args):
         "dropped_by_reason": dict(Counter(d["reason"].split(":")[0] for d in dropped)),
         "collection_passes": passes, "mode": "ONLINE" if args.online else "OFFLINE_REBUILD",
         "rows_with_reviewer_input": sum(1 for r in results if reviewer_touched(r)),
+        "dropped_candidates": [{k: d.get(k, "") for k in ("cas_inputs", "source_batch", "reason",
+                                                          "pubchem_title_human_only")} for d in dropped],
     })
+    if extra_files.get("mixture_name_resolution.csv"):
+        summary["mixture_name_resolution"] = read_csv(extra_files["mixture_name_resolution.csv"])
     (out / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     return summary
 

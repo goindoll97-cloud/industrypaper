@@ -17,24 +17,22 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
     python build_validation_dataset.py
 
 - `--target-total 300`은 **기존 112건을 포함한** 전체 규모입니다. 정답 검토에서 빠질 후보를 감안해 20% 더 모으므로 후보 행은 226건이 목표입니다(`--overshoot`로 조정).
-- 같은 명령을 다시 실행하면 **같은 폴더에 이어서 추가**합니다. 이미 채운 `human_*` 열은 그대로 보존됩니다(직전 검토표는 `review_sheet.previous.csv`로 백업).
+- 같은 명령을 다시 실행하면 **같은 폴더에 이어서 추가**합니다. 이미 채운 `human_*` 열은 그대로 보존됩니다.
 - `--online` 없이 실행하면 네트워크 없이 가져오기·중복 제거·사전검토만 다시 합니다.
 - 목표에 못 미치면 실행 끝에 부족한 건수가 출력됩니다. PubChem에서 새로 찾을 수 있는 후보가 소진되면 더 늘릴 수 없으니, 그때는 `boundary_probes.py`의 탐색 이름을 늘리거나 목표를 조정해야 합니다.
 - GitHub에서 실행하려면 Actions의 `Collect validation candidates`(Run workflow)를 쓰고 Artifacts의 `candidates`를 내려받아 이 폴더에 덮어 넣으세요.
+- 이전 실행의 `collection_output\_stages` 캐시는 첫 실행 때 `_work`로 자동 복사됩니다.
 
 예전에 만든 `collection_output\balanced_v2`, `collection_output\boundary_v1` 폴더는 더 이상 필요 없습니다. 안에 있던 PubChem 응답 캐시는 첫 실행 때 자동으로 가져옵니다. 실행이 끝난 뒤 지워도 됩니다.
 
-## 2. `candidates/` 폴더
+## 2. `candidates/` 폴더 (파일 2개)
 
 | 파일 | 내용 |
 | --- | --- |
-| **`review_sheet.csv`** | **여기에 정답을 채웁니다.** 후보 1건당 1행, 자동 사전검토 결과(`auto_*`)와 사람이 채울 열(`human_*`) |
-| `candidates_for_review.csv` | 수집 원본(PubChem 식별 정보, 수집 경로). 직접 고치지 않습니다 |
-| `review_target_hits.csv` | 후보와 규제항목의 관계를 1건씩 풀어 쓴 근거 목록 |
-| `dropped_candidates.csv` | 기존 112건과 같은 CAS·구조라서 제외한 후보와 사유 |
-| `summary.json` | 건수, 출처별·분류별 집계, 목표 대비 부족분, 카탈로그 경고 |
-| `mixture_name_resolution.csv` | 성분 CAS가 없는 카탈로그 혼합물 6개의 성분 이름 → PubChem CAS 후보 (수집 실행 후 생성) |
-| `_sources/` | 첫 실행 때 가져오는 이전 배치 원본(87건, 65건) |
+| **`review_sheet.csv`** | **여기에 정답을 채웁니다.** 후보 1건당 1행. 수집 정보, 자동 사전검토 결과(`auto_*`), 사람이 채울 열(`human_*`)이 한 파일에 있고, 이 파일이 후보 목록 자체이기도 합니다 |
+| `summary.json` | 건수, 출처별·분류별 집계, 목표 대비 부족분, 제외된 후보와 사유(`dropped_candidates`), 성분 CAS가 없는 혼합물 6개의 PubChem 후보(`mixture_name_resolution`), 카탈로그 경고 |
+
+`_sources/`는 첫 실행 때 가져오는 이전 배치 원본이며 이후에는 쓰이지 않습니다. 수집 중간 파일과 PubChem 응답 캐시는 `collection_output\_work\`(A=균형 수집, B=경계 프로브)에만 쌓이며 열어볼 필요가 없고 Git에도 올라가지 않습니다.
 
 `case_id`는 `CAND-0001`부터 한 가지 체계로 붙고, 이전 배치의 번호는 `legacy_case_id`에 남아 있습니다.
 
