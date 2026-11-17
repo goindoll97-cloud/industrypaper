@@ -140,6 +140,11 @@ def run_checks(rows, catalog, allow_structure_duplicates=False):
             if exact and not (set(r["gold_target_id"].split("|")) & exact):
                 msg = f"GOLD_DIFFERS_FROM_EXACT_CATALOG_CAS {r['query_id']} {sig[0]} gold={r['gold_target_id']} exact={sorted(exact)}"
                 (errors if new else warnings).append(msg)
+        if len(sig) > 1:  # component-CAS set equal to a catalog mixture must carry that mixture as Gold
+            same = {tid for tid, t in catalog.items() if t["type"] == "MIXTURE" and t["components"] == set(sig)}
+            if same and r["gold_target_id"] not in same:
+                msg = f"GOLD_DIFFERS_FROM_CATALOG_MIXTURE_SET {r['query_id']} gold={r['gold_target_id']} set={sorted(same)}"
+                (errors if new else warnings).append(msg)
         if pre.HAVE_RDKIT and len(sig) == 1 and r["smiles"]:
             mol = pre.parse(r["smiles"])
             if mol is not None:

@@ -75,6 +75,16 @@ PowerShell (`D:\framework_chemical_regul_paper\llm_capability_study`, Python 환
 - 카탈로그 혼합물 15개 중 9개는 이미 기존 112건에 있습니다. 나머지 6개(`MX::2017-886, 887, 890, 891, 892, 2026-1-1328`)는 성분 CAS가 없어 질의를 만들 수 없습니다. `mixture_name_resolution.csv`의 CAS 후보를 **공식 규제자료로 확인**한 뒤에만 혼합물 질의로 추가할 수 있습니다.
 - 규제 대상이 아닌 실제 혼합물(NOT_FOUND 사례)은 공식 자료에서 근거가 확인되는 것만 추가해야 합니다. 출처는 연구자가 정해야 합니다.
 
+## 5-1. 혼합물만 따로 추가 수집
+
+    python collect_mixtures.py --online                       # 성분 CAS가 없는 카탈로그 혼합물 6개: 성분 이름 → PubChem CAS
+    python collect_mixtures.py --input mixtures_input.csv     # 공식 자료에서 직접 찾은 실제 혼합물 (NOT_FOUND 사례 포함)
+
+- `mixtures_input.csv` 열: `mixture_name`, `component_cas`(CAS를 `|`로 연결, 예: `67-64-1|67-56-1`), `source`(고시명 또는 URL).
+- 결과는 새 파일 없이 같은 `candidates\review_sheet.csv`에 행으로 추가되고, 확정하지 못한 성분은 `summary.json`의 `mixture_collection`에 남습니다.
+- 이름으로 찾은 CAS는 `MIXTURE_NAME_RESOLVED_NEEDS_OFFICIAL_CAS` 표시가 붙으며 반드시 공식 자료로 확인해야 합니다. 성분당 CAS가 하나로 정해지지 않으면 행을 만들지 않습니다.
+- 기존 112건이나 이미 있는 혼합물과 성분 조합이 같으면 제외하고, 카탈로그 혼합물의 성분 일부만 든 경우는 `AMBIGUOUS`로 표시합니다.
+
 ## 6. 고급: 개별 단계
 
 `collect_pubchem_candidates.py`(균형 수집), `collect_boundary_candidates.py`(경계 프로브), `prereview_candidates.py`(사전검토)는 통합 수집기가 내부에서 호출하는 단계입니다. 평소에는 `collect_candidates.py`만 쓰면 됩니다.

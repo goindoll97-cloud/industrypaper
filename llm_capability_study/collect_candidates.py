@@ -89,6 +89,9 @@ class Dedup:
         self.catalog_cas = set(catalog_cas)  # CAS printed in the frozen catalog are never dropped by structure
         self.baseline_struct = {}
         self.kept_cas = set()
+        self.baseline_sets = {tuple(sorted(cas_list(r["cas_inputs"]))) for r in baseline_rows
+                              if len(cas_list(r["cas_inputs"])) > 1}
+        self.kept_sets = set()
         if pre.HAVE_RDKIT:
             for c in self.baseline_cas:
                 mol = pre.parse(smiles_by_cas.get(c, ""))
@@ -98,6 +101,16 @@ class Dedup:
     def check(self, row):
         """Return a drop reason or ''. Duplicates among candidates are kept (flagged later)."""
         cas = row["cas_inputs"].strip()
+        parts = cas_list(cas)
+        if len(parts) > 1:  # mixture query: component-CAS set
+            if not all(valid_cas(c) for c in parts):
+                return "CAS_CHECKSUM_INVALID"
+            sig = tuple(sorted(parts))
+            if sig in self.baseline_sets:
+                return "MIXTURE_IN_BASELINE"
+            if sig in self.kept_sets:
+                return "MIXTURE_ALREADY_IN_POOL"
+            return ""
         if not valid_cas(cas):
             return "CAS_CHECKSUM_INVALID"
         if cas in self.baseline_cas:
@@ -113,7 +126,11 @@ class Dedup:
         return ""
 
     def keep(self, row):
-        self.kept_cas.add(row["cas_inputs"].strip())
+        parts = cas_list(row["cas_inputs"])
+        if len(parts) > 1:
+            self.kept_sets.add(tuple(sorted(parts)))
+        else:
+            self.kept_cas.add(row["cas_inputs"].strip())
 
 
 def add_rows(pool, dropped, dedup, new_rows, batch, start_id):
