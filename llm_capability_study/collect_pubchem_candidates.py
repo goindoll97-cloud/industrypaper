@@ -129,6 +129,7 @@ class PubChem:
         self.cached = 0
         self.last = 0.0
         self.failures = []
+        self.phase_max_requests = None
 
     def get(self, path, params=None):
         url = PUG + path
@@ -139,11 +140,14 @@ class PubChem:
         if file.is_file():
             self.cached += 1
             return json.loads(file.read_text(encoding="utf-8"))
-        if self.requests >= self.args.max_requests:
-            raise RequestBudget("Maximum new PubChem request budget reached")
+        bound = self.args.max_requests
+        if self.phase_max_requests is not None:
+            bound = min(bound, self.phase_max_requests)
+        if self.requests >= bound:
+            raise RequestBudget("PubChem request budget reached for this stage")
         for attempt in range(4):
-            if self.requests >= self.args.max_requests:
-                raise RequestBudget("Maximum new PubChem request budget reached")
+            if self.requests >= bound:
+                raise RequestBudget("PubChem request budget reached for this stage")
             pause = 1.0 / self.args.rate_per_sec - (time.monotonic() - self.last)
             if pause > 0:
                 time.sleep(pause)
@@ -221,6 +225,10 @@ def main():
                         help="Maximum fraction of direct catalog candidates (online mode).")
     parser.add_argument("--general-share", type=float, default=0.40,
                         help="Fraction for candidates obtained independently of catalog seeds.")
+    parser.add_argument("--general-request-share", type=float, default=0.60,
+                        help="Maximum portion of HTTP calls used by independent sampling.")
+    parser.add_argument("--exclude-file", action="append", default=[],
+                        help="Additional candidate CSV to exclude from collection; repeat as needed.")
     parser.add_argument("--general-name-share", type=float, default=0.60,
                         help="Fraction of general candidates initially sought from diverse named classes.")
     parser.add_argument("--random-seed", type=int, default=20261117)
@@ -247,7 +255,8 @@ def main():
         parser.error("--rate-per-sec must be >0 and <=3.")
     if not (0 <= args.listed_share <= 1 and 0 <= args.general_share <= 1
             and args.listed_share + args.general_share <= 1
-            and 0 <= args.general_name_share <= 1):
+            and 0 <= args.general_name_share <= 1
+            and 0 < args.general_request_share < 1):
         parser.error("shares must be within [0,1]; listed+general must be <=1.")
     if args.random_cid_min < 1 or args.random_cid_max < args.random_cid_min:
         parser.error("Invalid random CID range.")
@@ -269,6 +278,17 @@ def main():
     if len(catalog) != 29 or len(baseline) != 112:
         raise RuntimeError("Frozen 29-target / 112-case baseline changed.")
     old = {signature(r["cas_inputs"]) for r in baseline}
+    excluded_additional = []
+    for name in args.exclude_file:
+        extra_path = Path(name).expanduser().resolve()
+        extra = read_csv(extra_path)
+        if extra and "cas_inputs" not in extra[0]:
+            raise ValueError("Exclude file must have cas_inputs column: " + str(extra_path))
+        for row in extra:
+            old.add(signature(row["cas_inputs"]))
+        excluded_additional.append({"path": str(extra_path),
+                                    "sha256": sha(extra_path),
+                                    "rows": len(extra)})
     known = {
         r["cas"]: r for r in p_cache
         if r.get("structure_status") == "PUBCHEM_EXACT_CAS_VERIFIED"
@@ -394,14 +414,25 @@ def main():
     # Run BEFORE near-catalog search, reserving both rows and HTTP budget.
     if args.online and general_cap > 0:
         try:
-            catalog_cids = {
+            reserved = {
                 known[c]["pubchem_cid"]
                 for c in per_cas_targets if c in known
             }
+            # Also avoid reintroducing a baseline compound under another CAS
+            # synonym for the same CID.
+            baseline_cas = {
+                c for row in baseline for c in cas_list(row["cas_inputs"])
+            }
+            reserved.update(
+                known[c]["pubchem_cid"] for c in baseline_cas if c in known)
+            client.phase_max_requests = max(
+                1, int(args.max_requests * args.general_request_share))
             general_report = collect_general(
-                client, add, from_synonyms, args, catalog_cids, general_cap)
+                client, add, from_synonyms, args, reserved, general_cap)
         except RequestBudget as exc:
             errors.append("GENERAL_SEARCH_BUDGET: " + str(exc))
+        finally:
+            client.phase_max_requests = None
 
     # STAGE 3: PubChem name search for salts (positive prospects, NO LABEL).
     # STAGE 4: 2D similarity search for near-catalog challenges (not necessarily negatives).
@@ -521,7 +552,9 @@ def main():
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "mode": "ONLINE_PUBCHEM_PUG_REST" if args.online else "OFFLINE_ARCHIVED_CATALOG",
         "n_regulatory_targets": len(catalog),
-        "n_existing_baseline_cases": len(old),
+        "n_existing_baseline_cases": len(baseline),
+        "n_additional_signatures_excluded": len(old) - len(baseline),
+        "exclusion_files": excluded_additional,
         "new_candidate_count": len(result),
         "candidate_stratum_quota": quotas,
         "candidates_by_stratum": dict(stratum_count),
