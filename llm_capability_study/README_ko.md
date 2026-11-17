@@ -1,3 +1,9 @@
+## 자동 후보 수집 코드 (추가됨)
+
+PubChem API를 이용하는 후보 수집 코드는 collect_pubchem_candidates.py 입니다.
+GitHub Actions에서 직접 실행하는 방법과 CSV 검토 절차는 PUBCHEM_COLLECTION_GUIDE_ko.md에 정리했습니다.
+기존 112건과 29개 규제항목은 변경하지 않으며, 신규 후보는 모두 REVIEW_PENDING으로 출력합니다.
+온라인 검색은 고시상 정답 확정을 대체하지 않습니다.
 # LLM 성능 수준에 따른 화학물질 규제대상 식별 연구
 
 ## 지금 무엇부터 해야 하나?
