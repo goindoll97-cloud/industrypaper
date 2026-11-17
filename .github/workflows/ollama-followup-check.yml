@@ -1,0 +1,25 @@
+name: Ollama follow-up offline protocol check
+on:
+  push:
+    paths:
+      - "ollama_followup/run_ollama_followup.py"
+      - "data/retrieval_INPUT.csv"
+      - "data/regulatory_catalog.csv"
+      - "intermediate/shared_pubchem_smiles.csv"
+      - "intermediate/hybrid_gate_preflight.csv"
+      - "intermediate/prompt_manifest.csv"
+      - ".github/workflows/ollama-followup-check.yml"
+  workflow_dispatch:
+
+jobs:
+  protocol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile standalone Ollama evaluator
+        run: python -m py_compile ollama_followup/run_ollama_followup.py
+      - name: Verify 112 archived Claude prompts and frozen gate
+        run: python ollama_followup/run_ollama_followup.py check
