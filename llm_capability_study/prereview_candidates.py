@@ -483,12 +483,12 @@ def main():
     p.add_argument("--catalog", default=str(ROOT / "data/regulatory_catalog.csv"))
     p.add_argument("--baseline", default=str(ROOT / "data/retrieval_INPUT.csv"))
     p.add_argument("--smiles", default=str(ROOT / "intermediate/shared_pubchem_smiles.csv"))
-    p.add_argument("--out", default="", help="output folder (default: prereview_output/<candidate-file-parent>)")
+    p.add_argument("--out", default="", help="output folder (default: collection_output/prereview/<candidate-file-parent>)")
     p.add_argument("--near-threshold", type=float, default=0.5)
     args = p.parse_args()
 
     cand_path = Path(args.candidates)
-    out = Path(args.out) if args.out else HERE / "prereview_output" / cand_path.resolve().parent.name
+    out = Path(args.out) if args.out else HERE / "collection_output" / "prereview" / cand_path.resolve().parent.name
     results, hits, summary = run(read_csv(cand_path), Path(args.catalog), Path(args.baseline),
                                  Path(args.smiles), args.near_threshold)
     write_csv(out / "prereview_results.csv", results, OUT_FIELDS)

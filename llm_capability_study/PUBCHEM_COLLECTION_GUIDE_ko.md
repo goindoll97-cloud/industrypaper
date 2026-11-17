@@ -1,3 +1,5 @@
+> **알림:** 수집은 이제 `python collect_candidates.py --online --target-total 300` 한 번으로 끝나고 결과는 `candidates/` 폴더 하나에 쌓입니다. 절차는 [VALIDATION_DATASET_GUIDE_ko.md](VALIDATION_DATASET_GUIDE_ko.md)를 보세요. 아래 내용은 내부 단계 `collect_pubchem_candidates.py`의 설명입니다.
+
 # PubChem 자동 후보 수집 v2: 규제목록과 무관한 일반 화학물질도 포함
 
 ## 1. 수정된 수집 설계

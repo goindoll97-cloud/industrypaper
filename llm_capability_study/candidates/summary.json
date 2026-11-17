@@ -1,0 +1,73 @@
+{
+  "created_at_utc": "2026-11-17T07:45:07.142985+00:00",
+  "prereview_version": "prereview_v1",
+  "rdkit_available": true,
+  "n_candidates": 143,
+  "by_class": {
+    "EXACT_CAS_MATCH": 22,
+    "POSSIBLE_OUT_OF_SCOPE": 106,
+    "POSSIBLE_PARENT_SALT": 8,
+    "POSSIBLE_GROUP_MEMBER": 5,
+    "AMBIGUOUS": 2
+  },
+  "by_priority": {
+    "MEDIUM": 18,
+    "HIGH": 43,
+    "LOW": 82
+  },
+  "by_stratum_and_class": {
+    "BOUNDARY_PROBE": {
+      "POSSIBLE_OUT_OF_SCOPE": 57,
+      "POSSIBLE_PARENT_SALT": 6,
+      "POSSIBLE_GROUP_MEMBER": 2
+    },
+    "CATALOG_LISTED": {
+      "EXACT_CAS_MATCH": 20
+    },
+    "INDEPENDENT_GENERAL": {
+      "POSSIBLE_OUT_OF_SCOPE": 40
+    },
+    "NEAR_CATALOG": {
+      "POSSIBLE_PARENT_SALT": 2,
+      "EXACT_CAS_MATCH": 2,
+      "POSSIBLE_GROUP_MEMBER": 3,
+      "POSSIBLE_OUT_OF_SCOPE": 9,
+      "AMBIGUOUS": 2
+    }
+  },
+  "multi_target_overlap_case_ids": [
+    "CAND-0074",
+    "CAND-0075",
+    "CAND-0077"
+  ],
+  "catalog_warnings": [
+    {
+      "target_id": "MX::97-1-127",
+      "issue": "MIXTURE_TEXT_CAS_DIFFERS_FROM_COMPONENT_SET",
+      "cas_only_in_scope_text": [
+        "3084-48-0"
+      ],
+      "cas_only_in_component_set": [
+        "3084-48-8"
+      ]
+    }
+  ],
+  "near_neighbor_threshold": 0.5,
+  "gold_labels_assigned": 0,
+  "disclaimer": "auto_* values are review priorities, not legal conclusions or Gold labels. NOT_FOUND is never assigned automatically.",
+  "pool_size": 143,
+  "baseline_cases": 112,
+  "target_total": 300,
+  "overshoot": 1.2,
+  "target_candidate_rows": 226,
+  "potential_total_if_all_adjudicated": 255,
+  "shortfall_candidate_rows": 83,
+  "by_source_batch": {
+    "balanced_v2": 78,
+    "boundary_v1": 65
+  },
+  "dropped_by_reason": {},
+  "collection_passes": [],
+  "mode": "OFFLINE_REBUILD",
+  "rows_with_reviewer_input": 0
+}
