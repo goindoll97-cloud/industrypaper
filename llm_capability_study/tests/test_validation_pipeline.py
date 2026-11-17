@@ -178,6 +178,20 @@ class TestBuilderGates(unittest.TestCase):
             self.assertFalse(report["frozen"])
             self.assertFalse((out / "VALIDATION_DATASET_FREEZE.json").exists())
 
+    def test_mixture_set_gold_must_match_catalog(self):
+        with tempfile.TemporaryDirectory() as d:
+            tmp = Path(d)
+            sheet = tmp / "b" / "sheet.csv"
+            # a catalog component set that is not part of the baseline: 8-/7-cyclohexadecen-1-one is, so use a made-up gold
+            comp = "3100-36-5|2550-59-6"
+            write_sheet(sheet, [dict(case_id="M-1", cas_inputs=comp, source_category="MIXTURE",
+                                     human_gold_target_id="NOT_FOUND", human_legal_basis="x",
+                                     human_review_status="ADJUDICATED")])
+            report, _ = bvd.build(self.args(tmp, [str(sheet)]))
+            joined = " ".join(report["errors"])
+            self.assertIn("DUPLICATE_CAS_SET", joined)  # already a baseline mixture
+            self.assertIn("GOLD_DIFFERS_FROM_CATALOG_MIXTURE_SET", joined)
+
     def test_freeze_writes_manifest_when_clean(self):
         with tempfile.TemporaryDirectory() as d:
             tmp = Path(d)

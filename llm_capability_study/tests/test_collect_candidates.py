@@ -13,6 +13,7 @@ ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
 
 import collect_candidates as cc  # noqa: E402
+import collect_mixtures as cm  # noqa: E402
 import prereview_candidates as pre  # noqa: E402
 from collect_pubchem_candidates import read_csv  # noqa: E402
 
@@ -142,6 +143,50 @@ class TestUnifiedRun(unittest.TestCase):
                 self.assertGreater(s["shortfall_candidate_rows"], 0)
         finally:
             cc.stage_a, cc.stage_b = orig_a, orig_b
+
+
+@unittest.skipUnless(pre.HAVE_RDKIT and SOURCES.is_dir(), "RDKit or committed sources missing")
+class TestMixtures(unittest.TestCase):
+    def test_input_csv_flow(self):
+        with tempfile.TemporaryDirectory() as d:
+            tmp = Path(d)
+            args = make_args(tmp)
+            cc.run(args)
+            n0 = len(read_csv(args.out / "review_sheet.csv"))
+            inp = tmp / "m.csv"
+            inp.write_text("mixture_name,component_cas,source\n"
+                           "acetone+methanol,67-64-1|67-56-1,official list\n"
+                           "dup of baseline,1027326-93-7|31775-89-0,x\n"
+                           "bad checksum,67-64-2|67-56-1,x\n"
+                           "single,67-64-1,x\n"
+                           "partial of catalog,35184-08-8|67-64-1,x\n", encoding="utf-8")
+            margs = SimpleNamespace(**{**vars(args), "input": str(inp)})
+            rep = cm.collect(margs)
+            self.assertEqual(rep["rows_added"], 2)
+            self.assertEqual({d["reason"] for d in rep["dropped"]}, {"MIXTURE_IN_BASELINE", "CAS_CHECKSUM_INVALID"})
+            self.assertEqual(len(rep["input_problems"]), 1)
+            sheet = read_csv(args.out / "review_sheet.csv")
+            self.assertEqual(len(sheet), n0 + 2)
+            by = {r["cas_inputs"]: r for r in sheet}
+            self.assertEqual(by["67-56-1|67-64-1"]["auto_prereview_class"], "POSSIBLE_OUT_OF_SCOPE")
+            self.assertEqual(by["35184-08-8|67-64-1"]["auto_prereview_class"], "AMBIGUOUS")
+            self.assertEqual(by["67-56-1|67-64-1"]["gold_target_id"], "")
+            self.assertEqual(by["67-56-1|67-64-1"]["human_review_status"], "PENDING")
+            # rerun is idempotent: same component set is not added twice
+            self.assertEqual(cm.collect(margs)["rows_added"], 0)
+
+    def test_name_resolution_needs_unique_cas(self):
+        base = {"scope_text": "Mixture of A and B", "pubchem_title": "", "pubchem_smiles": "", "status": ""}
+        resolved = [
+            {**base, "target_id": "MX::T1", "component_name": "A", "pubchem_cid": "1", "cas_candidates": "50-00-0"},
+            {**base, "target_id": "MX::T1", "component_name": "B", "pubchem_cid": "2", "cas_candidates": "67-56-1"},
+            {**base, "target_id": "MX::T2", "component_name": "A", "pubchem_cid": "3", "cas_candidates": "64-17-5"},
+            {**base, "target_id": "MX::T2", "component_name": "B", "pubchem_cid": "4", "cas_candidates": "67-64-1|75-07-0"},
+        ]
+        rows, unresolved = cm.rows_from_resolution(resolved)
+        self.assertEqual([r["cas_inputs"] for r in rows], ["50-00-0|67-56-1"])
+        self.assertEqual(rows[0]["suggested_target_ids_human_only"], "MX::T1")
+        self.assertEqual(unresolved[0]["target_id"], "MX::T2")
 
 
 if __name__ == "__main__":

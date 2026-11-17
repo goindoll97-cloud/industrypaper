@@ -271,14 +271,31 @@ def analyse(row, ctx, own_keys):
     flags = []
     reasons = []
 
-    if not valid_cas(cas):
+    cas_all = cas_list(cas)
+    is_mixture_query = len(cas_all) > 1
+    if not all(valid_cas(c) for c in cas_all) or not cas_all:
         flags.append("CAS_CHECKSUM_INVALID")
-    for tid, signal, basis in exact_signals(cas, ctx.catalog):
-        signals.append((tid, signal, basis, f"CAS {cas} in {basis}"))
+    if is_mixture_query:
+        # a component-CAS set is compared with the catalog mixtures as a SET
+        cset = set(cas_all)
+        for tid, t in ctx.catalog.items():
+            if t["type"] != "MIXTURE" or not t["components"]:
+                continue
+            if cset == t["components"]:
+                signals.append((tid, "EXACT", "MIXTURE_COMPONENT_SET", f"성분 CAS 집합이 {tid}와 동일"))
+            elif cset & t["components"]:
+                signals.append((tid, "COMPONENT", "MIXTURE_COMPONENT_CAS",
+                                f"{tid}의 성분 CAS 일부만 포함(부분 일치)"))
+        flags.append("MIXTURE_QUERY")
+    else:
+        for tid, signal, basis in exact_signals(cas, ctx.catalog):
+            signals.append((tid, signal, basis, f"CAS {cas} in {basis}"))
 
     mol = parse(row.get("smiles", ""))
     max_sim, nearest, sims = None, "", {}
-    if not row.get("smiles"):
+    if not row.get("smiles") and is_mixture_query:
+        pass  # mixtures are queried by component CAS, no single structure exists
+    elif not row.get("smiles"):
         flags.append("STRUCTURE_MISSING")
     elif not HAVE_RDKIT:
         flags.append("RDKIT_UNAVAILABLE")
@@ -343,6 +360,8 @@ def analyse(row, ctx, own_keys):
     hint = set(cas_list(row.get("suggested_target_ids_human_only", "")))
     if hint and not (hint & (set(exact) | set(rule_targets))):
         flags.append("COLLECTION_HINT_NOT_CONFIRMED")
+    if is_mixture_query and hint and not (hint & set(exact)):
+        flags.append("MIXTURE_NAME_RESOLVED_NEEDS_OFFICIAL_CAS")
     if overlap:
         flags.append("MULTI_TARGET_OVERLAP")
     near_targets = sorted(t for t, v in sims.items() if v >= ctx.near_threshold and t not in all_targets)
@@ -383,6 +402,8 @@ def analyse(row, ctx, own_keys):
         if why and why not in reasons and cls not in ("EXACT_CAS_MATCH",):
             reasons.append(why)
 
+    if is_mixture_query and "MIXTURE_NAME_RESOLVED_NEEDS_OFFICIAL_CAS" in flags:
+        reasons.append("카탈로그 혼합물의 성분 이름으로 PubChem에서 찾은 CAS 조합: 공식 자료로 CAS 확인 필요")
     if cls == "POSSIBLE_OUT_OF_SCOPE":
         # Boundary probes are built to sit near a target, so an unconfirmed collection hint
         # carries no information there and must not raise the priority by itself.
