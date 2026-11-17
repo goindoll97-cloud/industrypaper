@@ -11,7 +11,7 @@ sys.path.insert(0, str(HERE))
 import prereview_candidates as pr  # noqa: E402
 from collect_pubchem_candidates import read_csv  # noqa: E402
 
-BATCH = HERE / "candidate_batches/balanced_v2/candidates_for_review.csv"
+BATCH = HERE / "candidates/_sources/balanced_v2_candidates_for_review.csv"
 
 
 class TestCatalogLogic(unittest.TestCase):
@@ -101,7 +101,7 @@ class TestBatchEndToEnd(unittest.TestCase):
         self.assertIn("MX::97-1-127", ids)
 
 
-BOUNDARY = HERE / "candidate_batches/boundary_v1/boundary_v1_candidates_from_prereview.csv"
+BOUNDARY = HERE / "candidates/_sources/boundary_v1_candidates_from_prereview.csv"
 
 
 @unittest.skipUnless(pr.HAVE_RDKIT and BOUNDARY.is_file(), "RDKit or committed boundary batch missing")

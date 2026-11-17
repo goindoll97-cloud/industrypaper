@@ -224,7 +224,8 @@ def build(args):
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--reviewed", action="append", default=[],
-                   help="reviewer sheet CSV (prereview_results.csv with human_* columns filled); repeatable")
+                   help="reviewer sheet CSV with human_* columns filled; repeatable "
+                        "(default: candidates/review_sheet.csv)")
     p.add_argument("--version", default="draft")
     p.add_argument("--out", default=str(HERE / "validation_dataset"))
     p.add_argument("--catalog", default=str(ROOT / "data/regulatory_catalog.csv"))
@@ -237,6 +238,9 @@ def main():
     p.add_argument("--allow-structure-duplicates", action="store_true")
     p.add_argument("--freeze", action="store_true")
     args = p.parse_args()
+    if not args.reviewed:
+        default_sheet = HERE / "candidates" / "review_sheet.csv"
+        args.reviewed = [str(default_sheet)] if default_sheet.is_file() else []
     report, out = build(args)
     print(f"dataset={out}  total={report['n_total']}  new_included={report['n_new_included']}  "
           f"held={report['n_new_held']}  excluded={report['n_new_excluded_by_reviewer']}")

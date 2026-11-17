@@ -30,32 +30,17 @@ PubChem에서 수집한 신규 후보(기본 `REVIEW_PENDING`)를 고정된 29�
 - `NEAR_NEIGHBOR_OF_TARGET:<target>`: 해당 항목에는 해당하지 않지만 구조가 유사함(Tanimoto 0.5 이상, `--near-threshold`로 조정)
 - `MULTI_COMPONENT_ENTRY`, `STRUCTURE_MISSING`, `SMILES_PARSE_FAILED`, `CAS_CHECKSUM_INVALID`
 
-## 4. 출력 파일 (`prereview_output/<배치명>/`)
+## 4. 출력 파일과 실행
 
-- `prereview_results.csv`: 후보 1건당 1행. `auto_*` 열(자동 결과)과 `human_*` 열(사람이 채울 칸)이 분리되어 있음
-- `prereview_target_hits.csv`: 후보와 규제항목의 관계를 1건씩 풀어 쓴 근거 목록
-- `prereview_summary.json`: 분류별 건수, 중첩 사례, **규제목록 자체의 불일치 경고**(`catalog_warnings`)
+사전검토는 통합 수집기(`collect_candidates.py`)가 자동으로 실행하며 결과는 `candidates/review_sheet.csv`, `candidates/review_target_hits.csv`, `candidates/summary.json`에 저장됩니다. 사용 절차는 [VALIDATION_DATASET_GUIDE_ko.md](VALIDATION_DATASET_GUIDE_ko.md)를 보세요.
 
-## 5. Windows PowerShell 실행
+사전검토만 따로 돌리려면:
 
-현재 위치가 `D:\framework_chemical_regul_paper\llm_capability_study`이고 Python 환경이 `chemprop`이라면:
+    python prereview_candidates.py --candidates .\candidates\candidates_for_review.csv --out .\collection_output\prereview_test
 
-    git pull
-    conda activate chemprop
-    pip install rdkit
-    python prereview_candidates.py --candidates .\collection_output\balanced_v2\candidates_for_review.csv
+RDKit이 없어도 CAS 직접 일치 확인은 동작하지만, 구조 기반 판정은 모두 `AMBIGUOUS`(`RDKIT_UNAVAILABLE`)로 표시됩니다. 테스트: `python tests\test_prereview.py`
 
-결과는 `.\prereview_output\balanced_v2\`에 저장됩니다. 저장소에는 현재 87건 배치 사본이 `candidate_batches\balanced_v2\`에 들어 있어서 아래처럼 바로 재현할 수도 있습니다.
-
-    python prereview_candidates.py --candidates .\candidate_batches\balanced_v2\candidates_for_review.csv
-
-RDKit이 없어도 CAS 직접 일치 확인은 동작하지만, 구조 기반 판정은 모두 `AMBIGUOUS`(`RDKIT_UNAVAILABLE`)로 표시됩니다.
-
-테스트:
-
-    python tests\test_prereview.py
-
-## 6. 알려진 한계
+## 5. 알려진 한계
 
 - 구조 규칙은 검토 우선순위를 정하는 휴리스틱입니다. 예를 들어 크로뮴 6가는 SMILES의 `Cr(=O)=O` 단위로만 추정하며 산화수를 계산하지 않습니다.
 - 목록에 CAS가 열거되지 않은 염류나 화합물이 군 항목에 포함되는지는 법령 해석 문제이므로 자동으로 확정하지 않습니다.
