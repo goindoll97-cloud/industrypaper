@@ -14,7 +14,7 @@ Model-visible file: validation_INPUT.csv (query_id, cas_inputs, smiles) -- no na
 Analysis files: validation_GOLD.csv, validation_METADATA.csv, composition_report.json.
 --freeze writes VALIDATION_DATASET_FREEZE.json only if there are no errors
 and each new included row has a documented, non-draft legal reference.
-This syntactic evidence gate is NOT a substitute for independent legal review.
+This syntactic evidence gate is NOT a substitute for source-based legal validation.
 """
 from __future__ import annotations
 
