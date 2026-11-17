@@ -1,3 +1,23 @@
+## 일반 화학물질 포함 수집 방식 (2026-11-17 수정)
+
+검증자료는 규제목록과 관련된 CAS만으로 구성해서는 안 됩니다. 새 PubChem 수집 코드는 아래 세 경로를 구분합니다.
+
+- 규제목록 직접 CAS 후보 (온라인 기본 최대 20%)
+- 염류 및 구조 유사성에서 출발하는 후보 (온라인 기본 최대 40%)
+- 규제목록과 무관한 일반 물질명·재현 가능한 PubChem CID 탐색 (온라인 기본 목표 40%)
+
+이들은 **수집 경로**이므로 법적 규제대상/비대상을 의미하지 않습니다. 특히 독립적으로 찾았더라도 규제범위 안에 있을 수 있으므로 최종 GOLD는 별도 검토로 확정합니다.
+
+Windows 현재 경로가 llm_capability_study 라면 다음과 같이 실행합니다.
+
+    python collect_pubchem_candidates.py --online --max-candidates 100 --max-requests 350 --run-id balanced_v2
+
+실제 온라인 수집은 --online 옵션이 있어야 진행됩니다. 기존 파일을 개별 다운로드한 경우 collect_pubchem_candidates.py와 independent_pubchem_sources.py 두 파일을 모두 같은 폴더에 넣으세요.
+
+자세한 설명: PUBCHEM_COLLECTION_GUIDE_ko.md
+
+---
+
 ## 자동 후보 수집 코드 (추가됨)
 
 PubChem API를 이용하는 후보 수집 코드는 collect_pubchem_candidates.py 입니다.
