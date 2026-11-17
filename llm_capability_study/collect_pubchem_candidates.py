@@ -351,7 +351,7 @@ def main():
                     for cid in client.cids_for_name(name)[:2]:
                         syn = client.synonyms(cid)
                         props = client.properties(cid)
-                        for candidate in from_synonyms(syn)[:8]:
+                        for candidate in from_synonyms(syn)[:3]:
                             if signature(candidate) in old or candidate in proposals:
                                 continue
                             if cid not in client.cids_for_name(candidate):
@@ -394,7 +394,7 @@ def main():
                     if str(cid) == str(seed["cid"]):
                         continue
                     syn = client.synonyms(cid)
-                    cas_candidates = from_synonyms(syn)[:8]
+                    cas_candidates = from_synonyms(syn)[:3]
                     if not cas_candidates:
                         continue
                     props = client.properties(cid)
