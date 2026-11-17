@@ -130,6 +130,7 @@ LLM의 일반적인 성능과 화학 관련 추론 능력은 계속 발전하고
 - [PubChem 후보 자동 수집](collect_pubchem_candidates.py)
 - [규제목록과 독립적인 일반 화학물질 수집 모듈](independent_pubchem_sources.py)
 - [한국어 PubChem 수집·실행 가이드](PUBCHEM_COLLECTION_GUIDE_ko.md)
+- [신규 후보 규제대상 자동 사전검토](prereview_candidates.py) — 검토 우선순위 도구이며 Gold가 아님. [사용 안내](PREREVIEW_GUIDE_ko.md), 결과: `prereview_output/balanced_v2/`
 - [기존 112건 점검 코드](audit_baseline.py)
 - [신규 물질 검토용 빈 입력 양식](new_cases_template.csv)
 - [상세 연구 프로토콜](PROTOCOL.md)

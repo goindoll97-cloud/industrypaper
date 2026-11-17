@@ -1,0 +1,53 @@
+{
+  "created_at_utc": "2026-11-17T07:01:03.368087+00:00",
+  "prereview_version": "prereview_v1",
+  "rdkit_available": true,
+  "n_candidates": 87,
+  "by_class": {
+    "EXACT_CAS_MATCH": 22,
+    "POSSIBLE_OUT_OF_SCOPE": 49,
+    "POSSIBLE_PARENT_SALT": 9,
+    "POSSIBLE_GROUP_MEMBER": 5,
+    "AMBIGUOUS": 2
+  },
+  "by_priority": {
+    "HIGH": 31,
+    "MEDIUM": 17,
+    "LOW": 39
+  },
+  "by_stratum_and_class": {
+    "CATALOG_LISTED": {
+      "EXACT_CAS_MATCH": 20
+    },
+    "INDEPENDENT_GENERAL": {
+      "POSSIBLE_OUT_OF_SCOPE": 40
+    },
+    "NEAR_CATALOG": {
+      "POSSIBLE_PARENT_SALT": 9,
+      "EXACT_CAS_MATCH": 2,
+      "POSSIBLE_GROUP_MEMBER": 5,
+      "POSSIBLE_OUT_OF_SCOPE": 9,
+      "AMBIGUOUS": 2
+    }
+  },
+  "multi_target_overlap_case_ids": [
+    "NEW-0083",
+    "NEW-0084",
+    "NEW-0086"
+  ],
+  "catalog_warnings": [
+    {
+      "target_id": "MX::97-1-127",
+      "issue": "MIXTURE_TEXT_CAS_DIFFERS_FROM_COMPONENT_SET",
+      "cas_only_in_scope_text": [
+        "3084-48-0"
+      ],
+      "cas_only_in_component_set": [
+        "3084-48-8"
+      ]
+    }
+  ],
+  "near_neighbor_threshold": 0.5,
+  "gold_labels_assigned": 0,
+  "disclaimer": "auto_* values are review priorities, not legal conclusions or Gold labels. NOT_FOUND is never assigned automatically."
+}
