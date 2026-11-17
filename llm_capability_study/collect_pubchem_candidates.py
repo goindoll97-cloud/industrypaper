@@ -22,6 +22,8 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
+from independent_pubchem_sources import collect_general
+
 ROOT = Path(__file__).resolve().parents[1]
 HERE = Path(__file__).resolve().parent
 FILES = {
@@ -42,6 +44,7 @@ EXTRA = [
     "discovery_method", "suggested_target_ids_human_only", "seed_cas",
     "similarity_threshold", "pubchem_cid", "pubchem_title_human_only",
     "pubchem_identity_check", "pubchem_record_url", "retrieved_at_utc",
+    "candidate_stratum", "sampling_frame",
 ]
 # Discovery probes, NOT regulatory evidence and NOT labels.
 # The name-to-CID and CID-to-CAS links are cross-checked via PubChem.
@@ -212,6 +215,18 @@ def main():
     parser.add_argument("--online", action="store_true", help="Actually call PubChem PUG REST.")
     parser.add_argument("--out", default=str(HERE / "collection_output"))
     parser.add_argument("--max-candidates", type=int, default=80)
+    parser.add_argument("--run-id", default="balanced_v2",
+                        help="Separate output folder; do not overwrite the original run.")
+    parser.add_argument("--listed-share", type=float, default=0.20,
+                        help="Maximum fraction of direct catalog candidates (online mode).")
+    parser.add_argument("--general-share", type=float, default=0.40,
+                        help="Fraction for candidates obtained independently of catalog seeds.")
+    parser.add_argument("--general-name-share", type=float, default=0.60,
+                        help="Fraction of general candidates initially sought from diverse named classes.")
+    parser.add_argument("--random-seed", type=int, default=20261117)
+    parser.add_argument("--random-cid-min", type=int, default=1000)
+    parser.add_argument("--random-cid-max", type=int, default=1000000)
+    parser.add_argument("--random-cid-probes", type=int, default=80)
     parser.add_argument("--catalog-per-target", type=int, default=3)
     parser.add_argument("--seeds-per-target", type=int, default=2)
     parser.add_argument("--max-seeds", type=int, default=18)
@@ -230,11 +245,22 @@ def main():
         parser.error("--threshold must be 80..100.")
     if not 0 < args.rate_per_sec <= 3:
         parser.error("--rate-per-sec must be >0 and <=3.")
+    if not (0 <= args.listed_share <= 1 and 0 <= args.general_share <= 1
+            and args.listed_share + args.general_share <= 1
+            and 0 <= args.general_name_share <= 1):
+        parser.error("shares must be within [0,1]; listed+general must be <=1.")
+    if args.random_cid_min < 1 or args.random_cid_max < args.random_cid_min:
+        parser.error("Invalid random CID range.")
+    if not 0 <= args.random_cid_probes <= 5000:
+        parser.error("--random-cid-probes must be 0..5000.")
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", args.run_id):
+        parser.error("--run-id must contain letters, numbers, _ or - only.")
     if min(args.catalog_per_target, args.seeds_per_target, args.max_seeds,
            args.neighbors_per_seed, args.max_neighbor_cids, args.max_records,
            args.salts_per_parent, args.max_requests) < 0:
         parser.error("Limits cannot be negative.")
-    out = Path(args.out).expanduser().resolve()
+    # Version the outputs: never overwrite previous reviewed candidate CSVs.
+    out = Path(args.out).expanduser().resolve() / args.run_id
     out.mkdir(parents=True, exist_ok=True)
     catalog = read_csv(FILES["catalog"])
     baseline = read_csv(FILES["baseline"])
@@ -258,6 +284,19 @@ def main():
                 per_cas_targets.setdefault(cas, set()).add(r["target_id"])
     proposals = {}
     errors = []
+    if args.online:
+        listed_cap = round(args.max_candidates * args.listed_share)
+        general_cap = round(args.max_candidates * args.general_share)
+        near_cap = args.max_candidates - listed_cap - general_cap
+    else:
+        listed_cap, general_cap, near_cap = args.max_candidates, 0, 0
+    quotas = {
+        "CATALOG_LISTED": listed_cap,
+        "NEAR_CATALOG": near_cap,
+        "INDEPENDENT_GENERAL": general_cap,
+    }
+    stratum_count = Counter()
+    general_report = {}
     client = PubChem(args, out) if args.online else None
 
     def add(cas, typ, method, target, seed="", cid="", title="", struct="",
@@ -265,19 +304,28 @@ def main():
         cas = valid_cas(cas)
         if not cas or signature(cas) in old:
             return False
+        if method == "ARCHIVED_CATALOG_CAS":
+            stratum = "CATALOG_LISTED"
+        elif method in {"PUBCHEM_GENERAL_NAME", "PUBCHEM_RANDOM_CID_PROBE"}:
+            stratum = "INDEPENDENT_GENERAL"
+            if cas in per_cas_targets:
+                return False
+        else:
+            stratum = "NEAR_CATALOG"
         if cas in proposals:
             previous = proposals[cas]
             ids = set(previous["suggested_target_ids_human_only"].split("|")) - {""}
-            ids.add(target)
+            if target:
+                ids.add(target)
             ids.update(per_cas_targets.get(cas, set()))
             previous["suggested_target_ids_human_only"] = "|".join(sorted(ids))
             methods = set(previous["discovery_method"].split("|"))
             methods.add(method)
             previous["discovery_method"] = "|".join(sorted(methods))
             return False
-        if len(proposals) >= args.max_candidates:
+        if len(proposals) >= args.max_candidates or stratum_count[stratum] >= quotas[stratum]:
             return False
-        hints = sorted({target} | per_cas_targets.get(cas, set()))
+        hints = sorted(({target} if target else set()) | per_cas_targets.get(cas, set()))
         structure = struct or smiles.get(cas, "")
         row = {k: "" for k in TEMPLATE + EXTRA}
         row.update({
@@ -308,8 +356,15 @@ def main():
             "pubchem_record_url": (
                 f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}" if cid else ""),
             "retrieved_at_utc": datetime.now(timezone.utc).isoformat(),
+            "candidate_stratum": stratum,
+            "sampling_frame": (
+                "FROZEN_REGULATORY_CAS" if stratum == "CATALOG_LISTED"
+                else "TARGET_SEEDED_PUBCHEM_QUERY" if stratum == "NEAR_CATALOG"
+                else "INDEPENDENT_GENERAL_PUBCHEM_DISCOVERY"
+            ),
         })
         proposals[cas] = row
+        stratum_count[stratum] += 1
         return True
 
     # STAGE 1: official CAS members and parent references from already verified
@@ -335,17 +390,36 @@ def main():
                    identity_url=rec.get("pubchem_record_url", "")):
                 added += 1
 
-    # STAGE 2: PubChem name search for salts (good positive prospects, NO LABEL).
-    # STAGE 3: 2D similarity search for related compounds (not necessarily negatives).
-    if args.online and len(proposals) < args.max_candidates:
+    # STAGE 2: independent chemicals not searched via the 29 target seeds.
+    # Run BEFORE near-catalog search, reserving both rows and HTTP budget.
+    if args.online and general_cap > 0:
+        try:
+            catalog_cids = {
+                known[c]["pubchem_cid"]
+                for c in per_cas_targets if c in known
+            }
+            general_report = collect_general(
+                client, add, from_synonyms, args, catalog_cids, general_cap)
+        except RequestBudget as exc:
+            errors.append("GENERAL_SEARCH_BUDGET: " + str(exc))
+
+    # STAGE 3: PubChem name search for salts (positive prospects, NO LABEL).
+    # STAGE 4: 2D similarity search for near-catalog challenges (not necessarily negatives).
+    if (args.online and len(proposals) < args.max_candidates
+            and stratum_count["NEAR_CATALOG"] < quotas["NEAR_CATALOG"]
+            and client.requests < args.max_requests):
         try:
             for r in catalog:
+                if stratum_count["NEAR_CATALOG"] >= near_cap:
+                    break
                 if r["target_type"] != "PARENT_SALT":
                     continue
                 ref = cas_list(r["reference_cas_set"])
                 if len(ref) != 1:
                     continue
                 for name in SALT_PROBES.get(ref[0], [])[:args.salts_per_parent]:
+                    if stratum_count["NEAR_CATALOG"] >= near_cap:
+                        break
                     if len(proposals) >= args.max_candidates:
                         break
                     for cid in client.cids_for_name(name)[:2]:
@@ -384,11 +458,15 @@ def main():
                 if len(seeds) >= args.max_seeds:
                     break
             for seed in seeds[:args.max_seeds]:
+                if stratum_count["NEAR_CATALOG"] >= near_cap:
+                    break
                 if len(proposals) >= args.max_candidates:
                     break
                 accepted = 0
                 cid_ids = client.near_cids(seed["cid"])
                 for cid in cid_ids[:args.max_neighbor_cids]:
+                    if stratum_count["NEAR_CATALOG"] >= near_cap:
+                        break
                     if accepted >= args.neighbors_per_seed or len(proposals) >= args.max_candidates:
                         break
                     if str(cid) == str(seed["cid"]):
@@ -445,6 +523,15 @@ def main():
         "n_regulatory_targets": len(catalog),
         "n_existing_baseline_cases": len(old),
         "new_candidate_count": len(result),
+        "candidate_stratum_quota": quotas,
+        "candidates_by_stratum": dict(stratum_count),
+        "general_discovery_report": general_report,
+        "sampling_frames_are_not_legal_labels": True,
+        "random_cid_frame_warning": (
+            "Numeric CID probing is NOT a random representative sample "
+            "of PubChem compounds or of regulated/unregulated chemicals. "
+            "CID ranges have gaps and reflect deposition/assignment history."
+        ),
         "candidates_by_method": dict(Counter(
             method for r in result for method in r["discovery_method"].split("|"))),
         "candidates_by_source_category": dict(Counter(r["source_category"] for r in result)),
@@ -456,7 +543,8 @@ def main():
         "args": vars(args),
         "source_sha256": {key: sha(path) for key, path in FILES.items()},
         "disclaimer": (
-            "PubChem verifies chemical identifiers/structures, not legal scope. "
+            "Independently discovered candidates are NOT automatically out of "
+            "regulatory scope. PubChem verifies identifiers/structures, not legal scope. "
             "Even exact catalog CAS and reciprocal CAS-CID matches must be independently "
             "reviewed for target-specific membership. NOT_FOUND cannot be auto-labeled."
         ),
