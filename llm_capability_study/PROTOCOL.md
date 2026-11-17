@@ -27,6 +27,22 @@ Important distinction: this tests *identification within a specified catalog*, N
 8. **Scoring:** exact target accuracy, sensitivity for in-catalog cases, specificity for out-of-catalog cases, wrong-target rate, false inclusion, false exclusion, abstention, per-category accuracy, and per-case stability. Consider uncertainty with case-level paired analyses/cluster bootstrap.
 9. **No regulatory source fabrication:** blank or ambiguous legal evidence requires adjudication or exclusion from accuracy analysis. Never treat lack of a PubChem SMILES as proof of NOT_FOUND.
 
+## Candidate sampling frames (revised)
+
+Study 3 must NOT require all evaluation chemicals to be close to the 29 target entries.
+The PubChem candidate collector now records three independent sampling frames:
+
+1. CATALOG_LISTED: CAS values appearing in frozen catalog reference/member lists but not already tested.
+2. NEAR_CATALOG: PubChem structure-similarity and salt searches anchored on frozen catalog entries.
+3. INDEPENDENT_GENERAL: names drawn from multiple broad chemical categories and seeded numeric PubChem CID probes **without looking up starting seeds in the 29 target list**. These are not guaranteed to be structurally far from targets or legally NOT_FOUND.
+
+Typical *recruitment* quotas are 20%/40%/40%, adjustable. Each observed mixture may still need independent evidence.
+CID-range probing is reproducible but **not a representative random draw of PubChem chemical records**, since numeric CIDs reflect assignment history and gaps. Report the sampling frame, selection parameters, and errors by stratum.
+
+The candidate generation output source_category GENERAL_CHEMICAL is a provenance label, NOT a fourth legal target type. A reviewer should assign the final analytic category (e.g., independently sourced out-of-catalog case, near miss, or a true in-catalog target) only after verifying the full 29-target legal scope. Every newly collected row starts REVIEW_PENDING and no negative label is inferred merely from its discovery frame.
+
+Across collection batches, use --exclude-file to exclude prior CAS signatures as well as the frozen 112 cases. Use separate --run-id labels and different --random-seed values to expand the numeric CID probe frame without overwriting earlier outputs.
+
 ## Expand only after the protocol above is fixed
 
 Target ~300-400 distinct chemical cases as a *planning goal*, NOT a fixed statistical sample size. Start with an audited pilot of **40-60 NEW cases** and grow only once identity and legal-source reviews work. Stratify by **target type** and **gold status**, especially the underrepresented 10 named mixtures and difficult negative near-neighbor cases. Use quotas as recruitment guidance, not a claim of population prevalence.
