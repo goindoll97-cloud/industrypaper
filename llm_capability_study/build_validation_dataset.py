@@ -144,6 +144,60 @@ def catalog_source_pending(registry_path, catalog_ids):
     return pending
 
 
+def independent_review_issues(included, reviewer1, reviewer2):
+    """Require two distinct, cited, concordant independent judgments before freeze.
+
+    Blank/missing templates are not approval. Substantive source verification
+    remains a reviewer responsibility and cannot be proven by these fields.
+    """
+    if not included:
+        return []
+
+    def load_review(path):
+        path = Path(path)
+        if not path.is_file():
+            return {}, [f"MISSING_REVIEW_FILE {path}"]
+        data = read_csv(path)
+        records, issues = {}, []
+        for r in data:
+            case = (r.get("case_id") or "").strip()
+            if not case:
+                issues.append(f"REVIEW_WITHOUT_CASE_ID {path}")
+            elif case in records:
+                issues.append(f"DUPLICATE_REVIEW_CASE {path} {case}")
+            else:
+                records[case] = r
+        return records, issues
+
+    r1, issues = load_review(reviewer1)
+    r2, more = load_review(reviewer2)
+    issues.extend(more)
+    for rec in included:
+        case = rec["case_id"]
+        a, b = r1.get(case), r2.get(case)
+        if not a or not b:
+            issues.append(f"MISSING_INDEPENDENT_REVIEW {case}")
+            continue
+        reviewers = []
+        for index, item in enumerate((a, b), 1):
+            reviewer_id = (item.get("reviewer_id") or "").strip()
+            reviewers.append(reviewer_id)
+            target = "|".join(sorted(set((item.get("reviewed_target_id") or "").strip().split("|"))))
+            if (item.get("decision") or "").strip().upper() != "CONFIRMED":
+                issues.append(f"UNCONFIRMED_REVIEW_{index} {case}")
+            if not reviewer_id or not (item.get("reviewed_on") or "").strip():
+                issues.append(f"REVIEWER_ID_OR_DATE_MISSING_{index} {case}")
+            if not (item.get("official_legal_source") or "").strip():
+                issues.append(f"REVIEWER_LEGAL_SOURCE_MISSING_{index} {case}")
+            if not (item.get("chemical_identity_source") or "").strip():
+                issues.append(f"REVIEWER_IDENTITY_SOURCE_MISSING_{index} {case}")
+            if target != rec["human_gold_target_id"]:
+                issues.append(f"REVIEW_TARGET_DISAGREEMENT_{index} {case}")
+        if reviewers[0] and reviewers[0] == reviewers[1]:
+            issues.append(f"REVIEWERS_NOT_INDEPENDENT {case}")
+    return issues
+
+
 def to_dataset_row(rec, query_id):
     target = rec["human_gold_target_id"].strip()
     cas = cas_list(rec["cas_inputs"])
@@ -237,6 +291,9 @@ def build(args):
     included, excluded, held = gate_new_rows(args.reviewed, set(catalog))
     source_pending = catalog_source_pending(args.catalog_source_registry, set(catalog))
     included.sort(key=lambda r: (r["source_batch"], r["case_id"]))
+    independent_issues = independent_review_issues(included,
+        getattr(args, "reviewer1", HERE / "candidates/reviewer_1_completed.csv"),
+        getattr(args, "reviewer2", HERE / "candidates/reviewer_2_completed.csv"))
     legal_pending = [r for r in included if legal_evidence_pending(r["human_legal_basis"])]
     next_id = max(int(r["query_id"].split("-")[1]) for r in baseline) + 1
     new_rows = [to_dataset_row(r, f"RQ-{next_id + i:04d}") for i, r in enumerate(included)]
@@ -249,8 +306,10 @@ def build(args):
         "n_new_held": len(held), "held_by_reason": dict(Counter(h["reason"] for h in held)),
         "n_legal_basis_pending": len(legal_pending),
         "legal_basis_pending_case_ids": [r["case_id"] for r in legal_pending],
-        "gold_ready_for_freeze": not bool(legal_pending or source_pending),
+        "gold_ready_for_freeze": not bool(legal_pending or source_pending or independent_issues),
         "n_catalog_source_pending": len(source_pending),
+        "n_independent_review_issues": len(independent_issues),
+        "independent_review_issues": independent_issues,
         "catalog_source_pending_target_ids": source_pending,
         "excluded_cases": [{k: e.get(k, "") for k in ("case_id", "cas_inputs", "source_batch", "reason")}
                            for e in excluded],
@@ -270,6 +329,7 @@ def build(args):
             errors.extend(f"UNVERIFIED_LEGAL_BASIS {r['case_id']}" for r in legal_pending)
         if source_pending:
             errors.extend(f"UNVERIFIED_CATALOG_SOURCE {tid}" for tid in source_pending)
+        errors.extend(independent_issues)
         report["errors"] = errors
         if errors:
             report["freeze_refused"] = "errors present; fix them before --freeze"
@@ -283,6 +343,11 @@ def build(args):
                                     "retrieval_GOLD.csv": sha256(args.baseline_gold)},
                 "reviewed_sheet_sha256": {str(p): sha256(p) for p in args.reviewed},
                 "catalog_sha256": sha256(args.catalog),
+                "catalog_source_registry_sha256": sha256(args.catalog_source_registry),
+                "independent_review_sha256": {
+                    "reviewer_1": sha256(args.reviewer1),
+                    "reviewer_2": sha256(args.reviewer2),
+                } if included else {},
                 "rule": "Gold must be fixed before any model prediction is viewed; do not edit after freeze.",
             }
             (out / "VALIDATION_DATASET_FREEZE.json").write_text(
@@ -305,6 +370,10 @@ def main():
     p.add_argument("--smiles", default=str(ROOT / "intermediate/shared_pubchem_smiles.csv"))
     p.add_argument("--catalog-source-registry",
                    default=str(HERE / "candidates/catalog_source_registry.csv"))
+    p.add_argument("--reviewer1",
+                   default=str(HERE / "candidates/reviewer_1_completed.csv"))
+    p.add_argument("--reviewer2",
+                   default=str(HERE / "candidates/reviewer_2_completed.csv"))
     p.add_argument("--target-min", type=int, default=300)
     p.add_argument("--target-max", type=int, default=400)
     p.add_argument("--min-per-category", type=int, default=30)
@@ -328,6 +397,7 @@ def main():
     print(f"warnings: {len(report['warnings'])}  frozen: {report['frozen']}")
     print(f"unverified legal bases: {report['n_legal_basis_pending']} / {report['n_new_included']} new rows")
     print(f"unverified catalog source definitions: {report['n_catalog_source_pending']} / {len(report['found_cases_per_target']) + len(report['targets_without_any_found_case'])} targets")
+    print(f"independent reviewer signoff issues: {report['n_independent_review_issues']}")
     if report.get("freeze_refused"):
         print("FREEZE REFUSED:", report["freeze_refused"])
     sys.exit(1 if report["errors"] and args.freeze else 0)
