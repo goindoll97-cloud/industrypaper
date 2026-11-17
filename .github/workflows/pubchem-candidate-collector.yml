@@ -1,0 +1,61 @@
+name: PubChem candidate collection (review only)
+
+on:
+  push:
+    paths:
+      - "llm_capability_study/collect_pubchem_candidates.py"
+      - ".github/workflows/pubchem-candidate-collector.yml"
+  workflow_dispatch:
+    inputs:
+      online:
+        type: boolean
+        description: "Call PubChem PUG REST (otherwise archived data only)"
+        default: true
+      max_candidates:
+        description: "Maximum new candidate rows"
+        default: "60"
+        type: string
+      max_requests:
+        description: "Maximum new PubChem HTTP attempts"
+        default: "200"
+        type: string
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Python syntax check
+        run: python -m py_compile llm_capability_study/collect_pubchem_candidates.py
+      - name: Archived-catalog preview or rate-limited live PubChem collection
+        shell: bash
+        run: |
+          ONLINE=""
+          CANDIDATES="60"
+          REQUESTS="200"
+          if [[ "\${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            CANDIDATES="\${{ inputs.max_candidates }}"
+            REQUESTS="\${{ inputs.max_requests }}"
+            if [[ "\${{ inputs.online }}" == "true" ]]; then
+              ONLINE="--online"
+            fi
+          fi
+          python llm_capability_study/collect_pubchem_candidates.py \
+            $ONLINE --max-candidates "$CANDIDATES" --max-requests "$REQUESTS" \
+            --out llm_capability_study/collection_output
+      - name: Archive collection and evidence for manual review
+        uses: actions/upload-artifact@v4
+        with:
+          name: pubchem-candidate-review
+          path: |
+            llm_capability_study/collection_output/candidates_for_review.csv
+            llm_capability_study/collection_output/mixture_research_gaps.csv
+            llm_capability_study/collection_output/collection_summary.json
+          if-no-files-found: error
+          retention-days: 30
