@@ -1,0 +1,77 @@
+name: Boundary candidate collection and pre-review (review only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      online:
+        type: boolean
+        description: "Call PubChem PUG REST (otherwise only write the probe plan and mixture name queue)"
+        default: true
+      max_candidates:
+        description: "Maximum boundary candidate rows"
+        default: "100"
+        type: string
+      max_requests:
+        description: "Maximum new PubChem HTTP attempts"
+        default: "600"
+        type: string
+      run_id:
+        description: "Batch name (use a new name for every batch)"
+        default: "boundary_v1"
+        type: string
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install RDKit (structure de-duplication and pre-review)
+        run: pip install rdkit
+      - name: Reuse cached PubChem responses
+        uses: actions/cache@v4
+        with:
+          path: llm_capability_study/collection_output/${{ inputs.run_id }}/pubchem_http_cache
+          key: boundary-pubchem-${{ runner.os }}-${{ inputs.run_id }}-${{ github.run_id }}
+          restore-keys: |
+            boundary-pubchem-${{ runner.os }}-${{ inputs.run_id }}-
+      - name: Unit tests
+        run: |
+          python llm_capability_study/tests/test_prereview.py
+          python llm_capability_study/tests/test_validation_pipeline.py
+      - name: Collect boundary candidates (no Gold is assigned)
+        shell: bash
+        run: |
+          ONLINE=""
+          if [[ "${{ inputs.online }}" == "true" ]]; then ONLINE="--online"; fi
+          python llm_capability_study/collect_boundary_candidates.py $ONLINE \
+            --run-id "${{ inputs.run_id }}" \
+            --max-candidates "${{ inputs.max_candidates }}" \
+            --max-requests "${{ inputs.max_requests }}" \
+            --exclude-file llm_capability_study/candidate_batches/balanced_v2/candidates_for_review.csv \
+            --out llm_capability_study/collection_output
+      - name: Pre-review the new batch against the 29 targets
+        shell: bash
+        run: |
+          F="llm_capability_study/collection_output/${{ inputs.run_id }}/candidates_for_review.csv"
+          if [[ -f "$F" ]]; then
+            python llm_capability_study/prereview_candidates.py --candidates "$F" \
+              --out "llm_capability_study/collection_output/${{ inputs.run_id }}/prereview"
+          else
+            echo "No candidates file (offline plan only)."
+          fi
+      - name: Archive batch for manual review
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundary-candidate-batch-${{ inputs.run_id }}
+          path: |
+            llm_capability_study/collection_output/${{ inputs.run_id }}/*.csv
+            llm_capability_study/collection_output/${{ inputs.run_id }}/*.json
+            llm_capability_study/collection_output/${{ inputs.run_id }}/prereview/
+          if-no-files-found: error
+          retention-days: 30

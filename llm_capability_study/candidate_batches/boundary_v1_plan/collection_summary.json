@@ -1,0 +1,16 @@
+{
+  "created_at_utc": "2026-11-17T07:14:19.342843+00:00",
+  "run_id": "boundary_v1_plan",
+  "mode": "OFFLINE_PLAN_ONLY",
+  "n_probes_planned": 103,
+  "n_mixture_names_queued": 15,
+  "rdkit_available": true,
+  "exclusion_files": [],
+  "all_new_labels": "REVIEW_PENDING",
+  "candidate_gold_labels_assigned": 0,
+  "source_sha256": {
+    "catalog": "d04dd6367fbcc0ad97ea85ca2bf2c5dfe4576cab24b1943b38c23fdb165043c9",
+    "baseline": "8ea9ac869711b66c7857d7fb25c682569b2863b31e476c4d3f8f4624e8763cc0"
+  },
+  "errors": []
+}
