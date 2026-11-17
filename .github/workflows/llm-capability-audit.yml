@@ -46,7 +46,6 @@ jobs:
           print("Legal source not yet verified:", report["n_legal_basis_pending"])
           print("Target definitions awaiting signed-off source:", report["n_catalog_source_pending"])
           print("Structural/CAS errors:", len(report["errors"]))
-          print("Independent reviewer signoff issues:", report["n_independent_review_issues"])
           from pathlib import Path
           sampling = json.loads(Path("llm_capability_study/candidates/review_audit_output/sampling_design_report.json").read_text())
           print("Sampling class balance:", sampling["gold_counts"])
