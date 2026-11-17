@@ -226,36 +226,21 @@ class TestBuilderGates(unittest.TestCase):
             self.assertEqual(len(pending), 29)
 
 
-    def test_two_independent_reviewers_must_match_gold_and_have_sources(self):
+    def test_freeze_not_blocked_by_absent_independent_reviewer_files(self):
         with tempfile.TemporaryDirectory() as d:
             tmp = Path(d)
-            files = [tmp / "r1.csv", tmp / "r2.csv"]
-            fields = ["case_id", "reviewer_id", "reviewed_on", "reviewed_target_id",
-                      "official_legal_source", "chemical_identity_source", "decision"]
-            for i, filename in enumerate(files, 1):
-                with filename.open("w", encoding="utf-8", newline="") as handle:
-                    w = csv.DictWriter(handle, fieldnames=fields)
-                    w.writeheader()
-                    w.writerow({
-                        "case_id": "T-1", "reviewer_id": f"expert-{i}",
-                        "reviewed_on": "2026-11-17", "reviewed_target_id": "NOT_FOUND",
-                        "official_legal_source": "notice-reference",
-                        "chemical_identity_source": "identity-reference",
-                        "decision": "CONFIRMED",
-                    })
-            included = [{"case_id": "T-1", "human_gold_target_id": "NOT_FOUND"}]
-            self.assertEqual(bvd.independent_review_issues(included, *files), [])
-            with files[1].open("w", encoding="utf-8", newline="") as handle:
-                w = csv.DictWriter(handle, fieldnames=fields)
-                w.writeheader()
-                w.writerow({"case_id": "T-1", "reviewer_id": "expert-1",
-                            "reviewed_on": "2026-11-17", "reviewed_target_id": "CG::MG_SALTS",
-                            "official_legal_source": "notice-reference",
-                            "chemical_identity_source": "identity-reference",
-                            "decision": "CONFIRMED"})
-            issues = " ".join(bvd.independent_review_issues(included, *files))
-            self.assertIn("REVIEW_TARGET_DISAGREEMENT_2", issues)
-            self.assertIn("REVIEWERS_NOT_INDEPENDENT", issues)
+            sheet = tmp / "review" / "sheet.csv"
+            write_sheet(sheet, [dict(
+                case_id="T-1", cas_inputs="506-26-3", source_category="GENERAL_CHEMICAL",
+                human_gold_target_id="NOT_FOUND",
+                human_legal_basis="법적 근거 검토용 고시 제2025-28호 (test fixture)",
+                human_review_status="ADJUDICATED")])
+            report, _ = bvd.build(self.args(tmp, [str(sheet)]))
+            self.assertEqual(report["n_new_included"], 1)
+            self.assertNotIn("n_independent_review_issues", report)
+            self.assertEqual(report["n_legal_basis_pending"], 0)
+            self.assertEqual(report["n_catalog_source_pending"], 29)
+
 
     def test_freeze_writes_manifest_when_clean(self):
         with tempfile.TemporaryDirectory() as d:
