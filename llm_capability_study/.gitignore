@@ -2,4 +2,3 @@ output/
 __pycache__/
 *.pyc
 collection_output/
-candidates/review_sheet.previous.csv

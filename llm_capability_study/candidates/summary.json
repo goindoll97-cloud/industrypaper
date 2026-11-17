@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-11-17T07:45:07.142985+00:00",
+  "created_at_utc": "2026-11-17T08:07:49.310897+00:00",
   "prereview_version": "prereview_v1",
   "rdkit_available": true,
   "n_candidates": 143,
@@ -69,5 +69,6 @@
   "dropped_by_reason": {},
   "collection_passes": [],
   "mode": "OFFLINE_REBUILD",
-  "rows_with_reviewer_input": 0
+  "rows_with_reviewer_input": 0,
+  "dropped_candidates": []
 }

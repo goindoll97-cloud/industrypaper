@@ -28,7 +28,7 @@ jobs:
       - name: Reuse cached PubChem responses
         uses: actions/cache@v4
         with:
-          path: llm_capability_study/collection_output/_stages
+          path: llm_capability_study/collection_output/_work
           key: candidates-pubchem-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
             candidates-pubchem-${{ runner.os }}-

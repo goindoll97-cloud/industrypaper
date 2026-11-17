@@ -83,6 +83,8 @@ class TestUnifiedRun(unittest.TestCase):
             self.assertTrue(all(r["gold_status"] == "REVIEW_PENDING" and r["gold_target_id"] == "" for r in sheet))
             s2 = cc.run(args)
             self.assertEqual(s2["pool_size"], 143)
+            self.assertEqual(sorted(p.name for p in args.out.iterdir()),
+                             ["_sources", "review_sheet.csv", "summary.json"])
 
     def test_human_columns_survive_a_rerun(self):
         with tempfile.TemporaryDirectory() as d:
@@ -119,7 +121,7 @@ class TestUnifiedRun(unittest.TestCase):
                 s = cc.run(args)
                 self.assertEqual(s["pool_size"], 144)
                 self.assertEqual([c[0] for c in calls], ["B"])
-                ids = [r["case_id"] for r in read_csv(args.out / "candidates_for_review.csv")]
+                ids = [r["case_id"] for r in read_csv(args.out / "review_sheet.csv")]
                 self.assertEqual(ids[-1], "CAND-0144")
                 # target already met -> no further stage calls
                 calls.clear()
