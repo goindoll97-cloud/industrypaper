@@ -1,0 +1,8 @@
+# Never commit the answer key or raw model results
+private/
+results/*
+!results/.gitkeep
+__pycache__/
+*.py[cod]
+.env
+.venv/
