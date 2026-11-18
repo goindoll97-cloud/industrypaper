@@ -7,3 +7,6 @@ __pycache__/
 .DS_Store
 .ipynb_checkpoints/
 results/.tmp/
+llm_capability_study/validation_2026_5/pubchem_cache.json
+llm_capability_study/validation_2026_5/pubchem_name_review.csv
+llm_capability_study/validation_2026_5/mismatches.csv
