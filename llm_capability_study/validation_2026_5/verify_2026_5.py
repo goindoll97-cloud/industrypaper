@@ -124,6 +124,19 @@ PUG = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{}/{}/JSON"
 def norm_name(s):
     return re.sub(r"[^a-z0-9]", "", (s or "").lower())
 
+# 2026-11-18 PubChem 교차확인 결과(300 CAS)를 읽고 판정한 예외. 정답은 별표 CAS 일치로 정해지므로 어느 것도 정답 오류가 아님.
+# 'AI_REVIEWED' = Claude가 이름·분자식을 읽어 판단한 것(사람 확인 아님). 3078-97-5(DSP)는 일부러 넣지 않아 계속 사람이 볼 목록에 남음.
+_SAME = "같은 물질의 표기 차이(색인명 vs 관용명·IUPAC명; 이름·분자식 대조)"
+_NEW = "PubChem 미등재(신규 등록·유기금속·이온성액체·광산발생제 등). 별표 CAS로만 확인 가능"
+AI_REVIEWED = {
+    **{c: _SAME for c in ("177997-13-6", "2094-99-7", "258872-05-8", "374572-91-5", "57583-35-4", "68109-88-6",
+                          "857023-53-1", "90076-65-6", "912290-04-1")},
+    **{c: _NEW for c in ("1400865-07-7", "1400865-78-2", "1702310-11-9", "1814903-27-9", "184477-29-0", "195384-27-1",
+                         "2064323-02-8", "219125-19-6", "2841639-49-2", "460731-19-5", "462629-01-2")},
+    "506-64-9": "은 시안화물: CAS 체크디지트 정상, PubChem 이름 일치(동의어 목록에 CAS만 빠짐)",
+    "1461-22-9": "별표 영문명 오타(Tributylitin -> Tributyltin). CAS는 정상이라 정답 영향 없음",
+}
+
 
 UVCB_WORDS = ("reaction product", "polymer", "fatty acids", "amines,", "flue dust", "matte", "speiss", "creosote",
               "chloroalkanes", "hydrolyzed", "by-products", "quaternized", "reaction products")
@@ -225,6 +238,8 @@ def pubchem_crosscheck(cas_to_name, cache_path):
             row.update(status="UVCB_OR_POLYMER", note="반응생성물·고분자·UVCB로 PubChem 대상 아님(예상된 조회불가)")
         else:
             row.update(status="NOT_RESOLVED", note="CAS·이름 모두 PubChem에서 못 찾음 -> 사람이 확인")
+        if cas in AI_REVIEWED and row["status"] in ("MISMATCH", "NOT_RESOLVED", "NAME_FOUND_CAS_NOT_LISTED", "SIMILAR"):
+            row.update(note=f"[{row['status']}] {AI_REVIEWED[cas]}", status="AI_REVIEWED")
         rows.append(row)
     cache_path.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
     return Counter(r["status"] for r in rows), rows, ""
@@ -462,7 +477,7 @@ def main():
         pubchem_note = f"PubChem 교차확인 건너뜀: 인터넷 접속 불가 ({skipped})"
     else:
         order = {"MISMATCH": 0, "NAME_FOUND_CAS_NOT_LISTED": 1, "NOT_RESOLVED": 2, "ERROR": 3, "SIMILAR": 4,
-                 "UVCB_OR_POLYMER": 5, "MATCH_BY_NAME": 6, "MATCH": 7}
+                 "UVCB_OR_POLYMER": 5, "AI_REVIEWED": 6, "MATCH_BY_NAME": 7, "MATCH": 8}
         with open(args.pubchem_out, "w", encoding="utf-8-sig", newline="") as f:
             w = csv.DictWriter(f, fieldnames=["cas", "official_en", "status", "pubchem_title", "similarity", "note"])
             w.writeheader()
@@ -470,7 +485,7 @@ def main():
         need = counts["MISMATCH"] + counts["NAME_FOUND_CAS_NOT_LISTED"] + counts["NOT_RESOLVED"] + counts["ERROR"]
         pubchem_note = ("PubChem 교차확인(300 CAS): " + " / ".join(f"{k} {v}" for k, v in sorted(counts.items(), key=lambda kv: order[kv[0]])) +
                         f"\n  사람이 볼 것: {need}건 (MISMATCH·NAME_FOUND_CAS_NOT_LISTED·NOT_RESOLVED·ERROR) -> {args.pubchem_out} 맨 위. "
-                        "UVCB_OR_POLYMER는 예상된 조회불가(PubChem 대상 아님). 정답은 별표 CAS 일치로 정해지므로 정답 오류를 뜻하지 않음")
+                        "UVCB_OR_POLYMER는 예상된 조회불가, AI_REVIEWED는 Claude가 이미 읽고 판정한 예외(코드 AI_REVIEWED 참조). 정답은 별표 CAS 일치로 정해지므로 정답 오류를 뜻하지 않음")
     pubchem_ids = {r["cas"]: r["status"] for r in pc_rows} if not skipped else {}
 
     # 출력
