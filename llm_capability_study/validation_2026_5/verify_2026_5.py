@@ -7,7 +7,8 @@
 
 공식 별표만 근거로 삼고 정답지의 값을 빌리지 않는다. 불일치가 있으면 종료 코드 1.
 점검 항목: 원본 해시 / LEGAL_REFERENCE 원본 일치 / 선정 규칙 / 질의 구조(300 CAS x 4) / 농도 패턴 /
-행별 정답 재계산 / expected_output_json 일관성 / 질의·정답 파일 간 일치 / 정답 유출 / QC 요약 수치.
+행별 정답 재계산 / expected_output_json 일관성 / 질의·정답 파일 간 일치 / 정답 유출 / QC 요약 수치 /
+별표 CAS-영문명 PubChem 교차확인(300개 CAS; 인터넷 필요, 접속 불가면 이 항목만 건너뜀. 결과는 '사람이 볼 후보'이며 FAIL이 아님).
 """
 from __future__ import annotations
 
@@ -18,7 +19,12 @@ import json
 import math
 import re
 import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
 from collections import Counter, defaultdict
+from difflib import SequenceMatcher
 from pathlib import Path
 
 import openpyxl
@@ -111,12 +117,94 @@ def parse_official(path):
     return rows
 
 
+# ---- PubChem 교차확인: 별표의 CAS와 영문명이 서로 맞는지 (별표 자체의 오탈자 후보 탐지) -------------------
+PUG = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{}/{}/JSON"
+
+
+def norm_name(s):
+    return re.sub(r"[^a-z0-9]", "", (s or "").lower())
+
+
+def classify_name(official_en, names):
+    """MATCH(정규화 일치) / SIMILAR(유사도>=0.8 또는 포함) / MISMATCH."""
+    target = norm_name(official_en)
+    pool = [norm_name(n) for n in names if n]
+    if not target or not pool:
+        return "MISMATCH", 0.0
+    if target in pool:
+        return "MATCH", 1.0
+    best = max(SequenceMatcher(None, target, n).ratio() for n in pool[:200])
+    if best >= 0.8 or any(target in n or (len(n) > 6 and n in target) for n in pool[:200]):
+        return "SIMILAR", best
+    return "MISMATCH", best
+
+
+def pug_get(cas, what, retries=3):
+    url = PUG.format(urllib.parse.quote(cas), what)
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "verify_2026_5"}), timeout=30) as r:
+                return json.loads(r.read().decode("utf-8")), ""
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None, "NOT_FOUND"
+            if e.code in (429, 503):
+                time.sleep(2 * (attempt + 1))
+                continue
+            return None, f"HTTP_{e.code}"
+        except Exception as e:  # 네트워크 불가 등
+            return None, f"NETWORK:{type(e).__name__}"
+    return None, "RETRY_EXCEEDED"
+
+
+def pubchem_crosscheck(cas_to_name, cache_path):
+    """cas_to_name: {CAS: 별표 영문명}. 반환: (건수 Counter, 검토 후보 목록, 건너뜀 사유)."""
+    cache = {}
+    if cache_path.is_file():
+        cache = json.loads(cache_path.read_text(encoding="utf-8"))
+    rows = []
+    for i, (cas, en) in enumerate(sorted(cas_to_name.items()), 1):
+        rec = cache.get(cas)
+        if rec is None:
+            props, err = pug_get(cas, "property/Title,MolecularFormula")
+            if err.startswith("NETWORK") and i == 1:
+                return None, [], err
+            syn, err2 = (pug_get(cas, "synonyms") if props else (None, err))
+            title = formula = ""
+            names = []
+            if props:
+                p = props["PropertyTable"]["Properties"][0]
+                title, formula = p.get("Title", ""), p.get("MolecularFormula", "")
+            if syn:
+                names = syn["InformationList"]["Information"][0].get("Synonym", [])
+            rec = {"cid": (props["PropertyTable"]["Properties"][0].get("CID") if props else None),
+                   "title": title, "formula": formula, "names": names[:200], "error": err or err2}
+            if not rec["error"] or rec["error"] == "NOT_FOUND":
+                cache[cas] = rec
+            time.sleep(0.25)
+            if i % 25 == 0:
+                cache_path.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+                print(f"  PubChem 조회 {i}/{len(cas_to_name)}", flush=True)
+        if rec["error"] and rec["error"] != "NOT_FOUND":
+            rows.append({"cas": cas, "official_en": en, "status": "ERROR", "pubchem_title": "", "similarity": "", "note": rec["error"]})
+        elif not rec["cid"]:
+            rows.append({"cas": cas, "official_en": en, "status": "NOT_RESOLVED", "pubchem_title": "", "similarity": "", "note": "PubChem에 이 CAS 없음"})
+        else:
+            status, sim = classify_name(en, [rec["title"]] + rec["names"])
+            rows.append({"cas": cas, "official_en": en, "status": status, "pubchem_title": rec["title"],
+                         "similarity": round(sim, 2), "note": rec["formula"]})
+    cache_path.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+    return Counter(r["status"] for r in rows), rows, ""
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--official", required=True)
     ap.add_argument("--validation", required=True)
     ap.add_argument("--gold", required=True)
     ap.add_argument("--out", default="", help="불일치 목록 CSV 저장 경로 (선택)")
+    ap.add_argument("--pubchem-out", default="pubchem_name_review.csv", help="PubChem 교차확인 결과 CSV")
+    ap.add_argument("--cache", default="pubchem_cache.json", help="PubChem 조회 캐시(재실행 시 재사용)")
     args = ap.parse_args()
 
     official = parse_official(args.official)
@@ -330,12 +418,31 @@ def main():
           qcnum("고유번호의 세부행 선정 수") == kinds["SPECIFIC_COMPONENT"] // 4,
           f"재계산 {kinds['DIRECT_NAMED_SUBSTANCE'] // 4}/{kinds['SPECIFIC_COMPONENT'] // 4}")
 
+    # 9. 별표 CAS ↔ 영문명 PubChem 교차확인 (별표 자체의 오탈자 후보; FAIL이 아니라 사람이 볼 목록)
+    pc_names = {}
+    for cas, rows in per_cas.items():
+        pc_names[cas] = text(rows[0]["official_name_en"])
+    print("\nPubChem 교차확인 중(300개 CAS, 약 2~4분; 캐시 사용)…", flush=True)
+    counts, pc_rows, skipped = pubchem_crosscheck(pc_names, Path(args.cache))
+    pubchem_note = ""
+    if skipped:
+        pubchem_note = f"PubChem 교차확인 건너뜀: 인터넷 접속 불가 ({skipped})"
+    else:
+        with open(args.pubchem_out, "w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=["cas", "official_en", "status", "pubchem_title", "similarity", "note"])
+            w.writeheader()
+            w.writerows(sorted(pc_rows, key=lambda r: ({"MISMATCH": 0, "NOT_RESOLVED": 1, "ERROR": 2, "SIMILAR": 3, "MATCH": 4}[r["status"]], r["cas"])))
+        pubchem_note = (f"PubChem 교차확인(300 CAS): 일치 {counts['MATCH']} / 유사 {counts['SIMILAR']} / "
+                        f"불일치 {counts['MISMATCH']} / 조회불가 {counts['NOT_RESOLVED']} / 오류 {counts['ERROR']} "
+                        f"-> 불일치·조회불가·오류는 {args.pubchem_out} 맨 위에서 사람이 확인")
+
     # 출력
     width = max(len(n) for n, _, _ in results)
     for name, ok, detail in results:
         print(f"[{'PASS' if ok else 'FAIL'}] {name}" + (f"  -> {detail}" if detail and not ok else ""))
     n_fail = sum(1 for _, ok, _ in results if not ok)
     print(f"\n{len(results) - n_fail}/{len(results)} 통과, 불일치 상세 {len(mismatches)}건")
+    print(pubchem_note)
     if args.out and mismatches:
         with open(args.out, "w", encoding="utf-8-sig", newline="") as f:
             w = csv.DictWriter(f, fieldnames=["check", "key", "field", "expected", "actual"])
