@@ -1,7 +1,6 @@
-# 이전 Claude 실험 보관소
+# 보관 자료 (현재 실험에서 직접 사용하지 않음)
 
-`previous_claude_experiment/`는 **현재 연구 이전에 수행한 Claude / Hybrid / Ollama 및 CAS 목록 검색 실험**의 코드·결과·원본·그림·캐시를 보관합니다.
+- `previous_claude_experiment/`: 예전 Claude/Hybrid/Ollama 실행 스크립트, 원래 CAS 기반 benchmark, 예측 결과, 지표, 그림, 이전 Actions 워크플로 및 실행 캐시.
+- `previous_29_target_dataset_design/`: `llm_capability_study/`에 있던 이전 **29개 규제항목 검색 기반 검증셋 확장 연구**의 코드·자료 **40개 파일**. 해당 코드는 2026-5호 전체 별표의 가상 함량 판정과 입력·Gold 구조가 달라 현행 폴더에서 제거했습니다.
 
-**주의:** `llm_capability_study/`는 별도의 **현재 논문 연구 작업 폴더**이며, 이번 정리에서 저장소 **최상위 경로로 복원했습니다.** 이 폴더가 보관소에 있었던 것은 이전 정리의 분류 오류였습니다.
-
-보관소에 둔 실행 스크립트·워크플로는 현재 2026-5호 함량판정 실험의 코드를 대체하지 않습니다.
+여기 보관한 자료는 Git 기록과 함께 복구할 수 있습니다. **현행 실험은 저장소 최상위 `llm_capability_study/`만 확인하세요.**
