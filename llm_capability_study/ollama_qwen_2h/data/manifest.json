@@ -1,0 +1,25 @@
+{
+  "study": "Qwen 2.5/3/3.5 6GB RTX2060 time-budget exploratory benchmark",
+  "created": "2026-11-19",
+  "scope": "EXPLICIT_CAS_MATCH_ONLY_NOT_FULL_LEGAL_COMPLIANCE",
+  "source_240_prompts_sha256": "3bb92481ce1a2232c357ae0a5a97c813f0a0ec5ca664636c6009d682803ca135",
+  "source_240_gold_sha256": "61d622751b2426669794b1f318bedea7f0aabbb60495d051afa60c81b8704a9c",
+  "selection_seed": 20261118,
+  "selection_rule": "3 distinct CAS from each of 12 (6 strata x easy/hard) groups; both source questions retained",
+  "total_cases": 72,
+  "chemicals": 36,
+  "model_count": 3,
+  "case_distribution": {
+    "AT_FIRST_THRESHOLD": 30,
+    "BELOW_BOUNDARY": 30,
+    "NOT_LISTED_5": 6,
+    "NOT_LISTED_1": 6
+  },
+  "evidence_rows_per_question": 12,
+  "pilot_questions_per_model": 6,
+  "main_questions_per_model": 72,
+  "model_inferences_total_pilot_included": 216,
+  "prompts_sha256": "8e3e25b085202016fdc198feebf025a4cc59afa42f0c511956dd081d4c3fc057",
+  "gold_sha256": "9487fa9a40fc053777f6af571a5b4301d79fa0b274f8b99f5fd8aaaa893ad5ff",
+  "pilot_ids_sha256": "093778b8db16e4647ae93922f05d1fda8d1f18dbb58cac5500327fd26649fb1a"
+}
