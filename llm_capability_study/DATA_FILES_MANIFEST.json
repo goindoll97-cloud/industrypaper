@@ -1,29 +1,31 @@
 {
-  "study": "2026-5 official hazardous substance classification and concentration application",
-  "status": "files not yet uploaded to GitHub",
-  "reference_basis": "2026-5_(별표) 인체등유해성물질 목록(전체)(2).xlsx",
-  "n_chemicals_planned": 300,
+  "study": "2026-5 official annex CAS-explicit benchmark, 1600 cases",
+  "status": "integrated workbooks on GitHub",
+  "reference_basis": "2026-5_(별표) 인체등유해성물질 목록(전체)(2).xlsx, 1451 annex rows embedded in Validation Set LEGAL_REFERENCE",
+  "scope": "explicit CAS matching only; no legal group/salt determination; not proof of non-regulation",
+  "n_listed_chemicals": 300,
+  "n_unlisted_explicit_cas_chemicals": 100,
+  "n_chemicals": 400,
   "n_concentration_scenarios_per_chemical": 4,
-  "n_eval_questions_planned": 1200,
+  "n_eval_questions": 1600,
+  "n_listed_true": 1200,
+  "n_listed_false": 400,
+  "n_any_hazard_true": 600,
+  "n_any_hazard_false": 1000,
+  "shuffle_seed": 20261118,
   "files": [
     {
-      "path": "data/2026_5_LLM_Validation_Set.xlsx",
-      "size_bytes": 201621,
-      "sha256": "83954384d8fbb553321ee755c7d98d48b5537c65aebd8e4a29fb07ac382536ed",
-      "role": "MODEL_INPUT"
+      "path": "validation_2026_5/2026_5_LLM_Validation_Set.xlsx",
+      "size_bytes": 226921,
+      "sha256": "c04ec256a881eff107ff1fd8c25b9813c6afb0f18264770d4a4a15bfd0fe7d2f",
+      "role": "MODEL_INPUT_PLUS_LEGAL_REFERENCE"
     },
     {
-      "path": "data/2026_5_LLM_GOLD_Answer_Key.xlsx",
-      "size_bytes": 222678,
-      "sha256": "af8a59462c7d181b563203a54ee7c9ab110bcf7c4693c4130f92b8703c9fa64e",
-      "role": "HIDDEN_GOLD"
-    },
-    {
-      "path": "reference/2026-5_official_annex.xlsx",
-      "size_bytes": 163742,
-      "sha256": "a79fef57b5c935d5bd25b64d8b41d5eba0dcb4e44b473bd0892e9ba3e5cd7585",
-      "role": "OFFICIAL_LAW_ANNEX"
+      "path": "validation_2026_5/2026_5_LLM_GOLD_Answer_Key.xlsx",
+      "size_bytes": 274210,
+      "sha256": "d3e6a97d96595f73ae6020edbe653837bf547f784f145e98754c53f502ba3a13",
+      "role": "HIDDEN_GOLD_DO_NOT_SEND_TO_MODEL"
     }
   ],
-  "note": "All paths are relative to llm_capability_study/."
+  "note": "All paths relative to llm_capability_study. Candidate screening CSVs and out-of-date 1200-only verification script removed from active directory; Git history retains prior versions."
 }
