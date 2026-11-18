@@ -125,18 +125,30 @@ def norm_name(s):
     return re.sub(r"[^a-z0-9]", "", (s or "").lower())
 
 
+UVCB_WORDS = ("reaction product", "polymer", "fatty acids", "amines,", "flue dust", "matte", "speiss", "creosote",
+              "chloroalkanes", "hydrolyzed", "by-products", "quaternized", "reaction products")
+
+
 def classify_name(official_en, names):
-    """MATCH(정규화 일치) / SIMILAR(유사도>=0.8 또는 포함) / MISMATCH."""
-    target = norm_name(official_en)
-    pool = [norm_name(n) for n in names if n]
-    if not target or not pool:
-        return "MISMATCH", 0.0
-    if target in pool:
-        return "MATCH", 1.0
-    best = max(SequenceMatcher(None, target, n).ratio() for n in pool[:200])
-    if best >= 0.8 or any(target in n or (len(n) > 6 and n in target) for n in pool[:200]):
-        return "SIMILAR", best
-    return "MISMATCH", best
+    """MATCH(정규화 일치) / SIMILAR(유사도>=0.8 또는 포함) / MISMATCH. 별표 이름이 ';'로 여러 개면 각각 비교해 가장 좋은 것."""
+    pool = [norm_name(n) for n in names if n][:200]
+    best_status, best_sim = "MISMATCH", 0.0
+    for part in [x for x in re.split(r"\s*;\s*", official_en or "") if x.strip()] or [official_en or ""]:
+        target = norm_name(part)
+        if not target or not pool:
+            continue
+        if target in pool:
+            return "MATCH", 1.0
+        sim = max(SequenceMatcher(None, target, n).ratio() for n in pool)
+        best_sim = max(best_sim, sim)
+        if sim >= 0.8 or any(target in n or (len(n) > 6 and n in target) for n in pool):
+            best_status = "SIMILAR"
+    return best_status, best_sim
+
+
+def looks_uvcb(name):
+    n = (name or "").lower()
+    return any(w in n for w in UVCB_WORDS)
 
 
 def pug_get(cas, what, retries=3):
@@ -157,42 +169,63 @@ def pug_get(cas, what, retries=3):
     return None, "RETRY_EXCEEDED"
 
 
+def fetch_record(query):
+    props, err = pug_get(query, "property/Title,MolecularFormula")
+    if err.startswith("NETWORK"):
+        return {"cid": None, "title": "", "formula": "", "names": [], "error": err}
+    syn, err2 = (pug_get(query, "synonyms") if props else (None, err))
+    rec = {"cid": None, "title": "", "formula": "", "names": [], "error": err or err2}
+    if props:
+        p = props["PropertyTable"]["Properties"][0]
+        rec.update(cid=p.get("CID"), title=p.get("Title", ""), formula=p.get("MolecularFormula", ""))
+    if syn:
+        rec["names"] = syn["InformationList"]["Information"][0].get("Synonym", [])[:300]
+    return rec
+
+
 def pubchem_crosscheck(cas_to_name, cache_path):
-    """cas_to_name: {CAS: 별표 영문명}. 반환: (건수 Counter, 검토 후보 목록, 건너뜀 사유)."""
-    cache = {}
-    if cache_path.is_file():
-        cache = json.loads(cache_path.read_text(encoding="utf-8"))
+    """cas_to_name: {CAS: 별표 영문명}. 반환: (건수 Counter, 결과 행 목록, 건너뜀 사유).
+    CAS로 못 찾으면 별표 영문명으로 다시 찾아, 그 물질의 동의어에 이 CAS가 있는지 확인한다."""
+    cache = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.is_file() else {}
     rows = []
     for i, (cas, en) in enumerate(sorted(cas_to_name.items()), 1):
         rec = cache.get(cas)
-        if rec is None:
-            props, err = pug_get(cas, "property/Title,MolecularFormula")
-            if err.startswith("NETWORK") and i == 1:
-                return None, [], err
-            syn, err2 = (pug_get(cas, "synonyms") if props else (None, err))
-            title = formula = ""
-            names = []
-            if props:
-                p = props["PropertyTable"]["Properties"][0]
-                title, formula = p.get("Title", ""), p.get("MolecularFormula", "")
-            if syn:
-                names = syn["InformationList"]["Information"][0].get("Synonym", [])
-            rec = {"cid": (props["PropertyTable"]["Properties"][0].get("CID") if props else None),
-                   "title": title, "formula": formula, "names": names[:200], "error": err or err2}
+        if rec is None or (not rec.get("cid") and not rec.get("name_checked")):
+            rec = fetch_record(cas)
+            if rec["error"].startswith("NETWORK") and i == 1:
+                return None, [], rec["error"]
+            time.sleep(0.25)
+            if not rec["cid"] and rec["error"] in ("NOT_FOUND", "") and not looks_uvcb(en):
+                first = [x for x in re.split(r"\s*;\s*", en) if x.strip()][0]
+                byname = fetch_record(first)
+                time.sleep(0.25)
+                rec["name_checked"] = True
+                if byname["cid"]:
+                    rec["by_name"] = {k: byname[k] for k in ("cid", "title", "formula", "names")}
+            elif not rec["cid"]:
+                rec["name_checked"] = True
             if not rec["error"] or rec["error"] == "NOT_FOUND":
                 cache[cas] = rec
-            time.sleep(0.25)
             if i % 25 == 0:
                 cache_path.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
                 print(f"  PubChem 조회 {i}/{len(cas_to_name)}", flush=True)
+        row = {"cas": cas, "official_en": en, "status": "", "pubchem_title": "", "similarity": "", "note": ""}
         if rec["error"] and rec["error"] != "NOT_FOUND":
-            rows.append({"cas": cas, "official_en": en, "status": "ERROR", "pubchem_title": "", "similarity": "", "note": rec["error"]})
-        elif not rec["cid"]:
-            rows.append({"cas": cas, "official_en": en, "status": "NOT_RESOLVED", "pubchem_title": "", "similarity": "", "note": "PubChem에 이 CAS 없음"})
-        else:
+            row.update(status="ERROR", note=rec["error"] + " (다시 실행하면 재조회)")
+        elif rec["cid"]:
             status, sim = classify_name(en, [rec["title"]] + rec["names"])
-            rows.append({"cas": cas, "official_en": en, "status": status, "pubchem_title": rec["title"],
-                         "similarity": round(sim, 2), "note": rec["formula"]})
+            row.update(status=status, pubchem_title=rec["title"], similarity=round(sim, 2), note=rec["formula"])
+        elif rec.get("by_name"):
+            bn = rec["by_name"]
+            listed = cas in bn["names"]
+            row.update(status="MATCH_BY_NAME" if listed else "NAME_FOUND_CAS_NOT_LISTED", pubchem_title=bn["title"],
+                       note=("이름으로 찾은 물질의 동의어에 이 CAS가 있음" if listed else
+                             "이름으로는 찾았으나 PubChem 동의어에 이 CAS가 없음 -> 사람이 확인") + f" ({bn['formula']})")
+        elif looks_uvcb(en):
+            row.update(status="UVCB_OR_POLYMER", note="반응생성물·고분자·UVCB로 PubChem 대상 아님(예상된 조회불가)")
+        else:
+            row.update(status="NOT_RESOLVED", note="CAS·이름 모두 PubChem에서 못 찾음 -> 사람이 확인")
+        rows.append(row)
     cache_path.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
     return Counter(r["status"] for r in rows), rows, ""
 
@@ -428,13 +461,17 @@ def main():
     if skipped:
         pubchem_note = f"PubChem 교차확인 건너뜀: 인터넷 접속 불가 ({skipped})"
     else:
+        order = {"MISMATCH": 0, "NAME_FOUND_CAS_NOT_LISTED": 1, "NOT_RESOLVED": 2, "ERROR": 3, "SIMILAR": 4,
+                 "UVCB_OR_POLYMER": 5, "MATCH_BY_NAME": 6, "MATCH": 7}
         with open(args.pubchem_out, "w", encoding="utf-8-sig", newline="") as f:
             w = csv.DictWriter(f, fieldnames=["cas", "official_en", "status", "pubchem_title", "similarity", "note"])
             w.writeheader()
-            w.writerows(sorted(pc_rows, key=lambda r: ({"MISMATCH": 0, "NOT_RESOLVED": 1, "ERROR": 2, "SIMILAR": 3, "MATCH": 4}[r["status"]], r["cas"])))
-        pubchem_note = (f"PubChem 교차확인(300 CAS): 일치 {counts['MATCH']} / 유사 {counts['SIMILAR']} / "
-                        f"불일치 {counts['MISMATCH']} / 조회불가 {counts['NOT_RESOLVED']} / 오류 {counts['ERROR']} "
-                        f"-> 불일치·조회불가·오류는 {args.pubchem_out} 맨 위에서 사람이 확인")
+            w.writerows(sorted(pc_rows, key=lambda r: (order[r["status"]], r["cas"])))
+        need = counts["MISMATCH"] + counts["NAME_FOUND_CAS_NOT_LISTED"] + counts["NOT_RESOLVED"] + counts["ERROR"]
+        pubchem_note = ("PubChem 교차확인(300 CAS): " + " / ".join(f"{k} {v}" for k, v in sorted(counts.items(), key=lambda kv: order[kv[0]])) +
+                        f"\n  사람이 볼 것: {need}건 (MISMATCH·NAME_FOUND_CAS_NOT_LISTED·NOT_RESOLVED·ERROR) -> {args.pubchem_out} 맨 위. "
+                        "UVCB_OR_POLYMER는 예상된 조회불가(PubChem 대상 아님). 정답은 별표 CAS 일치로 정해지므로 정답 오류를 뜻하지 않음")
+    pubchem_ids = {r["cas"]: r["status"] for r in pc_rows} if not skipped else {}
 
     # 출력
     width = max(len(n) for n, _, _ in results)
