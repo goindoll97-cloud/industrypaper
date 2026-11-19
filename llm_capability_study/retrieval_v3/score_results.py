@@ -17,12 +17,12 @@ def mean(rs,k):return round(sum(float(x[k]) for x in rs)/len(rs),4) if rs else N
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--models',nargs='+',choices=MODELS,default=MODELS)
  args=ap.parse_args()
- path=ROOT/'private/gold_40.jsonl'
- if not path.exists():raise SystemExit('private/gold_40.jsonl 파일을 로컬에 두세요 (GitHub 업로드 금지).')
+ path=ROOT/'private/gold_48.jsonl'
+ if not path.exists():raise SystemExit('private/gold_48.jsonl 파일을 로컬에 두세요 (GitHub 업로드 금지).')
  mf=json.loads((DATA/'manifest.json').read_text(encoding='utf-8'))
  if hashlib.sha256(path.read_bytes()).hexdigest()!=mf['gold_sha256']:raise SystemExit('Gold SHA 불일치')
  gold={g['test_id']:g for g in load(path)}
- if len(gold)!=40:raise SystemExit('Gold 40건 확인 실패')
+ if len(gold)!=48:raise SystemExit('Gold 48건 확인 실패')
  with sqlite3.connect(DB) as con:
   con.row_factory=sqlite3.Row
   # Deterministic plain-identity baseline: CAS and full name, no model-generated search terms.
@@ -37,7 +37,7 @@ def main():
   for tid,g in gold.items():
    x=d.get(tid)
    label=g['expected_relation']
-   confirmed=(label!='NOT_COVERED')  # NOT_COVERED Gold is ONLY for old 16-row scope.
+   confirmed=(g.get('gold_status')=='CURATED_PROVISIONAL')  # 5 unreviewed negatives excluded.
    gold_row=g.get('source_excel_row')
    expected_row=int(gold_row) if confirmed and gold_row else None
    retrieved=[int(r['excel_row']) for r in x.get('retrieved_rows',[])] if x else []
@@ -50,7 +50,7 @@ def main():
    exact=bool(confirmed and identity_correct and scope_correct and relation_correct and entry_correct)
    rows.append({'model':m,'test_id':tid,'case_id':g['case_id'],'condition':g['condition'],
     'category':g['category'],'difficulty':g['difficulty'],'expected_relation':label,
-    'gold_scope_verified':int(confirmed),'gold_row':gold_row or '',
+    'gold_scope_verified':int(confirmed),'gold_status':g.get('gold_status','UNKNOWN'),'gold_row':gold_row or '',
     'query_valid':int(bool(x and x.get('query_valid'))),'answer_valid':int(bool(answer)),
     'retrieved_count':len(retrieved),'retrieval_hit_at_8':int(hit),
     'baseline_hit_at_8':int(expected_row in baseline[tid]) if confirmed else '',
@@ -61,12 +61,13 @@ def main():
     'direct_cas_correct':int(identity_correct) if confirmed else '',
     'exact_correct':int(exact) if confirmed else '',
     'end_to_end_success':int(hit and exact) if confirmed else '',
+     'failure_stage':('UNVERIFIED_GOLD' if not confirmed else 'NOT_RUN' if not x else 'QUERY_INVALID' if not x.get('query_valid') else 'RETRIEVAL_MISS' if not hit else 'ANSWER_INVALID' if not answer else 'INFERENCE_OR_FIELD_ERROR' if not exact else 'SUCCESS'),
     'status':x['status'] if x else 'not_run',
     'query_seconds':x.get('query_seconds','') if x else '',
     'reason_seconds':x.get('reason_seconds','') if x else '',
     'wall_seconds':x.get('wall_seconds','') if x else ''})
  OUT.mkdir(exist_ok=True)
- write_csv(OUT/'case_scores_retrieval_v2.csv',rows)
+ write_csv(OUT/'case_scores_retrieval_v3.csv',rows)
  agg=[]
  for m in args.models:
   chunk=[r for r in rows if r['model']==m]
@@ -87,7 +88,7 @@ def main():
       'scope_accuracy_verified':mean(verified,'scope_correct'),
       'relation_accuracy_verified':mean(verified,'relation_correct'),
       'end_to_end_success_rate':mean(verified,'end_to_end_success')})
- write_csv(OUT/'subgroup_accuracy_retrieval_v2.csv',agg)
+ write_csv(OUT/'subgroup_accuracy_retrieval_v3.csv',agg)
  pair=[]
  for m in args.models:
   idx={(x['case_id'],x['condition']):x for x in rows if x['model']==m}
@@ -99,7 +100,7 @@ def main():
      'delta_retrieval':b['retrieval_hit_at_8']-a['retrieval_hit_at_8'],
      'A_end_to_end':a['end_to_end_success'],'B_end_to_end':b['end_to_end_success'],
      'delta_end_to_end':b['end_to_end_success']-a['end_to_end_success']})
- write_csv(OUT/'paired_structure_effect_retrieval_v2.csv',pair)
+ write_csv(OUT/'paired_structure_effect_retrieval_v3.csv',pair)
  print('\n=== 전체 별표 검색 및 근거추론 분석 ===')
  for a in agg:
   if a['variable']=='ALL':
@@ -108,8 +109,8 @@ def main():
     f"검색 성공 시 완전판정={a['reasoning_accuracy_given_retrieval']}, "
     f"end-to-end={a['end_to_end_success_rate']}, "
     f"JSON 성공={a['json_valid_rate']}")
- print('CSV: results/case_scores_retrieval_v2.csv, subgroup_accuracy_retrieval_v2.csv, paired_structure_effect_retrieval_v2.csv')
- print('주요 한계: NOT_COVERED 4종(8문항)은 16개 조항 기준으로 만들어진 미검증 음성 Gold라 확정 정답률에서 제외함.')
+ print('CSV: results/case_scores_retrieval_v3.csv, subgroup_accuracy_retrieval_v3.csv, paired_structure_effect_retrieval_v3.csv')
+ print('주요 한계: V3 비해당 후보 5종(10문항)은 독립 검토 전까지 정확도 계산에서 제외함.')
  print('검색 성공 시 판정 지표는 검색 성공 표본에 조건부로 계산됐으므로 인과적으로 독립된 추론능력 지표는 아님.')
  if any(a['observed_cases']<a['planned_cases'] for a in agg if a['variable']=='ALL'):
   print('주의: 일부 문항 미실행. 미실행은 0점으로 처리하지 않았으며 완전한 전체 비교 결과가 아닙니다.')
