@@ -12,7 +12,7 @@ for m in M:
  xs=[x for x in data if x.get('status')!='api_error' and (ns.condition=='all' or x['condition']==ns.condition)]
  if len(xs)<3:print('Pilot observations insufficient:',m);continue
  mean=statistics.mean(x['wall_seconds'] for x in xs)
- alln=40 if ns.condition=='all' else 20
+ alln=48 if ns.condition=='all' else 24
  extra=max(0,alln-len({x['test_id'] for x in xs}))*mean/60
  all_extra+=extra;pilot_total+=sum(x['wall_seconds'] for x in xs)/60;valid_models+=1
  print(f'{m:<20} pilot {len(xs)}, 평균 2단계 {mean:.1f}s (검색+추론), 본실험 추가 {extra:.1f}분')

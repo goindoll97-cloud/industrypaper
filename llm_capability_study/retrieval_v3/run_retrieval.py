@@ -105,13 +105,13 @@ def main(argv=None):
  ns=ap.parse_args(argv)
  if ns.num_predict_query<75 or ns.num_predict_reason<250:ap.error('출력 토큰 제한이 너무 작습니다.')
  mf=json.loads((DATA/'manifest.json').read_text(encoding='utf-8'))
- for n,key in [('cases_40.jsonl','cases_sha256'),('pilot_8_ids.json','pilot_sha256'),('official_annex_2026_5_full.csv','annex_sha256')]:
+ for n,key in [('cases_48.jsonl','cases_sha256'),('pilot_8_ids.json','pilot_sha256'),('official_annex_2026_5_full.csv','annex_sha256')]:
   if sha(DATA/n)!=mf[key]:sys.exit(f'SHA 불일치: {n}')
  if not DB.exists():build()
  with sqlite3.connect(DB) as con:
   if con.execute('SELECT count(*) FROM annex').fetchone()[0]!=1451:sys.exit('DB 고시 1451행 검사 실패')
- cases=load(DATA/'cases_40.jsonl')
- if len(cases)!=40:sys.exit('40문항 오류')
+ cases=load(DATA/'cases_48.jsonl')
+ if len(cases)!=48:sys.exit('48문항 오류')
  pilot=set(json.loads((DATA/'pilot_8_ids.json').read_text(encoding='utf-8')))
  chosen=[c for c in cases if (ns.stage=='main' or c['test_id'] in pilot) and (ns.condition=='all' or c['condition']==ns.condition)]
  if ns.limit:chosen=chosen[:ns.limit]

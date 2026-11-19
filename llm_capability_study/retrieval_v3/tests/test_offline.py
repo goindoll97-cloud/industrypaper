@@ -30,7 +30,7 @@ class PipelineTests(unittest.TestCase):
   self.assertEqual(parse_queries('{"queries":["aniline","aniline","염류"]}'),['aniline','염류'])
   self.assertIsNone(parse_queries('{"queries":[]}'))
  def test_prompt_no_choices_no_gold(self):
-  c=json.loads((ROOT/'data/cases_40.jsonl').read_text(encoding='utf-8').splitlines()[0])
+  c=json.loads((ROOT/'data/cases_48.jsonl').read_text(encoding='utf-8').splitlines()[0])
   texts=str(query_messages(c))
   self.assertNotIn('97-1-156',texts)
   self.assertNotIn('16개',texts)
@@ -38,7 +38,7 @@ class PipelineTests(unittest.TestCase):
   self.assertIn('CAS:',texts)
   self.assertNotIn('97-1-156',str(reason_messages(c,[])))
  def test_stubbed_end_to_end_no_gold(self):
-  cases=runner.load(ROOT/'data/cases_40.jsonl')
+  cases=runner.load(ROOT/'data/cases_48.jsonl')
   pilot=set(json.loads((ROOT/'data/pilot_8_ids.json').read_text(encoding='utf-8')))
   case=next(c for c in cases if c['test_id'] in pilot)
   calls=[]

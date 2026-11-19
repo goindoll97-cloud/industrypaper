@@ -1,0 +1,23 @@
+{
+  "study": "retrieval_v3 independent 24 new CAS/48 paired cases (2-stage LLM retrieval over full annex)",
+  "version": "3.0.0",
+  "dataset_frozen_date": "2026-11-19",
+  "official_annex_rows": 1451,
+  "new_compounds": 24,
+  "cases": 48,
+  "models": [
+    "qwen2.5:3b",
+    "qwen3:4b-instruct",
+    "qwen3.5:4b"
+  ],
+  "pilot_cases_per_model": 8,
+  "intended_pairs_total": 144,
+  "intended_model_calls_total": 288,
+  "full_annex_basis": "user supplied 2026-5 official annex XLSX sheet, source rows 5..1455",
+  "gold_policy": "19 curated/provisional positive-and-exception substances used for exploratory scoring (38 cases); 5 negative candidates/10 cases excluded until independent expert adjudication",
+  "cases_sha256": "2e13b97c3c9bc23f554992611c364153549f158079e0cdcc92468a4a3c2d920d",
+  "pilot_sha256": "4cacecaeeaba616d44a49ee0c37c201795ef0dc14cd3ebcc34dad602feb3e65d",
+  "annex_sha256": "665c2d449e769c0c7352c49f89934ff3ffaaea2ba4ebf35cc1e5ae545f004bc0",
+  "gold_sha256": "2deff9785f3e5a345acae1efc32083baa9edafdbb58f4d6fc901c1d03b6bbaa9",
+  "total_annex_rows": 1451
+}
