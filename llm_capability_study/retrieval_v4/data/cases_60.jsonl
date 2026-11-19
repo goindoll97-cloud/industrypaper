@@ -1,0 +1,60 @@
+{"cas": "7733-02-0", "case_id": "V4-004", "condition": "A", "formula": null, "name_en": "Zinc sulfate", "smiles": null, "test_id": "V4-004-A"}
+{"cas": "7733-02-0", "case_id": "V4-004", "condition": "B", "formula": "O4SZn", "name_en": "Zinc sulfate", "smiles": null, "test_id": "V4-004-B"}
+{"cas": "14075-53-7", "case_id": "V4-030", "condition": "A", "formula": null, "name_en": "Potassium tetrafluoroborate", "smiles": null, "test_id": "V4-030-A"}
+{"cas": "14075-53-7", "case_id": "V4-030", "condition": "B", "formula": "BF4K", "name_en": "Potassium tetrafluoroborate", "smiles": null, "test_id": "V4-030-B"}
+{"cas": "124-28-7", "case_id": "V4-029", "condition": "A", "formula": null, "name_en": "N,N-Dimethyl-1-octadecanamine (C18 alkyl)", "smiles": null, "test_id": "V4-029-A"}
+{"cas": "124-28-7", "case_id": "V4-029", "condition": "B", "formula": "C20H43N", "name_en": "N,N-Dimethyl-1-octadecanamine (C18 alkyl)", "smiles": null, "test_id": "V4-029-B"}
+{"cas": "7440-66-6", "case_id": "V4-027", "condition": "A", "formula": null, "name_en": "Zinc, particle size 1.5 mm", "particle_size_mm": 1.5, "smiles": null, "test_id": "V4-027-A"}
+{"cas": "7440-66-6", "case_id": "V4-027", "condition": "B", "formula": "Zn", "name_en": "Zinc, particle size 1.5 mm", "particle_size_mm": 1.5, "smiles": null, "test_id": "V4-027-B"}
+{"cas": "7775-09-9", "case_id": "V4-006", "condition": "A", "formula": null, "name_en": "Sodium chlorate", "smiles": null, "test_id": "V4-006-A"}
+{"cas": "7775-09-9", "case_id": "V4-006", "condition": "B", "formula": "ClNaO3", "name_en": "Sodium chlorate", "smiles": null, "test_id": "V4-006-B"}
+{"cas": "106-50-3", "case_id": "V4-018", "condition": "A", "formula": null, "name_en": "p-Phenylenediamine", "smiles": null, "test_id": "V4-018-A"}
+{"cas": "106-50-3", "case_id": "V4-018", "condition": "B", "formula": "C6H8N2", "name_en": "p-Phenylenediamine", "smiles": "Nc1ccc(N)cc1", "test_id": "V4-018-B"}
+{"cas": "7440-50-8", "case_id": "V4-024", "condition": "A", "formula": null, "name_en": "Copper, particle size 0.5 mm", "particle_size_mm": 0.5, "smiles": null, "test_id": "V4-024-A"}
+{"cas": "7440-50-8", "case_id": "V4-024", "condition": "B", "formula": "Cu", "name_en": "Copper, particle size 0.5 mm", "particle_size_mm": 0.5, "smiles": null, "test_id": "V4-024-B"}
+{"cas": "1327-53-3", "case_id": "V4-008", "condition": "A", "formula": null, "name_en": "Arsenic trioxide", "smiles": null, "test_id": "V4-008-A"}
+{"cas": "1327-53-3", "case_id": "V4-008", "condition": "B", "formula": "As2O3", "name_en": "Arsenic trioxide", "smiles": null, "test_id": "V4-008-B"}
+{"cas": "13746-66-2", "case_id": "V4-014", "condition": "A", "formula": null, "name_en": "Potassium ferricyanide", "smiles": null, "test_id": "V4-014-A"}
+{"cas": "13746-66-2", "case_id": "V4-014", "condition": "B", "formula": "C6FeK3N6", "name_en": "Potassium ferricyanide", "smiles": null, "test_id": "V4-014-B"}
+{"cas": "7783-90-6", "case_id": "V4-005", "condition": "A", "formula": null, "name_en": "Silver chloride", "smiles": null, "test_id": "V4-005-A"}
+{"cas": "7783-90-6", "case_id": "V4-005", "condition": "B", "formula": "AgCl", "name_en": "Silver chloride", "smiles": null, "test_id": "V4-005-B"}
+{"cas": "131-52-2", "case_id": "V4-003", "condition": "A", "formula": null, "name_en": "Sodium pentachlorophenolate", "smiles": null, "test_id": "V4-003-A"}
+{"cas": "131-52-2", "case_id": "V4-003", "condition": "B", "formula": "C6Cl5NaO", "name_en": "Sodium pentachlorophenolate", "smiles": null, "test_id": "V4-003-B"}
+{"cas": "143-33-9", "case_id": "V4-013", "condition": "A", "formula": null, "name_en": "Sodium cyanide", "smiles": null, "test_id": "V4-013-A"}
+{"cas": "143-33-9", "case_id": "V4-013", "condition": "B", "formula": "CNaN", "name_en": "Sodium cyanide", "smiles": null, "test_id": "V4-013-B"}
+{"cas": "76-87-9", "case_id": "V4-011", "condition": "A", "formula": null, "name_en": "Triphenyltin hydroxide", "smiles": null, "test_id": "V4-011-A"}
+{"cas": "76-87-9", "case_id": "V4-011", "condition": "B", "formula": "C18H16OSn", "name_en": "Triphenyltin hydroxide", "smiles": null, "test_id": "V4-011-B"}
+{"cas": "7439-92-1", "case_id": "V4-022", "condition": "A", "formula": null, "name_en": "Lead, particle size 0.5 mm", "particle_size_mm": 0.5, "smiles": null, "test_id": "V4-022-A"}
+{"cas": "7439-92-1", "case_id": "V4-022", "condition": "B", "formula": "Pb", "name_en": "Lead, particle size 0.5 mm", "particle_size_mm": 0.5, "smiles": null, "test_id": "V4-022-B"}
+{"cas": "1461-22-9", "case_id": "V4-010", "condition": "A", "formula": null, "name_en": "Tributyltin chloride", "smiles": null, "test_id": "V4-010-A"}
+{"cas": "1461-22-9", "case_id": "V4-010", "condition": "B", "formula": "C12H27ClSn", "name_en": "Tributyltin chloride", "smiles": null, "test_id": "V4-010-B"}
+{"cas": "32598-13-3", "case_id": "V4-021", "condition": "A", "formula": null, "name_en": "3,3',4,4'-Tetrachlorobiphenyl (PCB 77)", "smiles": null, "test_id": "V4-021-A"}
+{"cas": "32598-13-3", "case_id": "V4-021", "condition": "B", "formula": "C12H6Cl4", "name_en": "3,3',4,4'-Tetrachlorobiphenyl (PCB 77)", "smiles": null, "test_id": "V4-021-B"}
+{"cas": "65-30-5", "case_id": "V4-002", "condition": "A", "formula": null, "name_en": "Nicotine sulfate", "smiles": null, "test_id": "V4-002-A"}
+{"cas": "65-30-5", "case_id": "V4-002", "condition": "B", "formula": "C20H30N4O4S", "name_en": "Nicotine sulfate", "smiles": null, "test_id": "V4-002-B"}
+{"cas": "56-35-9", "case_id": "V4-012", "condition": "A", "formula": null, "name_en": "Bis(tributyltin) oxide", "smiles": null, "test_id": "V4-012-A"}
+{"cas": "56-35-9", "case_id": "V4-012", "condition": "B", "formula": "C24H54OSn2", "name_en": "Bis(tributyltin) oxide", "smiles": null, "test_id": "V4-012-B"}
+{"cas": "124-58-3", "case_id": "V4-015", "condition": "A", "formula": null, "name_en": "Methylarsonic acid", "smiles": null, "test_id": "V4-015-A"}
+{"cas": "124-58-3", "case_id": "V4-015", "condition": "B", "formula": "CH5AsO3", "name_en": "Methylarsonic acid", "smiles": null, "test_id": "V4-015-B"}
+{"cas": "2051-60-7", "case_id": "V4-019", "condition": "A", "formula": null, "name_en": "2-Chlorobiphenyl (PCB 1)", "smiles": null, "test_id": "V4-019-A"}
+{"cas": "2051-60-7", "case_id": "V4-019", "condition": "B", "formula": "C12H9Cl", "name_en": "2-Chlorobiphenyl (PCB 1)", "smiles": null, "test_id": "V4-019-B"}
+{"cas": "7446-08-4", "case_id": "V4-009", "condition": "A", "formula": null, "name_en": "Selenium dioxide", "smiles": null, "test_id": "V4-009-A"}
+{"cas": "7446-08-4", "case_id": "V4-009", "condition": "B", "formula": "O2Se", "name_en": "Selenium dioxide", "smiles": null, "test_id": "V4-009-B"}
+{"cas": "142-04-1", "case_id": "V4-001", "condition": "A", "formula": null, "name_en": "Aniline hydrochloride", "smiles": null, "test_id": "V4-001-A"}
+{"cas": "142-04-1", "case_id": "V4-001", "condition": "B", "formula": "C6H8ClN", "name_en": "Aniline hydrochloride", "smiles": null, "test_id": "V4-001-B"}
+{"cas": "301-04-2", "case_id": "V4-007", "condition": "A", "formula": null, "name_en": "Lead acetate", "smiles": null, "test_id": "V4-007-A"}
+{"cas": "301-04-2", "case_id": "V4-007", "condition": "B", "formula": "C4H6O4Pb", "name_en": "Lead acetate", "smiles": null, "test_id": "V4-007-B"}
+{"cas": "7012-37-5", "case_id": "V4-020", "condition": "A", "formula": null, "name_en": "2,4,4'-Trichlorobiphenyl (PCB 28)", "smiles": null, "test_id": "V4-020-A"}
+{"cas": "7012-37-5", "case_id": "V4-020", "condition": "B", "formula": "C12H7Cl3", "name_en": "2,4,4'-Trichlorobiphenyl (PCB 28)", "smiles": null, "test_id": "V4-020-B"}
+{"cas": "7440-50-8", "case_id": "V4-025", "condition": "A", "formula": null, "name_en": "Copper, particle size 1.5 mm", "particle_size_mm": 1.5, "smiles": null, "test_id": "V4-025-A"}
+{"cas": "7440-50-8", "case_id": "V4-025", "condition": "B", "formula": "Cu", "name_en": "Copper, particle size 1.5 mm", "particle_size_mm": 1.5, "smiles": null, "test_id": "V4-025-B"}
+{"cas": "112-18-5", "case_id": "V4-028", "condition": "A", "formula": null, "name_en": "N,N-Dimethyl-1-dodecanamine (C12 alkyl)", "smiles": null, "test_id": "V4-028-A"}
+{"cas": "112-18-5", "case_id": "V4-028", "condition": "B", "formula": "C14H31N", "name_en": "N,N-Dimethyl-1-dodecanamine (C12 alkyl)", "smiles": null, "test_id": "V4-028-B"}
+{"cas": "106-49-0", "case_id": "V4-017", "condition": "A", "formula": null, "name_en": "p-Toluidine", "smiles": null, "test_id": "V4-017-A"}
+{"cas": "106-49-0", "case_id": "V4-017", "condition": "B", "formula": "C7H9N", "name_en": "p-Toluidine", "smiles": "Cc1ccc(N)cc1", "test_id": "V4-017-B"}
+{"cas": "7439-92-1", "case_id": "V4-023", "condition": "A", "formula": null, "name_en": "Lead, particle size 1.5 mm", "particle_size_mm": 1.5, "smiles": null, "test_id": "V4-023-A"}
+{"cas": "7439-92-1", "case_id": "V4-023", "condition": "B", "formula": "Pb", "name_en": "Lead, particle size 1.5 mm", "particle_size_mm": 1.5, "smiles": null, "test_id": "V4-023-B"}
+{"cas": "823-40-5", "case_id": "V4-016", "condition": "A", "formula": null, "name_en": "2,6-Toluenediamine", "smiles": null, "test_id": "V4-016-A"}
+{"cas": "823-40-5", "case_id": "V4-016", "condition": "B", "formula": "C7H10N2", "name_en": "2,6-Toluenediamine", "smiles": null, "test_id": "V4-016-B"}
+{"cas": "7440-66-6", "case_id": "V4-026", "condition": "A", "formula": null, "name_en": "Zinc, particle size 0.5 mm", "particle_size_mm": 0.5, "smiles": null, "test_id": "V4-026-A"}
+{"cas": "7440-66-6", "case_id": "V4-026", "condition": "B", "formula": "Zn", "name_en": "Zinc, particle size 0.5 mm", "particle_size_mm": 0.5, "smiles": null, "test_id": "V4-026-B"}
