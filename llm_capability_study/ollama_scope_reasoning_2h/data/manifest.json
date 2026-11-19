@@ -1,0 +1,20 @@
+{
+  "experiment": "Qwen 3 generations CAS identity + optional structural information group-scope reasoning",
+  "scope": "CLOSED_WORLD_16_SELECTED_2026_5_ANNEX_CLAUSES_NOT_ALL_LAWS",
+  "n_chemicals": 20,
+  "n_conditions": 2,
+  "n_questions": 40,
+  "models": 3,
+  "planned_calls": 120,
+  "condition_A": "CAS+chemical name+fixed 16 official clauses",
+  "condition_B": "A + chemical formula + curated RDKit-checked SMILES when representable",
+  "limitations": [
+    "Negative means not covered by 16 supplied provisions, not unregulated generally",
+    "Polymer/UVCB not covered; only evidence-supported salts and inorganic substances",
+    "Small 20-CAS exploratory benchmark, paired within chemical"
+  ],
+  "official_annex_sha256": "a79fef57b5c935d5bd25b64d8b41d5eba0dcb4e44b473bd0892e9ba3e5cd7585",
+  "prompts_sha256": "bada16fe60d17f6d127650836ac2a0a92e099ae120f717690aa4ca9c0630ff02",
+  "gold_sha256": "0ebae64b0467f6598d74d0b17760c2e206ca77c76af3fc6faa0039656b03aead",
+  "pilot_ids_sha256": "f109e40f4e585c0cd70fef1d05eb8bc17964c21176dfdd917783ea6e1f5b8e14"
+}
