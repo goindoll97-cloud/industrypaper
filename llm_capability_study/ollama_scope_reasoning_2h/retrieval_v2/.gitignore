@@ -1,0 +1,5 @@
+private/
+results/
+*.sqlite
+__pycache__/
+*.pyc
