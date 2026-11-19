@@ -1,35 +1,30 @@
 {
-  "study": "2026-5 scoped legal retrieval v4 broad families without polymer/reaction products/UVCB targets",
-  "total_cases": 30,
-  "total_questions": 60,
-  "model_count": 3,
-  "llm_calls_expected": 360,
-  "pilot_question_count_per_model": 10,
-  "source": "User-uploaded official 2026-5 full annex xlsx; project verified CSV from v3",
-  "case_families": {
-    "ORGANIC_PARENT_SALTS": 3,
-    "INORGANIC_SALTS": 3,
-    "ELEMENT_AND_COMPOUNDS": 3,
-    "ORGANOTIN_SUBCLASS": 3,
-    "INORG_ORG_SPECIES": 3,
-    "AROMATIC_ISOMER_CLASS": 3,
-    "PCB_CHLORINE_COUNT": 3,
-    "PHYSICAL_SIZE": 6,
-    "CARBON_CHAIN_RANGE": 2,
-    "NAMED_EXCEPTION": 1
+  "study": "2026-5 full annex, three primary groups, 10 scenarios each, EASY/HARD=5/5",
+  "taxonomy": [
+    "PARENT_AND_SALTS",
+    "COMPOUND_CLASS",
+    "MIXTURE"
+  ],
+  "total_scenarios": 30,
+  "total_cases": 60,
+  "n_models": 3,
+  "llm_inferences": 360,
+  "total_annex_rows": 1451,
+  "pilot_questions_per_model": 12,
+  "source_legal_article3": "https://www.law.go.kr/admRulLsInfoP.do?admRulSeq=2100000285142&chrClsCd=",
+  "mixture_rule": "article3 all-components-listed only; not comprehensive legal status",
+  "gold_review": "ALL_PROVISIONAL_NOT_EXPERT_VERIFIED",
+  "scored_mixture_cases": 10,
+  "cases_per_stratum": {
+    "('PARENT_AND_SALTS', 'EASY')": 5,
+    "('PARENT_AND_SALTS', 'HARD')": 5,
+    "('COMPOUND_CLASS', 'EASY')": 5,
+    "('COMPOUND_CLASS', 'HARD')": 5,
+    "('MIXTURE', 'EASY')": 5,
+    "('MIXTURE', 'HARD')": 5
   },
-  "gold_status_counts": {
-    "CURATED_PROVISIONAL": 27,
-    "PENDING_INDEPENDENT_REVIEW": 3
-  },
-  "exclusive_chemical_cases": false,
-  "published_gold": false,
-  "scope_audit_source_rows": 1451,
-  "scope_audit_candidate_rows": 88,
-  "cases_sha256": "74fd5e8181f14ec97b78af389fb4ac764d60290ac559ccf66c454ddae604ee26",
-  "pilot_sha256": "63a0227fcd5ac8dfd4ce0452c64c63add06591aa43ac9fc93899716b2a6eb8e1",
+  "cases_sha256": "a11461a76a0959be7b5a3f6308b22e6d5f5b8600e89d7561388134b7211a5a26",
   "annex_sha256": "665c2d449e769c0c7352c49f89934ff3ffaaea2ba4ebf35cc1e5ae545f004bc0",
-  "scope_audit_sha256": "60d6aed46cb8a9b25e084487c81fcc2547c5768bda80c13f630925e06b84dcf3",
-  "gold_sha256": "952e17f06097b140c74f2d625518ee6c6e8652133eb2677d78fa14351add7610",
-  "total_annex_rows": 1451
+  "pilot_sha256": "cd03ae91eb6c831a87dccaa1867bde8f045aa7dec2ee1e9b72db17591ebb4623",
+  "gold_sha256": "9994191a483f156760e199279f1a4614253d81eb11a129a2b0446844bf15c7f4"
 }
