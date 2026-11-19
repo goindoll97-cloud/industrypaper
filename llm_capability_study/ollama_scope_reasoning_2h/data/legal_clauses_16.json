@@ -1,0 +1,178 @@
+[
+  {
+    "source_excel_row": 6,
+    "entry_id": "97-1-2",
+    "sub_number": null,
+    "name_ko": "과산화 수소",
+    "name_en": "Hydrogen peroxide",
+    "cas_raw": "7722-84-1",
+    "acute_pct": 6,
+    "chronic_pct": "-",
+    "ecological_pct": "-"
+  },
+  {
+    "source_excel_row": 33,
+    "entry_id": "97-1-11",
+    "sub_number": null,
+    "name_ko": "니코틴과 그 염류",
+    "name_en": "Nicotine(54-11-5) and its salts",
+    "cas_raw": "-",
+    "acute_pct": 1,
+    "chronic_pct": "-",
+    "ecological_pct": "-"
+  },
+  {
+    "source_excel_row": 112,
+    "entry_id": "97-1-90",
+    "sub_number": 1,
+    "name_ko": "무기시안화합물(베를린청, 페로시안염, 페리시안염은 제외). 다만, 본 고시에서 별도로 규정한 것은 제외",
+    "name_en": "Inorganic cyanides(excluding ferric ferrocyanide(14038-43-8), ferrocyanide salts, ferricynide salts), with the exception of those specified elsewhere in this notice.",
+    "cas_raw": "-",
+    "acute_pct": 1,
+    "chronic_pct": "-",
+    "ecological_pct": 25
+  },
+  {
+    "source_excel_row": 117,
+    "entry_id": "97-1-91",
+    "sub_number": 1,
+    "name_ko": "무기아연염류(뇌산아연은 제외). 다만, 본 고시에서 별도로 규정한 것은 제외",
+    "name_en": "Inorganic zinc salts(excluding zinc fulminate), with the exception of those specified elsewhere in this notice.",
+    "cas_raw": "-",
+    "acute_pct": "-",
+    "chronic_pct": "-",
+    "ecological_pct": 25
+  },
+  {
+    "source_excel_row": 119,
+    "entry_id": "97-1-91",
+    "sub_number": 3,
+    "name_ko": "염화아연",
+    "name_en": "Zinc chloride",
+    "cas_raw": "7646-85-7",
+    "acute_pct": 25,
+    "chronic_pct": "-",
+    "ecological_pct": 25
+  },
+  {
+    "source_excel_row": 120,
+    "entry_id": "97-1-92",
+    "sub_number": 1,
+    "name_ko": "무기은 염류. 다만, 본 고시에서 별도로 규정한 것은 제외",
+    "name_en": "Inorganic silver salts, with the exception of those specified elsewhere in this notice.",
+    "cas_raw": "-",
+    "acute_pct": 10,
+    "chronic_pct": "-",
+    "ecological_pct": 25
+  },
+  {
+    "source_excel_row": 121,
+    "entry_id": "97-1-92",
+    "sub_number": 2,
+    "name_ko": "질산은",
+    "name_en": "Silver nitrate",
+    "cas_raw": "7761-88-8",
+    "acute_pct": 10,
+    "chronic_pct": "-",
+    "ecological_pct": 1
+  },
+  {
+    "source_excel_row": 123,
+    "entry_id": "97-1-93",
+    "sub_number": null,
+    "name_ko": "무기주석 염류",
+    "name_en": "Inorganic tin salts",
+    "cas_raw": "-",
+    "acute_pct": 25,
+    "chronic_pct": "-",
+    "ecological_pct": "-"
+  },
+  {
+    "source_excel_row": 183,
+    "entry_id": "97-1-139",
+    "sub_number": 1,
+    "name_ko": "수산화 트리알킬주석과 그 염류(산화트리알킬 주석을 포함한다). 다만, 본 고시에서 별도로 규정한 것은 제외",
+    "name_en": "Trialkyl tin hydroxides and their salts(including trialkyltin oxides), with the exception of those specified elsewhere in this notice.",
+    "cas_raw": "-",
+    "acute_pct": 1,
+    "chronic_pct": "-",
+    "ecological_pct": 0.1
+  },
+  {
+    "source_excel_row": 184,
+    "entry_id": "97-1-139",
+    "sub_number": 2,
+    "name_ko": "염화 트리부틸주석; 트리부틸틴 클로라이드",
+    "name_en": "Tributylitin chloride",
+    "cas_raw": "1461-22-9",
+    "acute_pct": 1,
+    "chronic_pct": 0.3,
+    "ecological_pct": 0.1
+  },
+  {
+    "source_excel_row": 209,
+    "entry_id": "97-1-156",
+    "sub_number": null,
+    "name_ko": "아닐린과 그 염류",
+    "name_en": "Aniline(62-53-3) and its salts",
+    "cas_raw": "-",
+    "acute_pct": 25,
+    "chronic_pct": 10,
+    "ecological_pct": 25
+  },
+  {
+    "source_excel_row": 220,
+    "entry_id": "97-1-167",
+    "sub_number": 1,
+    "name_ko": "아질산 염류. 다만, 본 고시에서 별도로 규정한 것은 제외",
+    "name_en": "Nitrous acid salts, with the exception of those specified elsewhere in this notice.",
+    "cas_raw": "-",
+    "acute_pct": 25,
+    "chronic_pct": "-",
+    "ecological_pct": 25
+  },
+  {
+    "source_excel_row": 253,
+    "entry_id": "97-1-198",
+    "sub_number": null,
+    "name_ko": "염소산 염류",
+    "name_en": "Chloric acid salts",
+    "cas_raw": "-",
+    "acute_pct": 25,
+    "chronic_pct": "-",
+    "ecological_pct": "-"
+  },
+  {
+    "source_excel_row": 427,
+    "entry_id": "97-1-339",
+    "sub_number": null,
+    "name_ko": "펜타클로로페놀과 그 염류",
+    "name_en": "Pentachlorophenol(87-86-5) and its salts",
+    "cas_raw": "-",
+    "acute_pct": 1,
+    "chronic_pct": "-",
+    "ecological_pct": 25
+  },
+  {
+    "source_excel_row": 466,
+    "entry_id": "97-1-377",
+    "sub_number": null,
+    "name_ko": "테트라플루오로붕산과 그 염류(테트라플루오로붕산1-에틸-3-메틸-1H-이미다졸리움과 테트라플루오로붕산 칼륨은 제외)",
+    "name_en": "Tetrafluoroboric acid(16872-11-0) and its salts(excluding 1-ethyl-3-methyl-1H-imidazolium tetrafluoroborate(1-)(143314-16-3) and potassium tetrafluoroborate(14075-53-7))",
+    "cas_raw": "-",
+    "acute_pct": 10,
+    "chronic_pct": "-",
+    "ecological_pct": "-"
+  },
+  {
+    "source_excel_row": 468,
+    "entry_id": "97-1-379",
+    "sub_number": null,
+    "name_ko": "플루오로아세트산과 그 염류",
+    "name_en": "Fluoroacetic acid(144-49-0) and its salt",
+    "cas_raw": "-",
+    "acute_pct": 1,
+    "chronic_pct": "-",
+    "ecological_pct": 25
+  }
+]
