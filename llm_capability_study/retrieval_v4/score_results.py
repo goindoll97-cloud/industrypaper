@@ -1,112 +1,111 @@
-"""v4: retrieval/reasoning scores against reviewed-eligible *provisional* reference, not certified legal conclusions."""
+"""Deterministic scoring: CAS and composition case-level, separate retrieval/decision metrics.
+This module alone reads the private provisional Gold. It does NOT confer legal validity.
+"""
 from __future__ import annotations
-import csv,hashlib,json,sqlite3,argparse,collections,statistics,random
+import csv,json,hashlib,statistics,random,argparse
 from pathlib import Path
-from search_legal_db import DB,fused_search
-from run_retrieval import MODELS,parse_answer,load,DATA,OUT,ROOT
+from collections import defaultdict
+from run_retrieval import ROOT,DATA,OUT,MODELS,load,parse_answer
 
-def csvwrite(path,rows):
+def save(path,rows):
  if not rows:return
+ OUT.mkdir(exist_ok=True)
  with path.open('w',encoding='utf-8-sig',newline='') as f:
   w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
-def avg(rows,key):
- vals=[float(x[key]) for x in rows if x[key]!='' and x[key] is not None]
- return round(statistics.mean(vals),4) if vals else None
+def rate(rs,key):return round(sum(int(bool(r[key])) for r in rs)/len(rs),4) if rs else None
 
-def main():
- ap=argparse.ArgumentParser()
- ap.add_argument('--models',choices=MODELS,nargs='+',default=MODELS)
- ns=ap.parse_args()
+def main(argv=None):
+ p=argparse.ArgumentParser();p.add_argument('--models',nargs='+',choices=MODELS,default=MODELS)
+ ns=p.parse_args(argv)
  mf=json.loads((DATA/'manifest.json').read_text(encoding='utf-8'))
- goldpath=ROOT/'private/gold_60.jsonl'
- if not goldpath.exists():raise SystemExit('private/gold_60.jsonl 파일 필요 (공개 GitHub에 업로드하지 마세요)')
- if hashlib.sha256(goldpath.read_bytes()).hexdigest()!=mf['gold_sha256']:raise SystemExit('Gold SHA mismatch')
- gg=load(goldpath)
- assert len(gg)==60
- assert len({g['test_id'] for g in gg})==60
- with sqlite3.connect(DB) as con:
-  con.row_factory=sqlite3.Row
-  baseline={}
-  for g in gg:
-   hits,_=fused_search(con,[g['cas'],g['chemical_name_en']],k=8)
-   baseline[g['test_id']]=set(int(x['excel_row']) for x in hits)
- rows=[]
+ gp=ROOT/'private/gold_60.jsonl'
+ if not gp.exists():raise SystemExit('Gold 없음: private/gold_60.jsonl (ZIP에서 복사, GitHub 업로드 금지)')
+ if hashlib.sha256(gp.read_bytes()).hexdigest()!=mf['gold_sha256']:raise SystemExit('Gold SHA 불일치: 수정되었으면 별도 버전으로 동결')
+ gold=load(gp);assert len(gold)==60
+ out=[];component_scores=[]
  for model in ns.models:
-  f=OUT/f'{model.replace(":","_")}__main.jsonl'
-  d={r['test_id']:r for r in load(f)}
-  for g in gg:
-   rec=d.get(g['test_id']);ans=parse_answer(rec.get('answer_raw'),g['test_id']) if rec else None
-   review=g['gold_status'];scorable=review=='CURATED_PROVISIONAL'
-   acceptable=set(int(i) for i in g['acceptable_evidence_rows'])
-   found=[int(x['excel_row']) for x in rec.get('retrieved_rows',[])] if rec else []
-   retrieved=bool(acceptable.intersection(found))
-   exactrow=int(g['source_excel_row']) in found
-   ok_scope=bool(ans and ans['covered_by_clause']==g['covered_by_clause'])
-   ok_relation=bool(ans and ans['reasoning_category']==g['expected_relation'])
-   ok_cas=bool(ans and ans['direct_cas_match']==g['direct_cas_match'])
-   ok_entry=bool(ans and ans['relevant_entry_id']==g['relevant_entry_id'] and ans['relevant_sub_number']==g['relevant_sub_number'])
-   exact=ok_scope and ok_relation and ok_cas and ok_entry
-   obs=bool(rec and rec['status']!='api_error')
-   status=rec.get('status','not_run') if rec else 'not_run'
-   rows.append({'model':model,'test_id':g['test_id'],'case_id':g['case_id'], 'cas':g['cas'],
-    'condition':g['condition'],'family':g['category'],'gold_review_status':review,
-    'independent_expert_review_completed':int(g['independent_expert_review_completed']),
-    'provisional_score_eligible':int(scorable),
-    'status':status,'query_valid':int(bool(rec and rec['query_valid'])),
-    'answer_valid':int(ans is not None),
-    'scope_correct_provisional':int(ok_scope) if scorable and obs else '',
-    'relation_correct_provisional':int(ok_relation) if scorable and obs else '',
-    'entry_correct_provisional':int(ok_entry) if scorable and obs else '',
-    'direct_cas_correct_provisional':int(ok_cas) if scorable and obs else '',
-    'complete_correct_provisional':int(exact) if scorable and obs else '',
-    'retrieval_acceptable_at_8':int(retrieved) if scorable and obs else '',
-    'retrieval_exact_row_at_8':int(exactrow) if scorable and obs else '',
-    'baseline_acceptable_at_8':int(bool(acceptable & baseline[g['test_id']])) if scorable and obs else '',
-    'end_to_end_provisional':int(retrieved and exact) if scorable and obs else '',
-    'wall_seconds':rec.get('wall_seconds','') if rec else '',
-    'search_queries':json.dumps(rec['queries'],ensure_ascii=False) if rec else '',
-    'retrieved_excel_rows':';'.join(map(str,found))})
- OUT.mkdir(exist_ok=True)
- csvwrite(OUT/'case_scores_retrieval_v4.csv',rows)
- ag=[]
+  rows={x['test_id']:x for x in load(OUT/f'{model.replace(":","_")}__main.jsonl')}
+  for g in gold:
+   x=rows.get(g['test_id'])
+   ids=[c['component_id'] for c in g['component_gold']]
+   a=parse_answer(x.get('answer_raw'),g['test_id'],ids,g['group']=='MIXTURE') if x else None
+   amap={c['component_id']:c for c in a['components']} if a else {}
+   matches=[];evidence_hits=[];covered_fields=[];identity_fields=[]
+   for c in g['component_gold']:
+    cid=c['component_id'];ans=amap.get(cid)
+    retrieved=x.get('retrieved_by_component',{}).get(cid,[]) if x else []
+    hit=int(c['source_excel_row'] in [z['excel_row'] for z in retrieved])
+    evidence_hits.append(hit)
+    cor=bool(ans and ans['direct_cas_match']==c['direct_cas_match'] and
+             ans['covered_by_clause']==c['covered_by_clause'] and
+             ans['reasoning_category']==c['expected_relation'] and
+             ans['relevant_entry_id']==c['relevant_entry_id'] and
+             ans['relevant_sub_number']==c['relevant_sub_number'])
+    matches.append(cor)
+    covered_fields.append(bool(ans and ans['covered_by_clause']==c['covered_by_clause']))
+    identity_fields.append(bool(ans and ans['direct_cas_match']==c['direct_cas_match']))
+    component_scores.append({'model':model,'test_id':g['test_id'],'case_id':g['case_id'],
+      'condition':g['condition'],'group':g['group'],'difficulty':g['difficulty'],'component_id':cid,
+      'cas':c['cas'],'gold_relation':c['expected_relation'],'gold_entry':c['relevant_entry_id'],
+      'gold_excel_row':c['source_excel_row'],'retrieval_hit':hit,'component_exact':int(cor),
+      'scope_correct':int(covered_fields[-1]),'direct_match_correct':int(identity_fields[-1]),
+      'status':x.get('status') if x else 'not_run'})
+   mixture_ok=(a and a['all_components_designated']==g['mixture_article3_all_listed']) if g['group']=='MIXTURE' else True
+   exact=bool(a and all(matches) and mixture_ok)
+   out.append({'model':model,'test_id':g['test_id'],'case_id':g['case_id'],
+    'condition':g['condition'],'group':g['group'],'difficulty':g['difficulty'],'component_count':len(ids),
+    'gold_status':g['review_status'],'expert_verified':int(g['independent_expert_review_completed']),
+    'status':x.get('status') if x else 'not_run','answer_valid':int(bool(a)),
+    'all_components_retrieved':int(all(evidence_hits)),
+    'retrieved_component_count':sum(evidence_hits),
+    'component_recall':round(sum(evidence_hits)/len(ids),4),
+    'all_scope_correct':int(all(covered_fields)),'all_direct_correct':int(all(identity_fields)),
+    'all_component_exact':int(all(matches)),
+    'article3_all_listed_correct':int(bool(mixture_ok)) if g['group']=='MIXTURE' and a else (0 if g['group']=='MIXTURE' else ''),
+    'case_exact':int(exact),'end_to_end_success':int(exact and all(evidence_hits)),
+    'query_seconds':x.get('query_seconds','') if x else '',
+    'reason_seconds':x.get('reason_seconds','') if x else '',
+    'wall_seconds':x.get('wall_seconds','') if x else ''})
+ save(OUT/'case_scores_three_groups.csv',out)
+ save(OUT/'component_scores_three_groups.csv',component_scores)
+ agg=[]
  for m in ns.models:
-  rr=[x for x in rows if x['model']==m]
-  for dimension in ['ALL','condition','family','gold_review_status']:
-   groups={'ALL':rr} if dimension=='ALL' else {str(v):[x for x in rr if str(x[dimension])==str(v)] for v in sorted(set(x[dimension] for x in rr))}
-   for val,sel in groups.items():
-    obs=[x for x in sel if x['status']!='not_run']
-    verified=[x for x in obs if x['provisional_score_eligible']]
-    hit=[x for x in verified if x['retrieval_acceptable_at_8']==1]
-    ag.append({'model':m,'dimension':dimension,'value':val,'planned_n':len(sel),'observed_n':len(obs),'provisional_scorable_n':len(verified),
-     'pending_n':sum(x['gold_review_status']!='CURATED_PROVISIONAL' for x in sel),
-     'json_valid_rate':avg(obs,'answer_valid'),'retrieval_recall_acceptable_at_8':avg(verified,'retrieval_acceptable_at_8'),
-     'retrieval_exact_row_rate':avg(verified,'retrieval_exact_row_at_8'),
-     'cas_name_baseline_recall':avg(verified,'baseline_acceptable_at_8'),
-     'scope_accuracy':avg(verified,'scope_correct_provisional'),
-     'relation_accuracy':avg(verified,'relation_correct_provisional'),
-     'complete_accuracy_given_hit':avg(hit,'complete_correct_provisional'),
-     'end_to_end_success':avg(verified,'end_to_end_provisional')})
- csvwrite(OUT/'subgroup_accuracy_retrieval_v4.csv',ag)
- paired=[]
- for model in ns.models:
-  d={(x['case_id'],x['condition']):x for x in rows if x['model']==model}
-  for cid in sorted(set(g['case_id'] for g in gg)):
-   a=d[(cid,'A')];b=d[(cid,'B')]
-   if not(a['provisional_score_eligible'] and b['provisional_score_eligible'] and a['status']!='not_run' and b['status']!='not_run'):continue
-   paired.append({'model':model,'case_id':cid,'cas':a['cas'],'family':a['family'],
-    'A_retrieval':a['retrieval_acceptable_at_8'],'B_retrieval':b['retrieval_acceptable_at_8'],
-    'delta_retrieval':b['retrieval_acceptable_at_8']-a['retrieval_acceptable_at_8'],
-    'A_end_to_end':a['end_to_end_provisional'],'B_end_to_end':b['end_to_end_provisional'],
-    'delta_end_to_end':b['end_to_end_provisional']-a['end_to_end_provisional']})
- csvwrite(OUT/'paired_structure_effect_retrieval_v4.csv',paired)
- print('=== v4 exploratory scoring (provisional only; no Gold legally expert-adjudicated) ===')
- for a in ag:
-  if a['dimension']=='ALL':
-   print(f"{a['model']:<20} {a['observed_n']}/{a['planned_n']} 실행; 평가 가능한 잠정 문항 {a['provisional_scorable_n']}; "
-         f"Recall@8={a['retrieval_recall_acceptable_at_8']}; scope={a['scope_accuracy']}; "
-         f"end-to-end={a['end_to_end_success']}; JSON={a['json_valid_rate']}")
- print('CSV: results/case_scores_retrieval_v4.csv, subgroup_accuracy_retrieval_v4.csv, paired_structure_effect_retrieval_v4.csv')
- print('검증 한계: curated provisional은 전문가 확정 Gold가 아님. 탄소수 범위·위치이성질체 3종(6문항)은 자동 채점 제외.')
- print('절대 독립 표본 60건으로 가정하지 말 것: A/B 대응 + 입자크기 반복 CAS 자료.')
- print('EXPLICIT_EXCEPTION은 해당 그룹 조항에만 비해당을 의미; 전체 법규 비규제와 동일시하지 말 것.')
+  rows=[x for x in out if x['model']==m]
+  for grouping in ['ALL','group','difficulty','condition','group_difficulty']:
+   groups={'ALL':rows} if grouping=='ALL' else defaultdict(list)
+   if grouping!='ALL':
+    for r in rows:
+     v=(r['group']+' / '+r['difficulty']) if grouping=='group_difficulty' else r[grouping]
+     groups[v].append(r)
+   for val,items in sorted(groups.items()):
+    done=[x for x in items if x['status']!='not_run']
+    agg.append({'model':m,'variable':grouping,'value':val,'planned':len(items),'observed':len(done),
+       'provisional_gold':sum(x['gold_status']=='CURATED_PROVISIONAL' for x in done),
+       'expert_verified':sum(x['expert_verified'] for x in done),
+       'json_valid_rate':rate(done,'answer_valid'),
+       'retrieval_all_recall':rate(done,'all_components_retrieved'),
+       'component_recall_mean':round(statistics.mean(x['component_recall'] for x in done),4) if done else None,
+       'scope_all_accuracy':rate(done,'all_scope_correct'),
+       'case_exact_accuracy':rate(done,'case_exact'),
+       'end_to_end_accuracy':rate(done,'end_to_end_success')})
+ save(OUT/'subgroup_accuracy_three_groups.csv',agg)
+ idx={(x['model'],x['case_id'],x['condition']):x for x in out}
+ pairs=[]
+ for m in ns.models:
+  for cid in sorted({x['case_id'] for x in out}):
+   a=idx[(m,cid,'A')];b=idx[(m,cid,'B')]
+   if a['status']=='not_run' or b['status']=='not_run':continue
+   pairs.append({'model':m,'case_id':cid,'group':a['group'],'difficulty':a['difficulty'],
+     'A_e2e':a['end_to_end_success'],'B_e2e':b['end_to_end_success'],
+     'delta_e2e':b['end_to_end_success']-a['end_to_end_success'],
+     'A_retrieved':a['all_components_retrieved'],'B_retrieved':b['all_components_retrieved'],
+     'delta_retrieved':b['all_components_retrieved']-a['all_components_retrieved']})
+ save(OUT/'paired_structure_effect_three_groups.csv',pairs)
+ print('\n=== 3분류 예비 성능(전문가 확인 전 잠정 Gold) ===')
+ for x in agg:
+  if x['variable']=='ALL':
+   print(f"{x['model']:<20} {x['observed']}/{x['planned']} 실행, retrieval(all)={x['retrieval_all_recall']}, end-to-end={x['end_to_end_accuracy']}, JSON={x['json_valid_rate']}")
+ print('CSV: results/case_scores_three_groups.csv / component_scores_three_groups.csv / subgroup_accuracy_three_groups.csv / paired_structure_effect_three_groups.csv')
+ print('주의: Gold 전부 잠정 판정이며 전문가 검증 완료=0. 본 실험 정답률 또는 법률 확정 판정으로 인용 금지.')
+ print('주의: 혼합물의 false는 고시 제3조의 “지정물질만으로 구성” 요건 불충족이지 혼합물 전체의 비규제 뜻이 아닙니다.')
 if __name__=='__main__':main()
