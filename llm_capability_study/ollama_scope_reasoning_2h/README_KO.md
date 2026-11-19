@@ -1,3 +1,9 @@
+# 최신 본실험: 전체 고시 검색 + 화학적 포괄 지정범위 추론 (retrieval_v2)
+
+> **새 본실험은 [`retrieval_v2/README_KO.md`](retrieval_v2/README_KO.md)를 사용하세요.** LLM이 검색어를 만들고 전체 1,451행 법규 DB를 검색한 다음 관련 조항을 해석합니다. 아래 기존 설명과 `run_ollama.py`는 **16개 조항 제공 방식의 이전 실험(legacy)** 으로 보존되어 있습니다. 새 실험은 `retrieval_v2/run_retrieval.py`로 실행합니다. Gold는 비공개로 유지합니다.
+
+---
+
 # 화학적 정체·구조정보 기반 2026-5호 포괄 지정범위 판정 실험 — RTX 2060 6GB
 
 ## 연구 목적
