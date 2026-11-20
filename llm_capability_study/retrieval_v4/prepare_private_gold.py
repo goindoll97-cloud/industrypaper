@@ -124,7 +124,7 @@ def build_gold(workbook, cases_path, annex_path):
                 require(c['component_id'] == f'C{i}' and c['cas'] == cas and c['name_en'] == name,
                         f'{case_id}-{condition}/C{i}: 엑셀과 시험 문항 CAS/명칭 불일치')
             a = annex[ref]
-            direct = bool(re.search(r'(?<!\\d)' + re.escape(cas) + r'(?!\\d)', a['cas_field']))
+            direct = bool(re.search(r'(?<!\d)' + re.escape(cas) + r'(?!\d)', a['cas_field']))
             require(direct == (relation == 'DIRECT_SPECIFIC'), f'{case_id}/C{i}: 직접 CAS 지정과 관계 분류 불일치')
             components.append({'component_id': f'C{i}', 'cas': cas,
                 'source_excel_row': ref, 'direct_cas_match': direct,
@@ -157,7 +157,7 @@ def main():
     require(digest(cases) == manifest['cases_sha256'] and digest(annex) == manifest['annex_sha256'],
             '공개 시험 데이터의 SHA256이 manifest와 일치하지 않습니다')
     gold = build_gold(ns.workbook, cases, annex)
-    blob = ''.join(json.dumps(row, ensure_ascii=False, sort_keys=True) + '\\n' for row in gold).encode('utf-8')
+    blob = ''.join(json.dumps(row, ensure_ascii=False, sort_keys=True) + '\n' for row in gold).encode('utf-8')
     sha = hashlib.sha256(blob).hexdigest()
     private = ROOT / 'private'
     private.mkdir(exist_ok=True)
