@@ -1,5 +1,27 @@
 # Retrieval v4 — 3개 평가분류 × 각 10사례 × 난이도 5:5
 
+## v4.1 응답의 내부 논리 및 지정번호 근거 진단 (기존 점수 보존)
+
+관계 유형 `reasoning_category`와 `covered_by_clause`의 상호 모순, 그리고 모델이 제시한 지정번호가 **실제로 반환된 고시 검색 결과에 존재하는지**를 추가 진단합니다.
+
+```powershell
+cd F:\framework_chemical_regul_paper
+git pull origin main
+cd .\llm_capability_study\retrieval_v4
+python .\diagnose_raw_failures.py --results-dir results_v4_1
+```
+
+기존 오류 진단 파일과 함께 `results_v4_1/scoring_audit/gold_<SHA256 앞 12자리>/error_diagnosis/consistency_audit/`에 두 CSV가 추가됩니다.
+
+- `component_consistency.csv`: 성분별 `relation_scope_contradiction`, `designation_grounding` 값
+- `consistency_summary.csv`: 모델 및 물질 유형·난이도별 논리적 모순 수, 지정번호가 검색 결과에 존재하는 건수, 근거 없는 지정번호 건수
+
+`DIRECT_SPECIFIC` 및 `GROUP_INCLUDED`이면 해당 **조항의 지정범위**에 포함(true), `EXPLICIT_EXCEPTION` 및 `NOT_COVERED`이면 해당 조항의 지정범위에 포함되지 않음(false)이라는 실험 스키마상의 일관성을 검사합니다. `INSUFFICIENT_EVIDENCE`와 파싱 불가능한 응답은 자동 판정하지 않습니다.
+
+**주의:** 검색 결과에서 발견되지 않은 지정번호는 `legal_id_not_in_returned_evidence`로 기록하지만, 이 자체로 법령상 존재하지 않는 번호라고 단정하지 않습니다. Gold 내용이나 기존 `score_results.py`의 점수는 자동으로 수정하지 않습니다. 이 진단은 사후 설명을 위한 보조 분석이며 새로운 본실험 정확도가 아닙니다.
+
+---
+
 ## 원본 응답 오류 추적: 관계 유형·지정번호·혼합물 예외
 
 **v4.1을 다시 실행하지 않고**, 기존 3개 모델의 `__main.jsonl` 원본과 로컬 비공개 Gold를 비교합니다. 원본 JSONL과 기존 채점 CSV는 수정하지 않습니다.
