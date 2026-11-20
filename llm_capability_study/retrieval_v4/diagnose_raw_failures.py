@@ -39,18 +39,19 @@ def _csv(path, rows):
         writer.writerows(rows)
 
 
-def diagnose(gold, run_rows, audit_cases, audit_components):
+def diagnose(gold, run_rows, audit_cases, audit_components, models=None):
     """Return reproducible diagnosis from original saved JSONL, not inferred CSV scores.
 
     run_rows maps model to a list of original records; the last record for each
     test_id is authoritative (same convention as score_results.py).
     """
+    models = MODELS if models is None else models
     gold_by_id = {g["test_id"]: g for g in gold}
     case_by_id = {(r["model"], r["test_id"]): r for r in audit_cases}
     comp_by_id = {(r["model"], r["test_id"], r["component_id"]): r for r in audit_components}
     details, cases, confusion = [], [], Counter()
 
-    for model in MODELS:
+    for model in models:
         latest = {r["test_id"]: r for r in run_rows[model]}
         for test_id, g in gold_by_id.items():
             case = case_by_id[(model, test_id)]
@@ -162,7 +163,7 @@ def diagnose(gold, run_rows, audit_cases, audit_components):
 
     pairs = []
     by_pair = {(r["model"], r["case_id"], r["condition"]): r for r in cases}
-    for model in MODELS:
+    for model in models:
         for case_id in sorted({g["case_id"] for g in gold}):
             if (model, case_id, "A") not in by_pair or (model, case_id, "B") not in by_pair:
                 continue  # Partial diagnostic fixtures or incomplete A/B cases
