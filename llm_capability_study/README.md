@@ -15,6 +15,7 @@ cd F:\framework_chemical_regul_paper
 git pull origin main
 cd .\llm_capability_study\retrieval_v4
 ollama pull qwen3.5:9b
+python .\preflight.py --fix-windows-eol
 python .\preflight.py
 # 먼저 예비 12문항으로 실행·JSON·속도 확인 (본실험에서 재사용됨)
 python .\run_retrieval.py --stage pilot --model qwen3.5:9b --results-dir results_v4_1_strong
@@ -27,6 +28,8 @@ python ..\make_paper_report.py --strong-results-dir results_v4_1_strong
 ~~~
 
 최종 비교 표 위치: `retrieval_v4/results_v4_1/PAPER_RESULTS_v4_1.md` (한 개). 기존 원본 데이터는 그대로 유지합니다. 추가 모델 원본은 `retrieval_v4/results_v4_1_strong/`에만 저장됩니다.
+
+**Windows 무결성 참고:** 세 입력 데이터의 해시가 줄바꿈(CRLF) 때문에 달라졌다면 `--fix-windows-eol`이 **LF 변환 후 공식 SHA256이 정확히 일치하는 파일만** 복구합니다. 줄바꿈 이외의 차이가 있으면 파일을 수정하지 않고 중단합니다. GitHub에 정답지·실험 결과가 올라가지 않도록 `results_v4_1_strong/`도 Git에서 제외했습니다.
 
 **주의:** 예비 단계에서 API 오류가 발생했다면 RAM/모델 로딩 문제를 먼저 해결한 뒤 같은 명령으로 이어서 실행하세요. GPU와 RAM 사용량은 `ollama ps`로 확인할 수 있습니다. `--force`는 기존 실행파일 삭제 옵션이므로 사용하지 마세요. 9B 평가 또한 기존 30원사례를 재사용하므로 독립 외부 검증은 아니며, Gold의 전문가 독립 검토는 여전히 필요합니다.
 

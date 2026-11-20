@@ -113,7 +113,7 @@ def main(args=None):
  ns=p.parse_args(args)
  m=json.loads((DATA/'manifest.json').read_text(encoding='utf-8'))
  for file,key in [('cases_60.jsonl','cases_sha256'),('official_annex_2026_5_full.csv','annex_sha256'),('pilot_12_ids.json','pilot_sha256')]:
-  if sha(DATA/file)!=m[key]:sys.exit('데이터 SHA256 불일치: '+file)
+  if sha(DATA/file)!=m[key]:sys.exit('데이터 SHA256 불일치: '+file+'\nWindows 줄바꿈 문제라면 먼저 python preflight.py --fix-windows-eol 실행 후 다시 시도하세요.')
  if not DB.exists():build()
  with sqlite3.connect(DB) as con:
   if con.execute('select count(*) from annex').fetchone()[0]!=1451:sys.exit('DB 행 수 불일치')
