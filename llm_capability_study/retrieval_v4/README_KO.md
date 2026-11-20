@@ -7,12 +7,12 @@
 ### 기존 v4 실행결과를 수정된 Gold로 재채점 (LLM 재호출 없음)
 
 ```powershell
-cd D:\\framework_chemical_regul_paper
+cd D:\framework_chemical_regul_paper
 git pull origin main
-cd .\\llm_capability_study\\retrieval_v4
-python .\\prepare_private_gold.py "$HOME\\Downloads\\2026-5_포괄지정_GOLD_30_수정.xlsx"
-python .\\preflight.py
-python .\\score_results.py --results-dir results
+cd .\llm_capability_study\retrieval_v4
+python .\prepare_private_gold.py "$HOME\Downloads\2026-5_포괄지정_GOLD_30_수정.xlsx"
+python .\preflight.py
+python .\score_results.py --results-dir results
 ```
 
 위 엑셀 경로는 실제 저장 위치로 변경하세요. 새 Gold 적용 시 기존 `private/gold_60.jsonl`이 달라지면 자동 백업합니다. 입력 CAS/명칭·그룹·근거 행·직접 CAS 지정·혼합물 관계를 공식 1,451행과 검증합니다. 등록 파일은 `private/gold_registry.json`이며, 공개 Git에 올라가지 않습니다.
@@ -22,8 +22,8 @@ python .\\score_results.py --results-dir results
 원본 v4의 `results/`는 그대로 보존됩니다. 개선된 실행기는 `results_v4_1/`에 **새로운 출력**을 생성합니다.
 
 ```powershell
-python .\\run_retrieval.py --stage main --model all
-python .\\score_results.py --results-dir results_v4_1
+python .\run_retrieval.py --stage main --model all
+python .\score_results.py --results-dir results_v4_1
 ```
 
 v4.1은 단일 물질의 JSON schema에서 혼합물 판정값을 null로 제약하고, 해당 시험 ID로 접두된 component_id만 정규화하며, CAS 접두어 검색을 허용합니다. 검색/판정 출력 예산을 384/900토큰, 기본 요청 timeout을 480초로 조정하고 실행 프로토콜을 settings hash에 기록합니다. 앞선 v4 결과와 동일한 프로토콜이라고 주장하거나 직접 합산하지 마세요.
