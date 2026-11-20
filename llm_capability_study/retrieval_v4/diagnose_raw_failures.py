@@ -200,6 +200,19 @@ def main(argv=None):
     audit_cases, audit_components, _, runs = inspect_run(folder, gold)
     raws = {model: load(folder / (model.replace(":", "_") + "__main.jsonl")) for model in MODELS}
     detailed, cases, relations, failures, pairs = diagnose(gold, raws, audit_cases, audit_components)
+    queue = []
+    for d in detailed:
+        reasons = []
+        if d["same_designation_different_row_candidate"]:
+            reasons.append("same_designation_different_gold_row")
+        if d["predicted_relation"] and d["predicted_relation"] != d["gold_relation"]:
+            reasons.append("relation_disagreement")
+        if d["predicted_scope"] != "" and d["predicted_scope"] != d["gold_scope"]:
+            reasons.append("scope_disagreement")
+        if d["predicted_designation_id"] != "" and d["predicted_designation_id"] != d["gold_designation_id"]:
+            reasons.append("entry_disagreement")
+        if reasons:
+            queue.append({"review_reason": ";".join(reasons), **d})
     out = folder / "scoring_audit" / ("gold_" + gold_sha[:12]) / "error_diagnosis"
     out.mkdir(parents=True, exist_ok=True)
     for name, data in (
@@ -208,12 +221,14 @@ def main(argv=None):
         ("relation_confusion.csv", relations),
         ("first_failure_counts.csv", failures),
         ("paired_AB_failure_comparison.csv", pairs),
+        ("expert_review_queue.csv", queue),
     ):
         _csv(out / name, data)
     metadata = {
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "gold_sha256": gold_sha, "run_files": runs,
         "case_rows": len(cases), "component_rows": len(detailed),
+        "review_queue_rows": len(queue),
         "strict_retrieval": "Only exact Gold source_excel_row is counted as a retrieval success",
         "failure_attribution": "First failure is a diagnostic ordering; all_failures is multivariate, not causal",
         "alternative_entry_rule": "Same designation but different Gold row is NOT credited automatically",
