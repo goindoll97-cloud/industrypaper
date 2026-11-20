@@ -168,7 +168,7 @@ def render(cases, components, consistency, run_info, gold_sha, models=None):
         "",
         "## 7. 재현 정보",
         "",
-        "동결 실험일: 2026-11-20; 결과는 고정 Gold·settings hash와 원본 JSONL에서 계산",
+        "v4.1 기준 프로토콜 확정: 2026-11-20; 결과는 고정 Gold·settings hash와 원본 JSONL에서 계산",
         "",
     ])
     for model in models:
