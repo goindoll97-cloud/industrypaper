@@ -9,7 +9,6 @@ Only provisional aggregate statistics are exported. No answers leave the PC.
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -164,7 +163,7 @@ def render(cases, components, consistency, run_info, gold_sha):
         "",
         "## 7. 재현 정보",
         "",
-        f"논문용 집계 생성: {datetime.now(timezone.utc).isoformat()}",
+        "동결 실험일: 2026-11-20; 결과는 고정 Gold·settings hash와 원본 JSONL에서 계산",
         "",
     ])
     for model in MODELS:
