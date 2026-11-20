@@ -4,6 +4,7 @@ This module alone reads the private provisional Gold. It does NOT confer legal v
 from __future__ import annotations
 import csv,json,hashlib,statistics,random,argparse
 from pathlib import Path
+from gold_integrity import expected_gold_sha
 from collections import defaultdict
 from run_retrieval import ROOT,DATA,OUT,MODELS,load,parse_answer
 
@@ -15,12 +16,15 @@ def save(path,rows):
 def rate(rs,key):return round(sum(int(bool(r[key])) for r in rs)/len(rs),4) if rs else None
 
 def main(argv=None):
+ global OUT
  p=argparse.ArgumentParser();p.add_argument('--models',nargs='+',choices=MODELS,default=MODELS)
+ p.add_argument('--results-dir',default='results',help='원본 v4는 results, 개선된 v4.1은 results_v4_1')
  ns=p.parse_args(argv)
+ OUT=ROOT/ns.results_dir
  mf=json.loads((DATA/'manifest.json').read_text(encoding='utf-8'))
  gp=ROOT/'private/gold_60.jsonl'
  if not gp.exists():raise SystemExit('Gold 없음: private/gold_60.jsonl (ZIP에서 복사, GitHub 업로드 금지)')
- if hashlib.sha256(gp.read_bytes()).hexdigest()!=mf['gold_sha256']:raise SystemExit('Gold SHA 불일치: 수정되었으면 별도 버전으로 동결')
+ if hashlib.sha256(gp.read_bytes()).hexdigest()!=expected_gold_sha(ROOT,mf):raise SystemExit('Gold SHA 불일치: 수정되었으면 별도 버전으로 동결')
  gold=load(gp);assert len(gold)==60
  out=[];component_scores=[]
  for model in ns.models:
