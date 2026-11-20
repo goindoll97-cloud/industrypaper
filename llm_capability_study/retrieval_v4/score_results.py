@@ -2,8 +2,10 @@
 This module alone reads the private provisional Gold. It does NOT confer legal validity.
 """
 from __future__ import annotations
-import csv,json,hashlib,statistics,random,argparse
+import csv,json,hashlib,statistics,random,argparse,shutil
+from datetime import datetime
 from pathlib import Path
+from gold_integrity import expected_gold_sha
 from collections import defaultdict
 from run_retrieval import ROOT,DATA,OUT,MODELS,load,parse_answer
 
@@ -14,14 +16,31 @@ def save(path,rows):
   w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
 def rate(rs,key):return round(sum(int(bool(r[key])) for r in rs)/len(rs),4) if rs else None
 
+def archive_previous_scores(folder):
+ names = ['case_scores_three_groups.csv','component_scores_three_groups.csv',
+          'subgroup_accuracy_three_groups.csv','paired_structure_effect_three_groups.csv']
+ existing = [folder/name for name in names if (folder/name).exists()]
+ if not existing:return
+ backup=folder/'score_backups'/datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+ backup.mkdir(parents=True,exist_ok=False)
+ for file in existing:shutil.copy2(file,backup/file.name)
+ print('기존 채점 CSV 백업:',backup)
+
+
 def main(argv=None):
+ global OUT
  p=argparse.ArgumentParser();p.add_argument('--models',nargs='+',choices=MODELS,default=MODELS)
+ p.add_argument('--results-dir',default='results',help='원본 v4는 results, 개선된 v4.1은 results_v4_1')
  ns=p.parse_args(argv)
+ OUT=ROOT/ns.results_dir
+ if not OUT.is_dir() or not any(OUT.glob('*__main.jsonl')):
+  raise SystemExit('선택된 결과 폴더에 본실험 JSONL이 없습니다: '+str(OUT))
  mf=json.loads((DATA/'manifest.json').read_text(encoding='utf-8'))
  gp=ROOT/'private/gold_60.jsonl'
  if not gp.exists():raise SystemExit('Gold 없음: private/gold_60.jsonl (ZIP에서 복사, GitHub 업로드 금지)')
- if hashlib.sha256(gp.read_bytes()).hexdigest()!=mf['gold_sha256']:raise SystemExit('Gold SHA 불일치: 수정되었으면 별도 버전으로 동결')
+ if hashlib.sha256(gp.read_bytes()).hexdigest()!=expected_gold_sha(ROOT,mf):raise SystemExit('Gold SHA 불일치: 수정되었으면 별도 버전으로 동결')
  gold=load(gp);assert len(gold)==60
+ archive_previous_scores(OUT)
  out=[];component_scores=[]
  for model in ns.models:
   rows={x['test_id']:x for x in load(OUT/f'{model.replace(":","_")}__main.jsonl')}

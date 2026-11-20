@@ -1,4 +1,5 @@
 from pathlib import Path
+from gold_integrity import expected_gold_sha
 import collections,hashlib,json
 R=Path(__file__).resolve().parent;D=R/'data';m=json.loads((D/'manifest.json').read_text(encoding='utf-8'))
 for k,n in [('annex_sha256','official_annex_2026_5_full.csv'),('cases_sha256','cases_60.jsonl'),('pilot_sha256','pilot_12_ids.json')]:
@@ -20,6 +21,6 @@ assert len(pilot)==12 and pilot.issubset({x['test_id'] for x in q})
 print('PASS: 공식 고시 1451행 / 30상황 / 유형별 10건 / EASY-HARD 각5 / 60문항 / Gold 입력 누출 없음')
 p=R/'private/gold_60.jsonl'
 if p.exists():
- assert hashlib.sha256(p.read_bytes()).hexdigest()==m['gold_sha256'],'Gold SHA mismatch'
+ assert hashlib.sha256(p.read_bytes()).hexdigest()==expected_gold_sha(R,m),'Gold SHA mismatch'
  print('PASS: 잠정 Gold 무결성 (법률 전문가의 검증을 의미하지 않음)')
 else:print('비공개 Gold는 공개 GitHub에서 제외함; 개인 ZIP에서 private/gold_60.jsonl 복사')

@@ -20,16 +20,21 @@ def request(base,ep,payload=None,timeout=210):
  data=json.dumps(payload,ensure_ascii=False).encode('utf-8') if payload is not None else None
  rq=urllib.request.Request(base+ep,data=data,headers={'Content-Type':'application/json'} if data else {})
  with urllib.request.urlopen(rq,timeout=timeout) as r:return json.loads(r.read().decode('utf-8'))
-def parse_queries(s,expected):
+def parse_queries(s,expected,test_id=None):
  try:obj=json.loads(s)
  except (ValueError,TypeError):return None
  if not isinstance(obj,dict) or set(obj)!={'searches'} or not isinstance(obj['searches'],list):return None
  result={}
  for x in obj['searches']:
-  if not isinstance(x,dict) or set(x)!={'component_id','queries'} or x['component_id'] not in expected or x['component_id'] in result:return None
+  if not isinstance(x,dict) or set(x)!={'component_id','queries'}:return None
+  cid=x['component_id']
+  # Recover only the documented ID-prefix format mistake (e.g. S-01-A-C1).
+  if test_id and isinstance(cid,str) and cid.startswith(test_id+'-') and cid[len(test_id)+1:] in expected:
+   cid=cid[len(test_id)+1:]
+  if cid not in expected or cid in result:return None
   q=x['queries']
   if not isinstance(q,list) or not 1<=len(q)<=3 or any(not isinstance(z,str) or not 2<=len(z.strip())<=100 for z in q):return None
-  result[x['component_id']]=list(dict.fromkeys(z.strip() for z in q))
+  result[cid]=list(dict.fromkeys(z.strip() for z in q))
  return result if set(result)==set(expected) else None
 def parse_answer(s,test_id,component_ids,is_mixture):
  try:o=json.loads(s)
@@ -46,6 +51,15 @@ def parse_answer(s,test_id,component_ids,is_mixture):
   if x['relevant_entry_id'] is not None and type(x['relevant_entry_id']) is not str:return None
   if x['relevant_sub_number'] is not None and type(x['relevant_sub_number']) is not int:return None
  return o if len({x['component_id'] for x in a})==len(component_ids) else None
+def answer_format(case):
+ schema=json.loads(json.dumps(ANSWER_SCHEMA))
+ ids=[c['component_id'] for c in case['components']]
+ schema['properties']['components']['items']['properties']['component_id']['enum']=ids
+ schema['properties']['components']['minItems']=len(ids)
+ schema['properties']['components']['maxItems']=len(ids)
+ schema['properties']['all_components_designated']={'type':'boolean'} if case['scenario_kind']=='FORMULATED_MIXTURE' else {'type':'null'}
+ return schema
+
 def identity(case):
  lines=['시험 ID: '+case['test_id'], '상황: '+('가상 다성분 혼합물' if case['scenario_kind']=='FORMULATED_MIXTURE' else '단일 화학물질')]
  for c in case['components']:
@@ -58,6 +72,7 @@ def identity(case):
 def qmessages(case):
  sysmsg=('환경부 2026-5호 고시 전체 검색을 위한 검색어를 작성하십시오. 정답 조항은 제공하지 않습니다. '
   '각 성분의 CAS, 명칭, 추정 모체·화합물군에 근거하여 성분마다 검색어 1~3개를 쓰십시오. '
+  'component_id는 입력의 C1, C2, C3을 그대로 사용하고 시험 ID 접두어를 붙이지 마십시오. '
   '고시 적용 여부는 아직 판정하지 마십시오. 반드시 component_id별 검색어 JSON만 출력하십시오.')
  return [{'role':'system','content':sysmsg},{'role':'user','content':identity(case)+'\n각 component_id별 검색어를 생성하시오.'}]
 def amessages(case,results):
@@ -68,7 +83,7 @@ def amessages(case,results):
   '혼합물이면 모든 성분이 각각 고시 지정물질인지(all_components_designated)를 판단하십시오. '
   '이 값이 false여도 혼합물이 다른 법규나 별표의 개별 함량기준에서 완전히 비규제란 뜻이 아닙니다. '
   '현재 실험에서는 성분별 함량기준 충족, 혼합물의 영업상 준법 여부, 물질 간 화학적 반응을 판단하지 마십시오. '
-  '단일 물질은 all_components_designated=null입니다. 짧은 한국어 근거를 JSON 한 개로 반환하십시오.')
+  '단일 물질은 all_components_designated=null입니다. 이유는 짧고 중복 없이 쓰십시오. 반드시 완결된 JSON 한 개로 반환하십시오.')
  usr=identity(case)+'\n\n[2026-5호 전체 1,451행 검색 결과: 각 성분별 최대 8행]\n'+json.dumps(results,ensure_ascii=False,separators=(',',':'))+\
   '\n\n각 성분의 지정번호/소번호/포괄포함·예외 여부 및 혼합물 전부-지정성분 요건을 판단하시오.'
  return [{'role':'system','content':sysmsg},{'role':'user','content':usr}]
@@ -86,10 +101,11 @@ def main(args=None):
  p.add_argument('--group',choices=['all','PARENT_AND_SALTS','COMPOUND_CLASS','MIXTURE'],default='all',help='한 번에 한 화학물질군만 실행; 결과는 전체와 동일한 파일에 누적')
  p.add_argument('--endpoint',default='http://127.0.0.1:11434')
  p.add_argument('--num-ctx',type=int,default=4096)
- p.add_argument('--num-predict-query',type=int,default=220)
- p.add_argument('--num-predict-reason',type=int,default=650)
+ p.add_argument('--num-predict-query',type=int,default=384)
+ p.add_argument('--num-predict-reason',type=int,default=900)
  p.add_argument('--seed',type=int,default=20261120)
- p.add_argument('--timeout',type=int,default=260)
+ p.add_argument('--timeout',type=int,default=480)
+ p.add_argument('--results-dir',default='results_v4_1',help='개선 프로토콜 출력; 원본 results/ 덮어쓰기 금지')
  p.add_argument('--force',action='store_true')
  p.add_argument('--limit',type=int,default=None)
  ns=p.parse_args(args)
@@ -109,20 +125,23 @@ def main(args=None):
  try:installed={x['name']:x for x in request(url,'/api/tags',timeout=20)['models']}
  except Exception as e:sys.exit('Ollama 연결 실패: '+str(e))
  if any(x not in installed for x in models):sys.exit('모델 미설치. ollama list 참조')
- OUT.mkdir(exist_ok=True)
+ out_dir=ROOT/ns.results_dir
+ if out_dir.resolve()==OUT.resolve():
+  sys.exit('안전 중단: 원본 v4 results/에는 개선 프로토콜 결과를 저장할 수 없습니다')
+ out_dir.mkdir(exist_ok=True)
  for model in models:
-  slug=model.replace(':','_');dst=OUT/f'{slug}__{ns.stage}.jsonl'
+  slug=model.replace(':','_');dst=out_dir/f'{slug}__{ns.stage}.jsonl'
   settings={'model':model,'digest':installed[model].get('digest'),'num_ctx':ns.num_ctx,
    'query_tokens':ns.num_predict_query,'reason_tokens':ns.num_predict_reason,'seed':ns.seed,
    'cases_sha256':m['cases_sha256'],'annex_sha256':m['annex_sha256'],
-   'search':'lexical_rank_fusion_v1','protocol':'v4_three_groups_components_mixture_article3'}
+   'search':'lexical_rank_fusion_v2_cas','protocol':'v4_1_three_groups_format_recovery'}
   settings_hash=hashlib.sha256(json.dumps(settings,sort_keys=True).encode()).hexdigest()
   if ns.force and dst.exists():dst.unlink()
   previous=load(dst)
   if any(x.get('settings_sha256')!=settings_hash for x in previous):sys.exit('실험 설정 충돌: 기존 파일을 백업하고 조건을 통일하세요')
   completed={x['test_id'] for x in previous if x['status'] in ('ok','invalid_query','invalid_answer')}
   if ns.stage=='main':
-   for x in load(OUT/f'{slug}__pilot.jsonl'):
+   for x in load(out_dir/f'{slug}__pilot.jsonl'):
     if x.get('settings_sha256')!=settings_hash:sys.exit('pilot/main 설정 다름')
     if x['status'] in ('ok','invalid_query','invalid_answer') and x['test_id'] not in completed:
      with dst.open('a',encoding='utf-8') as f:f.write(json.dumps({**x,'stage':'main','reused_pilot':True},ensure_ascii=False)+'\n')
@@ -138,18 +157,18 @@ def main(args=None):
      try:
       qr,qt=infer(url,model,qmessages(c),QUERY_SCHEMA,ns.num_predict_query,ns.num_ctx,ns.seed,ns.timeout)
       qraw=qr.get('message',{}).get('content','')
-      queries=parse_queries(qraw,component_ids)
+      queries=parse_queries(qraw,component_ids,c['test_id'])
       for component in c['components']:
        cid=component['component_id']
        found,log=fused_search(con,(queries or {}).get(cid,[]),k=8 if len(c['components'])==1 else (4 if len(c['components'])==3 else 5),per_query=10)
        hits[cid]=[evidence(x) for x in found];logs[cid]=log
-      ar,rt=infer(url,model,amessages(c,hits),ANSWER_SCHEMA,ns.num_predict_reason,ns.num_ctx,ns.seed,ns.timeout)
+      ar,rt=infer(url,model,amessages(c,hits),answer_format(c),ns.num_predict_reason,ns.num_ctx,ns.seed,ns.timeout)
       araw=ar.get('message',{}).get('content','')
      except Exception as e:error=str(e)
      parsed=parse_answer(araw,c['test_id'],component_ids,c['scenario_kind']=='FORMULATED_MIXTURE')
      status='api_error' if error else ('invalid_query' if not queries else ('ok' if parsed else 'invalid_answer'))
      row={'test_id':c['test_id'],'case_id':c['case_id'],'condition':c['condition'],'model':model,'status':status,
-       'stage':ns.stage,'reused_pilot':False,'settings_sha256':settings_hash,'model_digest':installed[model].get('digest'),
+       'stage':ns.stage,'reused_pilot':False,'query_component_id_prefix_recovered':bool(queries and qraw and c['test_id']+'-C' in qraw),'settings_sha256':settings_hash,'model_digest':installed[model].get('digest'),
        'timestamp_utc':datetime.now(timezone.utc).isoformat(),'query_raw':qraw,'queries':queries,'retrieved_by_component':hits,
        'search_logs':logs,'answer_raw':araw,'answer_valid':bool(parsed),
        'query_seconds':qt,'reason_seconds':rt,'wall_seconds':round(qt+rt,3),'error':error,

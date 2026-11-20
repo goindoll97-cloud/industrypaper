@@ -1,5 +1,37 @@
 # Retrieval v4 — 3개 평가분류 × 각 10사례 × 난이도 5:5
 
+## 2026-11-20 Gold 수정본 적용 및 v4.1 운영 안내
+
+**공개 저장소에는 Gold 정답지(.xlsx/.jsonl)를 올리지 않습니다.** 정답지 누출을 피하기 위해 사용자가 검토한 30사례 엑셀은 PC에서 60문항의 JSONL로 변환되며, 결과물과 해시 등록정보는 `private/` 안에만 저장됩니다. 공개 `data/manifest.json`은 수정하지 않습니다.
+
+### 기존 v4 실행결과를 수정된 Gold로 재채점 (LLM 재호출 없음)
+
+```powershell
+cd D:\framework_chemical_regul_paper
+git pull origin main
+cd .\llm_capability_study\retrieval_v4
+python .\prepare_private_gold.py "$HOME\Downloads\2026-5_포괄지정_GOLD_30_수정.xlsx"
+python .\preflight.py
+python .\score_results.py --results-dir results
+```
+
+위 엑셀 경로는 실제 저장 위치로 변경하세요. 새 Gold 적용 시 기존 `private/gold_60.jsonl`이 달라지면 자동 백업합니다. 입력 CAS/명칭·그룹·근거 행·직접 CAS 지정·혼합물 관계를 공식 1,451행과 검증합니다. 등록 파일은 `private/gold_registry.json`이며, 공개 Git에 올라가지 않습니다.
+
+### 프로토콜 수정 v4.1 (신규 실험으로만 수행)
+
+원본 v4의 `results/`는 그대로 보존됩니다. 개선된 실행기는 `results_v4_1/`에 **새로운 출력**을 생성합니다.
+
+```powershell
+python .\run_retrieval.py --stage main --model all
+python .\score_results.py --results-dir results_v4_1
+```
+
+v4.1은 단일 물질의 JSON schema에서 혼합물 판정값을 null로 제약하고, 해당 시험 ID로 접두된 component_id만 정규화하며, CAS 접두어 검색을 허용합니다. 검색/판정 출력 예산을 384/900토큰, 기본 요청 timeout을 480초로 조정하고 실행 프로토콜을 settings hash에 기록합니다. 앞선 v4 결과와 동일한 프로토콜이라고 주장하거나 직접 합산하지 마세요.
+
+기존 v4 실행결과의 수정 Gold 재채점과, v4.1 신규 실험은 **서로 다른 분석**입니다. Gold는 계속 `CURATED_PROVISIONAL` 상태이고 독립 전문가 검증이 완료되지 않았습니다.
+
+---
+
 이 검증셋은 **2026-5호 인체급성·만성·생태유해성물질 지정고시**의 전체 1,451개 별표 행을 검색할 수 있는 조건에서, 작은 Qwen 모델들의 **조항 탐색**과 **화학적·법적 지정범위 판단**을 비교하기 위한 탐색적 벤치마크입니다. 정답이 되는 16개 법령 항목을 선택지로 제공하지 않습니다.
 
 ## 핵심 설계

@@ -3,3 +3,4 @@ results/
 *.sqlite
 __pycache__/
 *.pyc
+results_v4_1/

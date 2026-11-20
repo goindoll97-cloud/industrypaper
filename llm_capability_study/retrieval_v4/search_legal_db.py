@@ -22,7 +22,8 @@ def row_score(query,row):
     if not q:return 0
     title=norm(row['name_ko']+' '+row['name_en'])
     raw_cas=row['cas_field'] or ''
-    if q in cas_tokens(raw_cas):return 1500
+    # Accept both bare CAS and model-generated prefixed CAS (e.g. CAS 67-56-1).
+    if cas_tokens(q) & cas_tokens(raw_cas):return 1500
     if CAS_PATTERN.fullmatch(q):return 0
     score=0.0
     if q==norm(row['name_ko']) or q==norm(row['name_en']):score+=350
