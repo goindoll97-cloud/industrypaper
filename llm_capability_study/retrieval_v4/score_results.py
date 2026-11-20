@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from gold_integrity import expected_gold_sha
 from collections import defaultdict
-from run_retrieval import ROOT,DATA,OUT,MODELS,load,parse_answer
+from run_retrieval import ROOT,DATA,OUT,MODELS,ADDITIONAL_MODELS,load,parse_answer
 
 def save(path,rows):
  if not rows:return
@@ -29,7 +29,7 @@ def archive_previous_scores(folder):
 
 def main(argv=None):
  global OUT
- p=argparse.ArgumentParser();p.add_argument('--models',nargs='+',choices=MODELS,default=MODELS)
+ p=argparse.ArgumentParser();p.add_argument('--models',nargs='+',choices=[*MODELS,*ADDITIONAL_MODELS],default=MODELS)
  p.add_argument('--results-dir',default='results',help='원본 v4는 results, 개선된 v4.1은 results_v4_1')
  ns=p.parse_args(argv)
  OUT=ROOT/ns.results_dir
@@ -124,7 +124,7 @@ def main(argv=None):
  for x in agg:
   if x['variable']=='ALL':
    print(f"{x['model']:<20} {x['observed']}/{x['planned']} 실행, retrieval(all)={x['retrieval_all_recall']}, end-to-end={x['end_to_end_accuracy']}, JSON={x['json_valid_rate']}")
- print('CSV: results/case_scores_three_groups.csv / component_scores_three_groups.csv / subgroup_accuracy_three_groups.csv / paired_structure_effect_three_groups.csv')
+ print('CSV 저장 폴더:',OUT)
  print('주의: Gold 전부 잠정 판정이며 전문가 검증 완료=0. 본 실험 정답률 또는 법률 확정 판정으로 인용 금지.')
  print('주의: 혼합물의 false는 고시 제3조의 “지정물질만으로 구성” 요건 불충족이지 혼합물 전체의 비규제 뜻이 아닙니다.')
 if __name__=='__main__':main()
