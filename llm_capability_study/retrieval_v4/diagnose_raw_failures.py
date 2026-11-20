@@ -164,6 +164,8 @@ def diagnose(gold, run_rows, audit_cases, audit_components):
     by_pair = {(r["model"], r["case_id"], r["condition"]): r for r in cases}
     for model in MODELS:
         for case_id in sorted({g["case_id"] for g in gold}):
+            if (model, case_id, "A") not in by_pair or (model, case_id, "B") not in by_pair:
+                continue  # Partial diagnostic fixtures or incomplete A/B cases
             a, b = by_pair[(model, case_id, "A")], by_pair[(model, case_id, "B")]
             pairs.append({
                 "model": model, "case_id": case_id,
