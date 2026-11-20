@@ -4,3 +4,4 @@ results/
 __pycache__/
 *.pyc
 results_v4_1/
+results_v4_1_strong/
