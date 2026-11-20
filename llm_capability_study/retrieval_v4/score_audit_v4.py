@@ -29,9 +29,11 @@ def write_csv(path, rows):
         writer.writerows(rows)
 
 
-def inspect_run(results_dir, gold):
+def inspect_run(results_dir, gold, models=None):
+    # Optional list allows an additional isolated model without changing the original 3-model study.
+    models = MODELS if models is None else models
     cases, components, summary, run_info = [], [], [], {}
-    for model in MODELS:
+    for model in models:
         file = results_dir / (model.replace(":", "_") + "__main.jsonl")
         if not file.is_file():
             raise FileNotFoundError("본실험 원본 JSONL 없음: " + str(file))
@@ -111,7 +113,7 @@ def inspect_run(results_dir, gold):
                 "gold_status": g["review_status"],
                 "expert_verified": int(g["independent_expert_review_completed"]),
             })
-    for model in MODELS:
+    for model in models:
         rows = [r for r in cases if r["model"] == model]
         for dimension in ("ALL", "group", "difficulty", "condition", "group_difficulty"):
             groups = defaultdict(list)
