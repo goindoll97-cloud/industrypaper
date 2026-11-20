@@ -1,5 +1,33 @@
 # Retrieval v4 — 3개 평가분류 × 각 10사례 × 난이도 5:5
 
+## 본실험 추가 진단: 점수 재정의 없이 단계별 성능 구분
+
+기존 `score_results.py`의 네 채점 CSV와 실행 JSONL은 그대로 보존합니다. 신규 진단은 별도 폴더의 파일로만 출력됩니다.
+
+~~~powershell
+# 현재 작업 폴더: llm_capability_study\retrieval_v4
+python .\score_audit_v4.py --results-dir results_v4_1
+# 기존 v4 원본 JSONL을 진단할 때만:
+python .\score_audit_v4.py --results-dir results
+~~~
+
+필수 입력: `private/gold_60.jsonl`, `private/gold_registry.json`, 그리고 선택한 결과 폴더의 **모델 3개 `__main.jsonl` 원본**. 이미 생성한 CSV 4개만으로는 판정의 세부 필드 오류를 다시 구성할 수 없습니다.
+
+출력 위치: `results_v4_1/scoring_audit/gold_<해시앞12자리>/` (또는 `results/scoring_audit/gold_<해시앞12자리>/`). Gold가 바뀌면 기존 분석 결과를 덮어쓰지 않습니다.
+
+- `audit_cases.csv`: 문항별 검색어 유효성·JSON 유효성, 각 성분 지정범위 일치, 관계 유형·지정번호·소번호 일치, 혼합물 제3조 판정, 엄격한 완전정답과 End-to-end
+- `audit_components.csv`: 성분별 필드 일치와 Gold 근거 행 검색 여부, 대체 근거 *검토 후보* 탐지
+- `audit_summary.csv`: 모델·A/B·난이도·평가분류별 단계 성능과 검색 성공 시 조건부 지정범위 판단 정확도
+- `audit_manifest.json`: 비공개 Gold 및 원본 실행파일 SHA256과 모델별 실험 설정 해시, 기록 중복 수
+
+**검색 깊이는 동일하지 않습니다.** 현재 코드는 단일물질 8행/성분, 2성분 혼합물 5행/성분, 3성분 혼합물 4행/성분을 반환합니다. 이 결과를 모두 **Recall@8**로 표기하거나, 동일 K에서의 성능인 것처럼 직접 비교하면 안 됩니다. 진단 파일에 `nominal_top_k_per_component`를 기록합니다.
+
+엄격한 검색 성공에는 기존처럼 Gold의 `source_excel_row`와 동일한 행만 인정합니다. `same_designation_hit_diagnostic`는 같은 지정번호의 *다른 행*을 찾았는지 확인하는 참고 지표이고, **독립 법령 검토 없이 정답으로 승격하지 않습니다.** `scope_correct`는 Gold의 `covered_by_clause` 일치 여부이며, 물질·제품의 전반적인 적법성을 뜻하지 않습니다. 혼합물에서는 `scope_plus_article3_correct` 지표를 별도로 사용합니다.
+
+진단의 엄격한 완전정답률·End-to-end 정의는 **기존 채점기와 동일**합니다. 신규 분석은 **사후 보조 분석**으로 구분하고, v4와 v4.1 결과를 동일 실험 조건의 반복측정으로 혼동하지 마세요. Gold는 모두 `CURATED_PROVISIONAL`이며 법규 전문가의 독립 검토를 대체하지 못합니다.
+
+---
+
 ## 2026-11-20 Gold 수정본 적용 및 v4.1 운영 안내
 
 **공개 저장소에는 Gold 정답지(.xlsx/.jsonl)를 올리지 않습니다.** 정답지 누출을 피하기 위해 사용자가 검토한 30사례 엑셀은 PC에서 60문항의 JSONL로 변환되며, 결과물과 해시 등록정보는 `private/` 안에만 저장됩니다. 공개 `data/manifest.json`은 수정하지 않습니다.
