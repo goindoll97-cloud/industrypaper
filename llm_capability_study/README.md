@@ -2,6 +2,36 @@
 
 2026-5호 인체급성·만성·생태유해성물질 지정고시의 **소형 Qwen LLM 법령 검색·지정범위 판정 실험**입니다. 원래 실험 코드와 자료를 유지하면서, 논문 작성에 필요한 실행법·방법론·결과를 **한 페이지**로 정리했습니다.
 
+## 2026-11-20 추가 비교: Qwen3.5 9B
+
+**목적:** 더 큰 모델에서는 규제정보 검색과 복잡한 지정범위 판단의 오류가 줄어드는지 동일한 v4.1 조건에서 확인합니다. 기존 세 모델은 재실행하지 않습니다. 정답지·프롬프트·검색 결과 수·채점 기준은 그대로 유지합니다.
+
+**모델 선택:** 공식 Ollama 모델 `qwen3.5:9b` (다운로드 약 6.6GB). RTX 2060 6GB에서는 GPU 메모리를 초과해 일반 RAM 일부를 사용할 수 있어 느릴 수 있습니다. RAM에 여유가 있어야 하며, 이 모델이 모든 LLM 중 가장 성능이 좋다는 뜻은 아닙니다.
+
+PowerShell 명령어 (아래 순서대로):
+
+~~~powershell
+cd F:\framework_chemical_regul_paper
+git pull origin main
+cd .\llm_capability_study\retrieval_v4
+ollama pull qwen3.5:9b
+python .\preflight.py
+# 먼저 예비 12문항으로 실행·JSON·속도 확인 (본실험에서 재사용됨)
+python .\run_retrieval.py --stage pilot --model qwen3.5:9b --results-dir results_v4_1_strong
+# 예비시험이 정상이면 동일한 설정으로 60문항 실행
+python .\run_retrieval.py --stage main --model qwen3.5:9b --results-dir results_v4_1_strong
+# 새 모델만 분리 채점
+python .\score_results.py --results-dir results_v4_1_strong --models qwen3.5:9b
+# 원래 3개 모델 + 9B 모델 비교를 기존 논문용 한 파일로 생성
+python ..\make_paper_report.py --strong-results-dir results_v4_1_strong
+~~~
+
+최종 비교 표 위치: `retrieval_v4/results_v4_1/PAPER_RESULTS_v4_1.md` (한 개). 기존 원본 데이터는 그대로 유지합니다. 추가 모델 원본은 `retrieval_v4/results_v4_1_strong/`에만 저장됩니다.
+
+**주의:** 예비 단계에서 API 오류가 발생했다면 RAM/모델 로딩 문제를 먼저 해결한 뒤 같은 명령으로 이어서 실행하세요. GPU와 RAM 사용량은 `ollama ps`로 확인할 수 있습니다. `--force`는 기존 실행파일 삭제 옵션이므로 사용하지 마세요. 9B 평가 또한 기존 30원사례를 재사용하므로 독립 외부 검증은 아니며, Gold의 전문가 독립 검토는 여전히 필요합니다.
+
+---
+
 ## 1. 일상적으로 필요한 파일 3개
 
 | 작업 | 사용할 파일 | 역할 |

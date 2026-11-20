@@ -131,6 +131,43 @@ class StagedScoreTests(unittest.TestCase):
             after = inspect_run(dest, gold)[3]
             self.assertEqual(before, {m: after[m]["file_sha256"] for m in MODELS})
 
+    def test_stronger_control_is_opt_in_and_comparable(self):
+        from run_retrieval import ADDITIONAL_MODELS
+        from diagnose_raw_failures import diagnose, audit_consistency
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+        from make_paper_report import render
+        self.assertEqual(ADDITIONAL_MODELS, ["qwen3.5:9b"])
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            gold = self.create_fixture(folder)
+            strong = ADDITIONAL_MODELS[0]
+            original = folder / (MODELS[-1].replace(":", "_") + "__main.jsonl")
+            records = [json.loads(x) for x in original.read_text(encoding="utf-8").splitlines()]
+            for row in records:
+                row["model"] = strong
+                row["settings_sha256"] = "isolated-strong-setting"
+            (folder / (strong.replace(":", "_") + "__main.jsonl")).write_text(
+                "".join(json.dumps(x) + "\n" for x in records), encoding="utf-8")
+            base_cases, base_comps, _, base_info = inspect_run(folder, gold)
+            extra_cases, extra_comps, _, extra_info = inspect_run(folder, gold, models=[strong])
+            self.assertEqual(len(base_cases), 2 * len(MODELS))
+            self.assertEqual(len(extra_cases), 2)
+            self.assertEqual(len(extra_comps), 3)
+            raw_by_model = {m: [
+                json.loads(x) for x in
+                (folder / (m.replace(":", "_") + "__main.jsonl")).read_text(
+                    encoding="utf-8").splitlines()] for m in MODELS}
+            base_detail = diagnose(gold, raw_by_model, base_cases, base_comps, models=MODELS)[0]
+            extra_detail = diagnose(gold, {strong: records}, extra_cases,
+                                    extra_comps, models=[strong])[0]
+            cons = audit_consistency(base_detail + extra_detail)[1]
+            report = render(base_cases + extra_cases, base_comps + extra_comps,
+                            cons, {**base_info, **extra_info}, "a"*64,
+                            models=[*MODELS, strong])
+            self.assertIn("Qwen3.5 9B (추가)", report)
+            self.assertIn("추후 평가한 대조군", report)
+            self.assertIn("8 문항-모델", report)
+
     def test_mixed_settings_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp)

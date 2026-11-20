@@ -10,6 +10,8 @@ from build_legal_db import build,DB
 from search_legal_db import fused_search,evidence
 ROOT=Path(__file__).resolve().parent;DATA=ROOT/'data';OUT=ROOT/'results'
 MODELS=['qwen2.5:3b','qwen3:4b-instruct','qwen3.5:4b']
+# Stronger control is opt-in. 'all' deliberately remains the frozen three-model baseline.
+ADDITIONAL_MODELS=['qwen3.5:9b']
 RELS=['DIRECT_SPECIFIC','GROUP_INCLUDED','EXPLICIT_EXCEPTION','NOT_COVERED','INSUFFICIENT_EVIDENCE']
 QUERY_SCHEMA={'type':'object','properties':{'searches':{'type':'array','items':{'type':'object','properties':{'component_id':{'type':'string'},'queries':{'type':'array','items':{'type':'string'},'minItems':1,'maxItems':3}},'required':['component_id','queries'],'additionalProperties':False}}},'required':['searches'],'additionalProperties':False}
 COMPONENT_SCHEMA={'type':'object','properties':{'component_id':{'type':'string'},'direct_cas_match':{'type':'boolean'},'covered_by_clause':{'type':'boolean'},'reasoning_category':{'type':'string','enum':RELS},'relevant_entry_id':{'type':['string','null']},'relevant_sub_number':{'type':['integer','null']}},'required':['component_id','direct_cas_match','covered_by_clause','reasoning_category','relevant_entry_id','relevant_sub_number'],'additionalProperties':False}
@@ -96,7 +98,7 @@ def infer(base,model,messages,schema,tokens,ctx,seed,timeout):
 def main(args=None):
  p=argparse.ArgumentParser(description='30 cases x A/B x 3 Qwen; each one model-query + one model-answer')
  p.add_argument('--stage',choices=['pilot','main'],required=True)
- p.add_argument('--model',choices=['all',*MODELS],default='all')
+ p.add_argument('--model',choices=['all',*MODELS,*ADDITIONAL_MODELS],default='all')
  p.add_argument('--condition',choices=['all','A','B'],default='all')
  p.add_argument('--group',choices=['all','PARENT_AND_SALTS','COMPOUND_CLASS','MIXTURE'],default='all',help='한 번에 한 화학물질군만 실행; 결과는 전체와 동일한 파일에 누적')
  p.add_argument('--endpoint',default='http://127.0.0.1:11434')
@@ -167,7 +169,11 @@ def main(args=None):
      except Exception as e:error=str(e)
      parsed=parse_answer(araw,c['test_id'],component_ids,c['scenario_kind']=='FORMULATED_MIXTURE')
      status='api_error' if error else ('invalid_query' if not queries else ('ok' if parsed else 'invalid_answer'))
-     row={'test_id':c['test_id'],'case_id':c['case_id'],'condition':c['condition'],'model':model,'status':status,
+     row={'protocol_config':{'num_ctx':ns.num_ctx,'query_tokens':ns.num_predict_query,'reason_tokens':ns.num_predict_reason,
+                             'seed':ns.seed,'timeout':ns.timeout,'search':settings['search'],
+                             'protocol':settings['protocol'],'cases_sha256':m['cases_sha256'],
+                             'annex_sha256':m['annex_sha256']},
+          'test_id':c['test_id'],'case_id':c['case_id'],'condition':c['condition'],'model':model,'status':status,
        'stage':ns.stage,'reused_pilot':False,'query_component_id_prefix_recovered':bool(queries and qraw and c['test_id']+'-C' in qraw),'settings_sha256':settings_hash,'model_digest':installed[model].get('digest'),
        'timestamp_utc':datetime.now(timezone.utc).isoformat(),'query_raw':qraw,'queries':queries,'retrieved_by_component':hits,
        'search_logs':logs,'answer_raw':araw,'answer_valid':bool(parsed),
