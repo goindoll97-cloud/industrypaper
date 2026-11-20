@@ -183,6 +183,78 @@ def diagnose(gold, run_rows, audit_cases, audit_components):
     return details, cases, relation_rows, failure_rows, pairs
 
 
+
+RELATION_SCOPE = {
+    "DIRECT_SPECIFIC": True,
+    "GROUP_INCLUDED": True,
+    "EXPLICIT_EXCEPTION": False,
+    "NOT_COVERED": False,
+}
+
+
+def audit_consistency(component_rows):
+    """Descriptive only: never reinterpret provisional Gold or repair model answers.
+
+    'INSUFFICIENT_EVIDENCE' and empty/invalid relation output have no
+    deterministic scope implication and are intentionally left unclassified.
+    """
+    import re
+    output = []
+    for c in component_rows:
+        relation = c["predicted_relation"]
+        scope = c["predicted_scope"]
+        expected = RELATION_SCOPE.get(relation)
+        scope_checkable = expected is not None and type(scope) is bool
+        contradictory = int(scope_checkable and scope != expected)
+        entry = c["predicted_designation_id"] or ""
+        returned = json.loads(c["retrieved_designation_ids"])
+        if not entry:
+            grounding = "not_reported"
+        elif entry in returned:
+            grounding = "cited_returned_evidence"
+        elif re.fullmatch(r"\d{2,4}-\d+-\d+", str(entry)):
+            grounding = "legal_id_not_in_returned_evidence"
+        else:
+            grounding = "invalid_designation_id_format"
+        output.append({
+            "model": c["model"], "test_id": c["test_id"], "case_id": c["case_id"],
+            "condition": c["condition"], "group": c["group"],
+            "difficulty": c["difficulty"], "component_id": c["component_id"],
+            "gold_relation": c["gold_relation"], "predicted_relation": relation,
+            "predicted_scope": scope, "implied_scope": expected if expected is not None else "",
+            "relation_scope_checkable": int(scope_checkable),
+            "relation_scope_contradiction": contradictory,
+            "predicted_designation_id": entry, "designation_grounding": grounding,
+            "gold_row_retrieved": c["retrieved_gold_row"],
+            "diagnostic_only_not_rescored": 1,
+        })
+    by_group = defaultdict(list)
+    for row in output:
+        by_group[(row["model"], "ALL", "ALL")].append(row)
+        by_group[(row["model"], row["group"], "ALL")].append(row)
+        by_group[(row["model"], row["group"], row["difficulty"])].append(row)
+    summary = []
+    for (model, group, difficulty), rows in sorted(by_group.items()):
+        n = len(rows)
+        checked = sum(r["relation_scope_checkable"] for r in rows)
+        contrad = sum(r["relation_scope_contradiction"] for r in rows)
+        counts = Counter(r["designation_grounding"] for r in rows)
+        summary.append({
+            "model": model, "group": group, "difficulty": difficulty,
+            "component_n": n, "relation_scope_checkable_n": checked,
+            "relation_scope_contradiction_n": contrad,
+            "relation_scope_contradiction_pct_checked": round(100 * contrad / checked, 2) if checked else "",
+            "cited_returned_evidence_n": counts["cited_returned_evidence"],
+            "legal_id_not_in_returned_evidence_n": counts["legal_id_not_in_returned_evidence"],
+            "invalid_designation_id_format_n": counts["invalid_designation_id_format"],
+            "designation_id_not_reported_n": counts["not_reported"],
+            "predicted_not_covered_n": sum(r["predicted_relation"] == "NOT_COVERED" for r in rows),
+            "diagnostic_only_not_rescored": 1,
+        })
+    return output, summary
+
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="원본 LLM 응답으로 오류 원인을 추적하는 로컬 전용 진단")
     parser.add_argument("--results-dir", default="results_v4_1")
@@ -202,6 +274,7 @@ def main(argv=None):
     audit_cases, audit_components, _, runs = inspect_run(folder, gold)
     raws = {model: load(folder / (model.replace(":", "_") + "__main.jsonl")) for model in MODELS}
     detailed, cases, relations, failures, pairs = diagnose(gold, raws, audit_cases, audit_components)
+    consistency_components, consistency_summary = audit_consistency(detailed)
     queue = []
     for d in detailed:
         reasons = []
@@ -226,11 +299,18 @@ def main(argv=None):
         ("expert_review_queue.csv", queue),
     ):
         _csv(out / name, data)
+    consistency_dir = out / "consistency_audit"
+    consistency_dir.mkdir(parents=True, exist_ok=True)
+    _csv(consistency_dir / "component_consistency.csv", consistency_components)
+    _csv(consistency_dir / "consistency_summary.csv", consistency_summary)
     metadata = {
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "gold_sha256": gold_sha, "run_files": runs,
         "case_rows": len(cases), "component_rows": len(detailed),
         "review_queue_rows": len(queue),
+        "consistency_component_rows": len(consistency_components),
+        "consistency_definition": "Predicted relation-scope contradictions; INSF_EVIDENCE is not logically classified",
+        "grounding_definition": "Whether predicted designation ID appeared in the component returned evidence; NOT an independent truth judgement",
         "strict_retrieval": "Only exact Gold source_excel_row is counted as a retrieval success",
         "failure_attribution": "First failure is a diagnostic ordering; all_failures is multivariate, not causal",
         "alternative_entry_rule": "Same designation but different Gold row is NOT credited automatically",
