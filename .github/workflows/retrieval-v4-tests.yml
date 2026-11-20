@@ -6,11 +6,13 @@ on:
       - "llm_capability_study/retrieval_v4/**"
       - "llm_capability_study/make_paper_report.py"
       - ".github/workflows/retrieval-v4-tests.yml"
+      - ".gitattributes"
   pull_request:
     paths:
       - "llm_capability_study/retrieval_v4/**"
       - "llm_capability_study/make_paper_report.py"
       - ".github/workflows/retrieval-v4-tests.yml"
+      - ".gitattributes"
 
 permissions:
   contents: read
@@ -30,5 +32,26 @@ jobs:
         run: |
           python -m py_compile ../make_paper_report.py
           python ../make_paper_report.py --help
+      - name: Check source-file SHA and safe Windows CRLF recovery
+        run: |
+          python preflight.py
+          python - <<'PY'
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          target = Path('data/pilot_12_ids.json')
+          original = target.read_bytes()
+          assert b'\r\n' not in original
+          target.write_bytes(original.replace(b'\n', b'\r\n'))
+          blocked = subprocess.run([sys.executable, 'preflight.py'], capture_output=True, text=True)
+          assert blocked.returncode != 0
+          assert 'CRLF' in blocked.stdout + blocked.stderr
+          assert target.read_bytes() != original
+          fixed = subprocess.run([sys.executable, 'preflight.py', '--fix-windows-eol'], capture_output=True, text=True)
+          assert fixed.returncode == 0, fixed.stdout + fixed.stderr
+          assert target.read_bytes() == original
+          print('PASS: CRLF-only data safely recovered and SHA verified')
+          PY
       - name: Test Gold-safe parsing, staged scoring and raw diagnosis
         run: python -m unittest discover -s tests -p "test_*.py" -v
