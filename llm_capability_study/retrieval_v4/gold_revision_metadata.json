@@ -1,0 +1,13 @@
+{
+  "revision_id": "2026-11-20-provisional-gold-revision-01",
+  "source_workbook_sha256": "2ba197d9c96960f06cf202a540e460ef4f88c35b6516c065b5d9702b6074e643",
+  "revised_gold_sha256": "ed817e989ec828c767fb09d39d9d912030a661b82b7b054250c8146167055c50",
+  "previous_local_gold_sha256": "1685a6d3fdd3b91c7c9270befe8c59a7a648d4037383328b26518eabb20233f1",
+  "total_scenarios": 30,
+  "total_questions": 60,
+  "modified_scenarios": 1,
+  "modified_question_records": 2,
+  "review_status": "CURATED_PROVISIONAL",
+  "independent_expert_review_completed": false,
+  "note": "Only provenance hashes and counts are public. Source Gold content is private and must not be committed."
+}
