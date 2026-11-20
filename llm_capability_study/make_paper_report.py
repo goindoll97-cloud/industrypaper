@@ -19,7 +19,7 @@ ENGINE_DIR = STUDY_DIR / "retrieval_v4"
 sys.path.insert(0, str(ENGINE_DIR))
 
 from gold_integrity import expected_gold_sha  # noqa: E402
-from run_retrieval import DATA, MODELS, load  # noqa: E402
+from run_retrieval import DATA, MODELS, ADDITIONAL_MODELS, load  # noqa: E402
 from score_audit_v4 import inspect_run  # noqa: E402
 from diagnose_raw_failures import diagnose, audit_consistency  # noqa: E402
 
@@ -34,6 +34,7 @@ LABELS = {
     "qwen2.5:3b": "Qwen2.5 3B",
     "qwen3:4b-instruct": "Qwen3 4B",
     "qwen3.5:4b": "Qwen3.5 4B",
+    "qwen3.5:9b": "Qwen3.5 9B (추가)",
 }
 GROUP_LABELS = {
     "PARENT_AND_SALTS": "모체 및 염류",
@@ -60,8 +61,9 @@ def table(headers, rows):
     ])
 
 
-def render(cases, components, consistency, run_info, gold_sha):
+def render(cases, components, consistency, run_info, gold_sha, models=None):
     """Pure rendering function; independent of local file paths."""
+    models = MODELS if models is None else models
     total_cases = len(cases)
     total_components = len(components)
     lines = [
@@ -77,8 +79,11 @@ def render(cases, components, consistency, run_info, gold_sha):
         "## 1. 1차 성능지표",
         "",
     ]
+    if len(models) > len(MODELS):
+        lines.append("**추가 비교:** 9B 모델은 같은 30개 사례에 추후 평가한 대조군입니다. 독립 외부 검증은 아니며 모델 크기 외의 차이도 존재합니다.")
+        lines.append("")
     rows = []
-    for model in MODELS:
+    for model in models:
         selected = [r for r in cases if r["model"] == model]
         n = len(selected)
         rows.append([
@@ -105,23 +110,23 @@ def render(cases, components, consistency, run_info, gold_sha):
     by_group = []
     for group in GROUP_LABELS:
         row = [GROUP_LABELS[group]]
-        for model in MODELS:
+        for model in models:
             selected = [r for r in cases if r["model"] == model and r["group"] == group]
             row.append(proportion(count(selected, "strict_end_to_end"), len(selected)))
         by_group.append(row)
-    lines.extend([table(["분류", *[LABELS[m] for m in MODELS]], by_group), "",
+    lines.extend([table(["분류", *[LABELS[m] for m in models]], by_group), "",
                   "## 3. 난이도별 End-to-end 성능", ""])
     by_diff = []
     for difficulty in ("EASY", "HARD"):
         row = [difficulty]
-        for model in MODELS:
+        for model in models:
             selected = [r for r in cases if r["model"] == model and r["difficulty"] == difficulty]
             row.append(proportion(count(selected, "strict_end_to_end"), len(selected)))
         by_diff.append(row)
-    lines.extend([table(["난이도", *[LABELS[m] for m in MODELS]], by_diff), "",
+    lines.extend([table(["난이도", *[LABELS[m] for m in models]], by_diff), "",
                   "## 4. 응답 일관성 (보조 진단)", ""])
     rows = []
-    for model in MODELS:
+    for model in models:
         selected = next(r for r in consistency if r["model"] == model and
                         r["group"] == "ALL" and r["difficulty"] == "ALL")
         rows.append([
@@ -166,7 +171,7 @@ def render(cases, components, consistency, run_info, gold_sha):
         "동결 실험일: 2026-11-20; 결과는 고정 Gold·settings hash와 원본 JSONL에서 계산",
         "",
     ])
-    for model in MODELS:
+    for model in models:
         meta = run_info[model]
         lines.append(f"- {LABELS[model]}: settings SHA256 \`{meta['settings_sha256']}\`; "
                      f"JSONL SHA256 \`{meta['file_sha256']}\`")
@@ -178,6 +183,8 @@ def main():
     parser = argparse.ArgumentParser(description="기존 3개 JSONL만으로 논문용 결과표 1개 생성")
     parser.add_argument("--results-dir", default="results_v4_1",
                         help="retrieval_v4 폴더 안의 원본 결과 디렉터리")
+    parser.add_argument("--strong-results-dir", default=None,
+                        help="선택: 같은 v4.1 조건으로 추가 실행한 Qwen3.5 9B 별도 폴더")
     ns = parser.parse_args()
     folder = ENGINE_DIR / ns.results_dir
     gold_path = ENGINE_DIR / "private" / "gold_60.jsonl"
@@ -202,7 +209,43 @@ def main():
     runs = {m: load(folder / (m.replace(":", "_") + "__main.jsonl")) for m in MODELS}
     details, _, _, _, _ = diagnose(gold, runs, cases, components)
     _, consistency = audit_consistency(details)
-    report = render(cases, components, consistency, run_info, gold_sha)
+    selected_models = list(MODELS)
+    if ns.strong_results_dir is not None:
+        strong_folder = ENGINE_DIR / ns.strong_results_dir
+        if strong_folder.resolve() == folder.resolve():
+            parser.error("추가 모델은 기존 baseline 결과 폴더와 반드시 분리하세요")
+        if not strong_folder.is_dir():
+            parser.error(f"추가 모델 결과 폴더가 없습니다: {strong_folder}")
+        stronger = ADDITIONAL_MODELS[0]
+        new_cases, new_components, _, new_meta = inspect_run(strong_folder, gold, models=[stronger])
+        raw_new = load(strong_folder / (stronger.replace(":", "_") + "__main.jsonl"))
+        expected_ids = {g["test_id"] for g in gold}
+        if (len(raw_new) != 60 or {r["test_id"] for r in raw_new} != expected_ids
+                or len(new_cases) != 60 or len(new_components) != 90
+                or new_meta[stronger]["duplicates"] != 0):
+            parser.error("추가 모델은 동일한 60문항·90성분을 모두 실행해야 비교할 수 있습니다")
+        expected_config = {
+            "num_ctx": 4096, "query_tokens": 384, "reason_tokens": 900,
+            "seed": 20261120, "timeout": 480,
+            "search": "lexical_rank_fusion_v2_cas",
+            "protocol": "v4_1_three_groups_format_recovery",
+            "cases_sha256": manifest["cases_sha256"],
+            "annex_sha256": manifest["annex_sha256"],
+        }
+        if any(r.get("protocol_config") != expected_config for r in raw_new):
+            parser.error("추가 모델의 컨텍스트·토큰·검색·시드·타임아웃이 기존 v4.1과 다릅니다")
+        if any(r.get("model") != stronger or not r.get("model_digest") for r in raw_new):
+            parser.error("추가 모델 태그와 digest 기록을 확인하세요")
+        new_details, _, _, _, _ = diagnose(
+            gold, {stronger: raw_new}, new_cases, new_components, models=[stronger])
+        _, new_consistency = audit_consistency(new_details)
+        cases.extend(new_cases)
+        components.extend(new_components)
+        consistency.extend(new_consistency)
+        run_info.update(new_meta)
+        selected_models.append(stronger)
+    report = render(cases, components, consistency, run_info, gold_sha,
+                    models=selected_models)
     target = folder / "PAPER_RESULTS_v4_1.md"
     if target.exists() and target.read_text(encoding="utf-8") != report:
         print("주의: 기존 논문용 보고서를 덮어씁니다 (같은 고정 Gold·실험 설정)")
