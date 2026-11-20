@@ -106,6 +106,31 @@ class StagedScoreTests(unittest.TestCase):
                 self.assertEqual(all_summary["query_valid_pct_observed"], 100)
                 self.assertEqual(runs[model]["duplicates"], 0)
 
+
+    def test_paper_report_renders_without_changing_run_files(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+        from make_paper_report import render
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp)
+            gold = self.create_fixture(dest)
+            cases, components, _, runs = inspect_run(dest, gold)
+            before = {m: runs[m]["file_sha256"] for m in MODELS}
+            consistency = [{
+                "model": m, "group": "ALL", "difficulty": "ALL",
+                "relation_scope_contradiction_n": 0,
+                "relation_scope_checkable_n": 3,
+                "cited_returned_evidence_n": 2, "component_n": 3,
+                "invalid_designation_id_format_n": 0,
+                "designation_id_not_reported_n": 0,
+            } for m in MODELS]
+            report = render(cases, components, consistency, runs, "a" * 64)
+            self.assertIn("논문용 결과표", report)
+            self.assertIn("엄격한 완전정답", report)
+            self.assertIn("Qwen3.5 4B", report)
+            self.assertIn("End-to-end", report)
+            after = inspect_run(dest, gold)[3]
+            self.assertEqual(before, {m: after[m]["file_sha256"] for m in MODELS})
+
     def test_mixed_settings_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp)
