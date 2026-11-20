@@ -163,7 +163,7 @@ def main(argv=None):
     if len(gold) != 60 or len({g["test_id"] for g in gold}) != 60:
         p.error("Gold 60문항 검증 실패")
     cases, components, summary, runs = inspect_run(results_dir, gold)
-    dest = results_dir / "scoring_audit"
+    dest = results_dir / "scoring_audit" / ("gold_" + gold_sha[:12])
     dest.mkdir(parents=True, exist_ok=True)
     write_csv(dest / "audit_cases.csv", cases)
     write_csv(dest / "audit_components.csv", components)
