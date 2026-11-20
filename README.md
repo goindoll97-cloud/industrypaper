@@ -1,14 +1,13 @@
-# 인체등유해성물질 2026-5호 고시 기반 LLM 실험
+# 2026-5호 화학물질 지정고시 기반 소형 LLM 연구
 
-이 저장소의 **현재 진행 중인 논문 실험은 아래 한 폴더에서 관리합니다.**
+## 논문 작업은 아래 페이지 하나에서 시작하세요.
 
-**[Retrieval v4 / v4.1 실험 안내](llm_capability_study/retrieval_v4/README_KO.md)** — 검증셋, 비공개 Gold 로컬 설치, 고시 원본, 실행·채점 절차
+**[논문 방법론·현재 결과·실행코드 통합 안내](llm_capability_study/README.md)**
 
-이전 연구 자료는 다음 보관 폴더에 분리했습니다.
+- 논문용 결과표 생성: `llm_capability_study/make_paper_report.py`
+- 핵심 실험 코드: `llm_capability_study/retrieval_v4/run_retrieval.py`
+- 정답 채점: `llm_capability_study/retrieval_v4/score_results.py`
 
-- `archive/previous_claude_experiment/`: 과거 Claude/Hybrid 실험 코드 및 결과
-- `archive/previous_29_target_dataset_design/`: 29개 규제항목 기반으로 수행하던 후보 수집·검토·검증셋 구축 코드와 자료
+나머지는 재현성을 위한 보조 코드와 이전 버전입니다. 실험 자료를 지우거나 새 실험을 수행할 필요는 없습니다.
 
-두 보관 폴더의 코드를 현재 논문 실험에 그대로 사용하지 않습니다.
-
-**주의:** 공개 저장소에는 시험 문항·공식 고시 검색 데이터·실험 코드만 저장합니다. Gold 정답지는 로컬 `private/`에 보관하고 GitHub에 공개하지 않습니다. 공개된 해시 및 변환 코드로 Gold 개정 이력을 검증할 수 있습니다.
+**데이터 보호:** Gold 정답지(`private/`), 모델 원본 응답(`results_v4_1/`)은 로컬에만 보관합니다. 공개 저장소에 정답지 원문이나 원본 응답을 업로드하지 마세요. Gold는 아직 독립 법령 전문가 검증 전 잠정판정입니다.
