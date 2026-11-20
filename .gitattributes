@@ -1,0 +1,6 @@
+# Experimental source files are hashed as UTF-8 with LF line endings.
+# Force identical working tree bytes on Windows, macOS, and Linux.
+llm_capability_study/retrieval_v4/data/official_annex_2026_5_full.csv text eol=lf
+llm_capability_study/retrieval_v4/data/cases_60.jsonl text eol=lf
+llm_capability_study/retrieval_v4/data/pilot_12_ids.json text eol=lf
+llm_capability_study/retrieval_v4/data/manifest.json text eol=lf
