@@ -1,5 +1,30 @@
 # Retrieval v4 — 3개 평가분류 × 각 10사례 × 난이도 5:5
 
+## 원본 응답 오류 추적: 관계 유형·지정번호·혼합물 예외
+
+**v4.1을 다시 실행하지 않고**, 기존 3개 모델의 `__main.jsonl` 원본과 로컬 비공개 Gold를 비교합니다. 원본 JSONL과 기존 채점 CSV는 수정하지 않습니다.
+
+~~~powershell
+cd F:\framework_chemical_regul_paper
+git pull origin main
+cd .\llm_capability_study\retrieval_v4
+python .\diagnose_raw_failures.py --results-dir results_v4_1
+~~~
+
+분석 파일은 `results_v4_1/scoring_audit/gold_<SHA256 앞 12자리>/error_diagnosis/`에 저장됩니다.
+
+- `component_discrepancies.csv`: 성분별 Gold/모델 예측의 관계 유형·지정범위·지정번호·소번호와 검색된 고시 행 대조
+- `case_failure_taxonomy.csv`: 문항별 검색·출력·판정 실패 원인을 별개 플래그로 제시
+- `relation_confusion.csv`: 모델·유형·난이도별 Gold 관계 유형과 모델 관계 유형의 혼동행렬
+- `first_failure_counts.csv`: 순차적인 첫 실패 단계별 건수
+- `paired_AB_failure_comparison.csv`: 동일 사례의 A/B 실패 단계 및 엄격한 성공 차이
+- `expert_review_queue.csv`: 같은 지정번호의 다른 고시 행, 관계 유형·지정범위·근거 불일치의 독립 검토 대상
+- `diagnosis_manifest.json`: 실험 결과 원본 파일 및 Gold 해시 등 재현성 메타데이터
+
+**주의:** `first_failure`는 진단용 판별 순서이지, 실패 원인의 인과적 증명이 아닙니다. 한 문항에 여러 오류가 공존하면 `all_failures`에 모두 기록됩니다. Gold는 잠정판정이며 전문가 검토 파일의 후보 조항을 자동 정답으로 채택하지 않습니다. **기존 점수를 높이기 위해 Gold·프롬프트·검색 K를 사후에 변경하지 않습니다.** 새 프롬프트/검색 방법을 검증하려면 프로토콜 버전을 올리고 새 실험을 분리해야 합니다.
+
+---
+
 ## 본실험 추가 진단: 점수 재정의 없이 단계별 성능 구분
 
 기존 `score_results.py`의 네 채점 CSV와 실행 JSONL은 그대로 보존합니다. 신규 진단은 별도 폴더의 파일로만 출력됩니다.
