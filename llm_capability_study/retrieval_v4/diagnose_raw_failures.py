@@ -212,7 +212,7 @@ def audit_consistency(component_rows):
             grounding = "not_reported"
         elif entry in returned:
             grounding = "cited_returned_evidence"
-        elif re.fullmatch(r"\d{2,4}-\d+-\d+", str(entry)):
+        elif re.fullmatch(r"\d{2,4}-1-\d+", str(entry)):
             grounding = "legal_id_not_in_returned_evidence"
         else:
             grounding = "invalid_designation_id_format"
@@ -309,7 +309,7 @@ def main(argv=None):
         "case_rows": len(cases), "component_rows": len(detailed),
         "review_queue_rows": len(queue),
         "consistency_component_rows": len(consistency_components),
-        "consistency_definition": "Predicted relation-scope contradictions; INSF_EVIDENCE is not logically classified",
+        "consistency_definition": "Predicted relation-scope contradictions; INSUFFICIENT_EVIDENCE is not logically classified",
         "grounding_definition": "Whether predicted designation ID appeared in the component returned evidence; NOT an independent truth judgement",
         "strict_retrieval": "Only exact Gold source_excel_row is counted as a retrieval success",
         "failure_attribution": "First failure is a diagnostic ordering; all_failures is multivariate, not causal",
