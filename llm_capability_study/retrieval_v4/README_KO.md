@@ -13,7 +13,7 @@ python .\score_audit_v4.py --results-dir results
 
 필수 입력: `private/gold_60.jsonl`, `private/gold_registry.json`, 그리고 선택한 결과 폴더의 **모델 3개 `__main.jsonl` 원본**. 이미 생성한 CSV 4개만으로는 판정의 세부 필드 오류를 다시 구성할 수 없습니다.
 
-출력 위치: `results_v4_1/scoring_audit/` (또는 `results/scoring_audit/`)
+출력 위치: `results_v4_1/scoring_audit/gold_<해시앞12자리>/` (또는 `results/scoring_audit/gold_<해시앞12자리>/`). Gold가 바뀌면 기존 분석 결과를 덮어쓰지 않습니다.
 
 - `audit_cases.csv`: 문항별 검색어 유효성·JSON 유효성, 각 성분 지정범위 일치, 관계 유형·지정번호·소번호 일치, 혼합물 제3조 판정, 엄격한 완전정답과 End-to-end
 - `audit_components.csv`: 성분별 필드 일치와 Gold 근거 행 검색 여부, 대체 근거 *검토 후보* 탐지
