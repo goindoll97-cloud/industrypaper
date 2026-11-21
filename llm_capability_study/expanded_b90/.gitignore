@@ -1,0 +1,6 @@
+# Never publish candidate identities before review, private Gold, or model responses.
+private/
+results_b90/
+data/cases_90_B.jsonl
+__pycache__/
+*.pyc
