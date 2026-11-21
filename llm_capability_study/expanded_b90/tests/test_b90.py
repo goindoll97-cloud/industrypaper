@@ -265,13 +265,14 @@ class ExpansionTests(unittest.TestCase):
                                encoding="utf-8")
             expected=hashlib.sha256(oldfile.read_bytes()).hexdigest()
             private=temp/"provisional_b90"
+            fixture_annex=p90.annex_rows()
             with patch.object(p90,"V4",new_v4),\
                  patch.object(p90,"PRIVATE",private),\
                  patch.object(p90,"GOLD",private/"gold_90_B_PROVISIONAL.jsonl"),\
                  patch.object(p90,"CASES",private/"cases_90_B_PROVISIONAL.jsonl"),\
                  patch.object(p90,"MANIFEST",private/"provisional_manifest.json"),\
                  patch.object(p90,"REVIEW",private/"gold_90_B_review_queue_PROVISIONAL.csv"),\
-                 patch.object(p90,"annex_rows",return_value=p90.annex_rows()),\
+                 patch.object(p90,"annex_rows",return_value=fixture_annex),\
                  patch("gold_integrity.expected_gold_sha",return_value=expected):
                 p90.build_provisional()
                 cases,gold,meta=p90.assert_provisional(need_gold=True)
