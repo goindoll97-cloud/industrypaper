@@ -9,6 +9,7 @@ from pathlib import Path
 import sys
 
 from prepare_b90 import ROOT, V4, assert_frozen, require
+from prepare_provisional_b90 import assert_provisional
 from run_b90 import ALL_MODELS, RESULTS
 sys.path.insert(0,str(V4))
 from score_audit_v4 import inspect_run
@@ -62,10 +63,10 @@ def paired(cases,field,first="qwen3.5:4b",second="qwen3.5:9b"):
     return (counts[True,True],counts[True,False],counts[False,True],counts[False,False])
 
 
-def verify_runs(locked,cases):
+def verify_runs(locked,cases, results_dir=RESULTS, provisional=False):
     expected_ids={c["test_id"] for c in cases}
     for model in ALL_MODELS:
-        path=RESULTS/(model.replace(":","_")+"__main.jsonl")
+        path=results_dir/(model.replace(":","_")+"__main.jsonl")
         require(path.is_file(),"미완료 모델 결과: "+str(path))
         rows=load(path)
         require(len(rows)==90 and {r["test_id"] for r in rows}==expected_ids,
@@ -79,7 +80,8 @@ def verify_runs(locked,cases):
         config=configs[0]
         require(config.get("cases_sha256")==locked["cases_sha256"] and
                 config.get("annex_sha256")==locked["annex_sha256"] and
-                config.get("protocol")=="b90_v1_B_only_same_v4_1_prompts" and
+                config.get("protocol")==("b90_v1_B_only_PROVISIONAL" if provisional
+                                        else "b90_v1_B_only_same_v4_1_prompts") and
                 config.get("model")==model,
                 f"{model}: 90문항 동결 설정과 원본 JSONL 불일치")
         require(all(r.get("model_digest")==config.get("digest") and
@@ -92,11 +94,13 @@ def verify_runs(locked,cases):
     return True
 
 
-def build_report(scored_cases, comps, consistency, run_info, locked):
+def build_report(scored_cases, comps, consistency, run_info, locked, provisional=False):
     lines=[
         "# 확장 B 조건 90문항의 화학물질 규제 LLM 평가",
         "",
-        "**검증 상태:** 법령 전문가가 확인하여 잠근 Gold를 사용한 90문항 분석. "
+        ("**검증 상태:** 법령 전문가 검증 전 잠정 정답을 사용한 90문항 탐색적 분석. "
+         if provisional else
+         "**검증 상태:** 법령 전문가가 확인하여 잠근 Gold를 사용한 90문항 분석. ")
         "본 연구 범위에 한정되며 현장 규제 준수 판정을 보증하지 않음.",
         "",
         f"입력 90문항 SHA256: \u0060{locked['cases_sha256']}\u0060  ",
@@ -179,20 +183,24 @@ def build_report(scored_cases, comps, consistency, run_info, locked):
 def main(argv=None):
     p=argparse.ArgumentParser(description="90개 B 질문 전체 완료 후 독립 채점")
     p.add_argument("--out-dir",default=None,help="출력 폴더(기본: 결과 JSONL 폴더)")
+    p.add_argument("--provisional",action="store_true",
+                   help="전문가 검증 전 잠정 Gold와 별도 잠정실험 JSONL만 채점")
     args=p.parse_args(argv)
     try:
-        cases,gold,locked=assert_frozen(need_gold=True)
-        verify_runs(locked,cases)
-        scored,comps,_,run_info=inspect_run(RESULTS,gold,models=ALL_MODELS)
+        cases,gold,locked=(assert_provisional(need_gold=True) if args.provisional
+                           else assert_frozen(need_gold=True))
+        active_dir=ROOT/"results_b90_provisional" if args.provisional else RESULTS
+        verify_runs(locked,cases,results_dir=active_dir,provisional=args.provisional)
+        scored,comps,_,run_info=inspect_run(active_dir,gold,models=ALL_MODELS)
         require(len(scored)==360,"4모델 × 90문항 = 360 결과여야 합니다")
         require(len(comps)==sum(len(c["components"]) for c in cases)*4,
                 "성분별 결과 행 수 불일치")
-        raw={m:load(RESULTS/(m.replace(":","_")+"__main.jsonl")) for m in ALL_MODELS}
+        raw={m:load(active_dir/(m.replace(":","_")+"__main.jsonl")) for m in ALL_MODELS}
         details=diagnose(gold,raw,scored,comps,models=ALL_MODELS)[0]
         _,consistency=audit_consistency(details)
     except (ValueError,KeyError,FileNotFoundError) as e:
         p.error(str(e))
-    dest=Path(args.out_dir) if args.out_dir else RESULTS
+    dest=Path(args.out_dir) if args.out_dir else active_dir
     dest.mkdir(parents=True,exist_ok=True)
     write_csv(dest/"B90_case_scores_PRIVATE.csv",scored)
     write_csv(dest/"B90_component_scores_PRIVATE.csv",comps)
@@ -220,10 +228,12 @@ def main(argv=None):
     write_csv(dest/"B90_paired_4B_9B_PRIVATE.csv",pairs)
     write_csv(dest/"B90_component_discrepancies_PRIVATE.csv",details)
     (dest/"B90_REPORT_PRIVATE.md").write_text(
-        build_report(scored,comps,consistency,run_info,locked),
+        build_report(scored,comps,consistency,run_info,locked,provisional=args.provisional),
         encoding="utf-8")
     meta={
         "dataset_sha256":locked["cases_sha256"],
+        "gold_status":locked["review_status"],
+        "independent_expert_review_completed":locked.get("independent_expert_review_completed",False),
         "gold_sha256":locked["gold_sha256"],
         "n_cases_per_model":90,"models":ALL_MODELS,
         "n_components_per_model":len(comps)//len(ALL_MODELS),
@@ -232,7 +242,9 @@ def main(argv=None):
     }
     (dest/"B90_provenance_PRIVATE.json").write_text(
         json.dumps(meta,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print("PASS: 전문가 검증 B 90문항 × 4모델 채점 완료", dest)
+    print("PASS: B 90문항 × 4모델 "+("잠정" if args.provisional else "전문가검증")+" 채점 완료", dest)
+    if args.provisional:
+        print("투고용 확정 수치 아님: 독립 법령·화학물질 정보 검증이 필요합니다")
     print("원본 JSONL, 기존 v4.1 Gold/결과는 모두 보존했습니다")
 
 
