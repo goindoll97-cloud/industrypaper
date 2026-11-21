@@ -224,6 +224,72 @@ class ExpansionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"검증 실패|고시행이 제안서와 다름"):
             p90.derive_new(original,rows,annex)
 
+    def test_end_to_end_provisional_90_b_gold_using_synthetic_old_gold(self):
+        import hashlib
+        import prepare_provisional_b90 as p90
+        with tempfile.TemporaryDirectory() as tmp:
+            temp=Path(tmp)
+            old_b,_=b90.baseline_b()
+            new_v4=temp/"legacy_v4"
+            (new_v4/"private").mkdir(parents=True)
+            # Purely synthetic prior labels; never used for any real benchmark.
+            mock_gold=[]
+            for old in old_b:
+                comps=[]
+                for z in old["components"]:
+                    comps.append({
+                        "component_id":z["component_id"],
+                        "cas":z["cas"],
+                        "source_excel_row":102,
+                        "direct_cas_match":False,
+                        "covered_by_clause":False,
+                        "expected_relation":"EXPLICIT_EXCEPTION",
+                        "relevant_entry_id":"97-1-80",
+                        "relevant_sub_number":None,
+                    })
+                record={
+                    "test_id":old["test_id"],"case_id":old["case_id"],
+                    "condition":"B","group":old["group"],
+                    "difficulty":old["difficulty"],
+                    "component_gold":comps,
+                    "mixture_article3_all_listed":(
+                        False if old["group"]=="MIXTURE" else None),
+                    "review_status":"CURATED_PROVISIONAL",
+                    "independent_expert_review_completed":False,
+                }
+                mock_gold.append(record)
+                mock_gold.append(dict(record,test_id=old["case_id"]+"-A",
+                                     condition="A"))
+            oldfile=new_v4/"private"/"gold_60.jsonl"
+            oldfile.write_text("".join(json.dumps(x)+"\n" for x in mock_gold),
+                               encoding="utf-8")
+            expected=hashlib.sha256(oldfile.read_bytes()).hexdigest()
+            private=temp/"provisional_b90"
+            with patch.object(p90,"V4",new_v4),\
+                 patch.object(p90,"PRIVATE",private),\
+                 patch.object(p90,"GOLD",private/"gold_90_B_PROVISIONAL.jsonl"),\
+                 patch.object(p90,"CASES",private/"cases_90_B_PROVISIONAL.jsonl"),\
+                 patch.object(p90,"MANIFEST",private/"provisional_manifest.json"),\
+                 patch.object(p90,"REVIEW",private/"gold_90_B_review_queue_PROVISIONAL.csv"),\
+                 patch.object(p90,"annex_rows",return_value=p90.annex_rows()),\
+                 patch("gold_integrity.expected_gold_sha",return_value=expected):
+                p90.build_provisional()
+                cases,gold,meta=p90.assert_provisional(need_gold=True)
+                self.assertEqual(len(cases),90)
+                self.assertEqual(len(gold),90)
+                self.assertTrue(all(x["condition"]=="B" for x in gold))
+                self.assertEqual(sum(len(x["component_gold"]) for x in gold),135)
+                self.assertEqual(len(b90.read_csv(p90.REVIEW)),135)
+                self.assertEqual(meta["review_status"],"CURATED_PROVISIONAL")
+                self.assertFalse(meta["independent_expert_review_completed"])
+                self.assertTrue(all(not x["independent_expert_review_completed"]
+                                    for x in gold))
+                with self.assertRaisesRegex(ValueError,"덮어쓰지"):
+                    p90.build_provisional()
+                p90.GOLD.write_text("tampered",encoding="utf-8")
+                with self.assertRaisesRegex(ValueError,"SHA|해시"):
+                    p90.assert_provisional(need_gold=True)
+
     def test_duplicate_structure_blocks_experiment(self):
         old,_=b90.baseline_b()
         mixed=old+[dict(old[0],test_id="S-99-B",case_id="S-99")]
