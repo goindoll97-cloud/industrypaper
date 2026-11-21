@@ -2,6 +2,67 @@
 
 **현재 상태: 신규 60사례의 CAS·영문명·분자식·가상 혼합물 조성까지 채운 후보 1차 초안 작성 완료. 화학물질 정보와 법령 정답은 독립 전문가 검증 전이므로 확정 검증셋은 아닙니다.** 따라서 지금은 90문항 모델 정확도를 제시할 수 없으며, 모든 검증 조건이 충족되기 전에는 모델 실행을 허용하지 않습니다.
 
+## 바로 실험할 수 있는 B 조건 90문항 잠정 정답지 (신규)
+
+**이전 30개의 비공개 잠정 정답지와 공식 2026-5호 고시 별표를 사용해 90문항 답지를 로컬에서 생성하고 바로 4개 모델을 평가할 수 있습니다. A 질문은 입력·답지·결과에 포함하지 않습니다.**
+
+이 경로는 기존 독립 법령 전문가 검증 프로세스와 **명확하게 분리된 예비실험용**입니다. 모든 90문항의 정답을 생성하지만 **정답지·CAS/분자식의 독립 전문가 검증은 완료되지 않았으므로 논문에 확정 정확도로 기재하면 안 됩니다.** 공식 고시 내 정확한 근거 행과 제외 문구를 대조한 *잠정 Gold*입니다.
+
+기존 로컬 파일 `retrieval_v4/private/gold_60.jsonl`이 있어야 합니다. 이 파일은 과거 30사례의 A/B 정답 60개로 구성되어 있으며, 새 프로그램은 **B 정답 30개만** 가져옵니다. SHA256은 기존 로컬 `gold_registry.json`과 검증합니다. 해당 파일이 없으면 과거 Gold 설치 ZIP에서 복원해야 하며, GitHub에는 업로드하지 않습니다.
+
+Windows PowerShell에서 **다음 순서대로 실행하세요.** 기존 빈 `new_cases_review.csv`에 실제 물질 정보를 복사하거나 전문가 확인을 미리 진행할 필요는 없습니다. 신규 60문항은 GitHub에 작성한 후보 초안에서 가져옵니다.
+
+~~~powershell
+cd F:\framework_chemical_regul_paper
+git pull origin main
+cd .\llm_capability_study\expanded_b90
+
+# 1. B 질문만 총 90개 + 기존 B 잠정 정답 30개 + 신규 잠정 정답 60개
+python .\prepare_provisional_b90.py --create
+
+# 2. 질문·답지 수 및 SHA256 재검사
+python .\prepare_provisional_b90.py --check
+
+# 3. 원래와 같은 4개 모델로 B 질문 90개씩 실행
+python .\run_b90.py --provisional --model qwen2.5:3b
+python .\run_b90.py --provisional --model qwen3:4b-instruct
+python .\run_b90.py --provisional --model qwen3.5:4b
+python .\run_b90.py --provisional --model qwen3.5:9b
+
+# 4. 모델별 정확도·유형별 결과·4B 대 9B 같은 문항 비교
+python .\score_b90.py --provisional
+~~~
+
+먼저 입력 구조와 모델 작동을 2문항만 시험할 수도 있습니다. **해당 2문항은 같은 결과 파일에 기록되어 전체 실행 때 건너뜁니다.**
+
+~~~powershell
+python .\run_b90.py --provisional --model qwen3.5:9b --limit 2
+~~~
+
+### 생성되는 비공개 파일
+
+| 위치 | 내용 |
+|---|---|
+| `private/provisional_b90/cases_90_B_PROVISIONAL.jsonl` | **B 질문만 90개**. 기존 B 질문 30개 + 신규 60개 |
+| `private/provisional_b90/gold_90_B_PROVISIONAL.jsonl` | **잠정 답지 90개**, 성분별 고시 근거·CAS·관계 유형·지정번호 포함 |
+| `private/provisional_b90/gold_90_B_review_queue_PROVISIONAL.csv` | 신규 60문항의 90성분에 대한 원본 고시행·CAS 직접 기재·제외 문구 검토표 |
+| `private/provisional_b90/provisional_manifest.json` | 질문·답지·고시·기존 Gold·실험 코드의 SHA256 |
+| `results_b90_provisional/qwen...__main.jsonl` | 4개 모델 각각의 원본 응답, **전문가 검증 실험과 별도 보관** |
+| `results_b90_provisional/B90_REPORT_PRIVATE.md` | 모델별 결과·검색·지정범위·최종 정답·4B와 9B 대응 비교 |
+| `results_b90_provisional/B90_*_PRIVATE.csv` | 논문 보충자료 작성을 위한 문항별·성분별 판정 및 불일치 증거 |
+
+고시 포괄 조항의 **명시적 제외**는 ‘그 조항의 지정범위에서 제외’라는 뜻입니다. 모든 다른 화학물질 법규에서 완전히 규제받지 않는다는 뜻이 아닙니다. 혼합물 판정 또한 고시 제3조의 **모든 성분이 지정되었는지**만 평가합니다.
+
+**실험 상태 구분:** `--provisional` 출력은 `results_b90_provisional/`에만 기록되며, 나중에 독립 전문가 확인을 마친 `--freeze` 경로의 `results_b90/`와 합치지 않습니다. 원본 v4.1 결과·Gold에는 어떠한 변경도 하지 않습니다. 잠정 답지 생성은 같은 파일이 있으면 덮어쓰지 않고 중단합니다.
+
+### 답지 검증 수준
+
+신규 60문항의 90성분은 고시의 **직접 CAS 기재** 또는 **특정 포괄·제외 조항**으로 분류했습니다. 고시 행에 CAS가 직접 기재된 경우에는 직접 지정으로 채점하고, CAS가 직접 없으면 원문 문구에서 테트라플루오로붕산염, 톨루엔디아민 이성질체, 수은화합물, 페로시안염, 염소치환 수가 적은 PCB 등의 포함·제외 관계를 따로 확인합니다. 정답 후보 행 번호와 지정번호를 성분별 검토 CSV에 남깁니다.
+
+단, 기존 30문항은 이전 연구자의 잠정 Gold를 사용하고, 신규 분자식·포괄 지정 우선순위 및 명시적 제외는 아직 법령·화학물질 전문가가 독립 확인하지 않았습니다. **현재 생성되는 정확도는 연구설계 점검·오류 탐색용**입니다. 논문 최종 수치는 90문항을 독립 검증한 뒤 별도의 전문가 검증 실험으로 산출하세요.
+
+---
+
 ## 연구 목적
 
 **“더 좋은 대규모 언어모델(LLM)이 나오면 화학물질 규제의 지정 여부와 그 법적 근거를 정확하게 판정할 수 있는가?”**를 B 조건 질문으로 확대 평가합니다. 같은 4개 모델(Qwen2.5 3B, Qwen3 4B, Qwen3.5 4B, Qwen3.5 9B), 동일 고시 1,451행과 v4.1 검색·판정 절차를 사용하되, **90문항의 후속 연구는 새 실험 버전**으로 보존합니다. 기존 60문항 결과를 90문항 결과와 합쳐 평균을 내지 않습니다.
