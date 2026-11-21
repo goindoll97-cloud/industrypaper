@@ -59,8 +59,9 @@ def source_code_sha():
     """Pin key source and preprocessing code so a later pull cannot silently
     run a different retrieval protocol against the same frozen cases."""
     paths = (V4 / "run_retrieval.py", V4 / "search_legal_db.py",
-             V4 / "build_legal_db.py", ROOT / "prepare_b90.py",
-             ROOT / "run_b90.py")
+             V4 / "build_legal_db.py", V4 / "score_audit_v4.py",
+             V4 / "diagnose_raw_failures.py", ROOT / "prepare_b90.py",
+             ROOT / "run_b90.py", ROOT / "score_b90.py")
     return {str(p.relative_to(ROOT.parent)): sha(p) for p in paths}
 
 
