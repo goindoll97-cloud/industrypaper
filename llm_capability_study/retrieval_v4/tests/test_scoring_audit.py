@@ -269,7 +269,7 @@ class StagedScoreTests(unittest.TestCase):
             by_id={r["test_id"]: r for r in miss}
             self.assertEqual(by_id["M-01-A"]["entry_wrong"],"1")
             self.assertEqual(by_id["S-01-A"]["gold_row_not_found"],"1")
-            self.assertEqual(cases[1]["only_4b_strict"],"1")
+            self.assertEqual({r["test_id"]:r for r in cases}["M-01-A"]["only_4b_strict"],"1")
             self.assertEqual(base_path.read_bytes(),origin)
             metadata=json.loads(files[0].read_text(encoding="utf-8"))
             self.assertEqual(metadata["n_component_rows"],12)
