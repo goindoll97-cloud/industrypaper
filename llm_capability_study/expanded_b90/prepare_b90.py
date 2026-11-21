@@ -225,6 +225,16 @@ def build_cases(csv_path):
     with target.open("w",encoding="utf-8",newline="\n") as f:
         for case in cases:
             f.write(json.dumps(case,ensure_ascii=False,sort_keys=True)+"\n")
+    # Bind the reviewed candidate sheet to the *exact* generated prompt dataset.
+    # The two can no longer drift independently between build and expert freeze.
+    binding=PRIVATE/"candidate_build_manifest.json"
+    require(not binding.exists(),"기존 후보·문항 연결 기록이 있습니다. 덮어쓰지 않습니다")
+    PRIVATE.mkdir(exist_ok=True)
+    binding.write_text(json.dumps({
+        "candidate_review_sha256":sha(csv_path),
+        "cases_sha256":sha(target),
+        "legacy_cases_sha256":m["cases_sha256"],
+    },ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print("검증 통과: 30개 기존 B + 60개 신규 B = 90개. 작성:",target)
     print("입력 SHA256:", sha(target))
     return target
@@ -273,6 +283,12 @@ def freeze():
     require(candidates_path.exists() and review_path.exists(),"90문항/Gold 검토표 준비 필요")
     cases=load(candidates_path)
     validate_cases(cases)
+    binding_path=PRIVATE/"candidate_build_manifest.json"
+    require(binding_path.exists(),"검증 후보표와 생성 질문의 SHA 연결기록 누락")
+    binding=json.loads(binding_path.read_text(encoding="utf-8"))
+    require(binding["candidate_review_sha256"]==sha(PRIVATE/"new_cases_review.csv") and
+            binding["cases_sha256"]==sha(candidates_path),
+            "후보표 작성 이후 입력이 변경되었습니다. 새 실험 버전으로 재구축하세요")
     rows=read_csv(review_path)
     expected={(c["test_id"],x["component_id"]):(c,x) for c in cases for x in c["components"]}
     require(len(rows)==len(expected),"Gold 검토 성분 행 수 불일치")
