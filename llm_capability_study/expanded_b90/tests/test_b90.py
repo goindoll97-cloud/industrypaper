@@ -103,6 +103,41 @@ class ExpansionTests(unittest.TestCase):
         self.assertFalse(b90.valid_cas("65-30-4"))
         self.assertFalse(b90.valid_cas("fake-cas"))
 
+    def test_paired_scoring_uses_same_90_questions_not_independent_totals(self):
+        from score_b90 import ALL_MODELS, METRICS, paired, build_report
+        cases=[]
+        comps=[]
+        cons=[]
+        info={}
+        for model in ALL_MODELS:
+            info[model]={"file_sha256":"a"*64, "settings_sha256":"b"*64}
+            cons.append({
+                "model":model,"group":"ALL","difficulty":"ALL",
+                "relation_scope_contradiction_n":0,
+                "relation_scope_checkable_n":90})
+            for i in range(90):
+                rec={"model":model,"test_id":f"C-{i+1:02d}-B",
+                     "case_id":f"C-{i+1:02d}","group":"COMPOUND_CLASS",
+                     "difficulty":"EASY" if i%2 else "HARD"}
+                for _,field in METRICS:
+                    rec[field]=0
+                if model=="qwen3.5:4b":
+                    rec["strict_end_to_end"]=int(i<15)
+                elif model=="qwen3.5:9b":
+                    rec["strict_end_to_end"]=int(i<10 or 20<=i<25)
+                cases.append(rec)
+                comps.append({"model":model,"test_id":rec["test_id"],
+                    "component_id":"C1",**{key:0 for key in
+                     ("strict_gold_row_hit","scope_correct","relation_correct",
+                      "direct_cas_correct","entry_correct","sub_number_correct",
+                      "component_exact")}})
+        self.assertEqual(paired(cases,"strict_end_to_end"),(10,5,5,70))
+        report=build_report(cases,comps,cons,info,
+                            {"cases_sha256":"1"*64, "gold_sha256":"2"*64})
+        self.assertIn("Qwen3.5 9B",report)
+        self.assertIn("15/90",report)
+        self.assertIn("10",report)
+
     def test_duplicate_structure_blocks_experiment(self):
         old,_=b90.baseline_b()
         mixed=old+[dict(old[0],test_id="S-99-B",case_id="S-99")]
