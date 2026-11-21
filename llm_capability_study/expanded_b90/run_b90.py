@@ -10,6 +10,7 @@ import sys
 import time
 
 from prepare_b90 import ROOT, V4, assert_frozen, require
+from prepare_provisional_b90 import assert_provisional
 sys.path.insert(0, str(V4))
 from run_retrieval import (MODELS, ADDITIONAL_MODELS, DB, build, load,
                            request, qmessages, amessages, infer,
@@ -22,6 +23,8 @@ RESULTS = ROOT / "results_b90"
 
 def main(argv=None):
     p = argparse.ArgumentParser(description="B 90문항(기존 30+신규 60) 독립 본실험")
+    p.add_argument("--provisional",action="store_true",
+                   help="별도 임시 검증셋으로 90 B문항 실행 (법령 전문가 검증 전)")
     p.add_argument("--model",choices=["all",*ALL_MODELS],default="all")
     p.add_argument("--group",choices=["all","PARENT_AND_SALTS",
                        "COMPOUND_CLASS","MIXTURE"],default="all")
@@ -37,7 +40,8 @@ def main(argv=None):
     if args.limit is not None and args.limit < 1:
         p.error("--limit는 1 이상이어야 합니다")
     try:
-        cases,locked=assert_frozen(need_gold=False)
+        cases,locked=(assert_provisional(need_gold=False) if args.provisional
+                      else assert_frozen(need_gold=False))
     except (ValueError,KeyError,FileNotFoundError) as exc:
         p.error(str(exc))
     selected=[c for c in cases if args.group=="all" or c["group"]==args.group]
@@ -59,9 +63,10 @@ def main(argv=None):
     with sqlite3.connect(DB) as connection:
         require(connection.execute("SELECT count(*) FROM annex").fetchone()[0]==1451,
                 "공식 고시 DB 1,451행 불일치")
-    RESULTS.mkdir(parents=True,exist_ok=True)
+    result_dir=ROOT/"results_b90_provisional" if args.provisional else RESULTS
+    result_dir.mkdir(parents=True,exist_ok=True)
     for model in models:
-        dest=RESULTS/(model.replace(":","_")+"__main.jsonl")
+        dest=result_dir/(model.replace(":","_")+"__main.jsonl")
         settings={
             "model":model,"digest":installed[model]["digest"],
             "num_ctx":args.num_ctx,"query_tokens":args.num_predict_query,
@@ -69,7 +74,8 @@ def main(argv=None):
             "timeout":args.timeout,"cases_sha256":locked["cases_sha256"],
             "annex_sha256":locked["annex_sha256"],
             "search":"lexical_rank_fusion_v2_cas",
-            "protocol":"b90_v1_B_only_same_v4_1_prompts",
+            "protocol":("b90_v1_B_only_PROVISIONAL"
+                        if args.provisional else "b90_v1_B_only_same_v4_1_prompts"),
         }
         shash=hashlib.sha256(json.dumps(settings,sort_keys=True).encode()).hexdigest()
         prior=load(dest)
@@ -151,7 +157,10 @@ def main(argv=None):
                         {"model":model,"prompt":"","keep_alive":0},timeout=50)
             except Exception:
                 pass
-    print("완료: python score_b90.py 로 본실험 90문항 채점")
+    print("완료: python score_b90.py "+("--provisional" if args.provisional else "")+
+          " 로 90문항 채점")
+    if args.provisional:
+        print("주의: 전체 90문항은 B 조건만 사용했고, 정답은 법령 전문가 검증 전 잠정판정입니다")
 
 
 if __name__=="__main__":
