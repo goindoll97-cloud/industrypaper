@@ -220,6 +220,61 @@ class StagedScoreTests(unittest.TestCase):
                     case_small + case_large[:-1], comp_small + comp_large,
                     detail_small + detail_large, consistency_rows)
 
+    def test_private_supplementary_records_and_source_provenance(self):
+        from run_retrieval import ADDITIONAL_MODELS
+        from diagnose_raw_failures import diagnose, audit_consistency
+        import csv
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+        from make_paper_report import export_local_supplementary
+        with tempfile.TemporaryDirectory() as tmp:
+            folder=Path(tmp)
+            gold=self.create_fixture(folder)
+            strong=ADDITIONAL_MODELS[0]
+            base_path=folder/(MODELS[-1].replace(":","_")+"__main.jsonl")
+            origin=base_path.read_bytes()
+            strong_rows=[json.loads(x) for x in origin.decode("utf-8").splitlines()]
+            for row in strong_rows:
+                row["model"]=strong
+                row["settings_sha256"]="synthetic9B"
+            # Correct scope, wrong designation: one clear scope-correct final failure.
+            a=json.loads(strong_rows[1]["answer_raw"])
+            a["components"][0]["relevant_entry_id"]="97-1-999"
+            strong_rows[1]["answer_raw"]=json.dumps(a)
+            new_file=folder/(strong.replace(":","_")+"__main.jsonl")
+            new_file.write_text("".join(json.dumps(x)+"\n" for x in strong_rows),
+                                encoding="utf-8")
+            baseline_cases,baseline_comp,_,baseline_meta=inspect_run(folder,gold)
+            extra_cases,extra_comp,_,extra_meta=inspect_run(folder,gold,models=[strong])
+            rows={m:[json.loads(x) for x in
+                    (folder/(m.replace(":","_")+"__main.jsonl")).read_text(
+                        encoding="utf-8").splitlines()] for m in MODELS}
+            diag=diagnose(gold,rows,baseline_cases,baseline_comp,models=MODELS)[0]
+            diag+=diagnose(gold,{strong:strong_rows},extra_cases,extra_comp,
+                           models=[strong])[0]
+            cons=audit_consistency(diag)[0]
+            files=export_local_supplementary(
+                folder/"supplementary_PRIVATE",baseline_cases+extra_cases,
+                baseline_comp+extra_comp,diag,cons,{**baseline_meta,**extra_meta},
+                "a"*64,[*MODELS,strong])
+            self.assertEqual(len(files),4)
+            with files[1].open(encoding="utf-8-sig",newline="") as fp:
+                cases=list(csv.DictReader(fp))
+            with files[2].open(encoding="utf-8-sig",newline="") as fp:
+                comps=list(csv.DictReader(fp))
+            with files[3].open(encoding="utf-8-sig",newline="") as fp:
+                miss=list(csv.DictReader(fp))
+            self.assertEqual(len(cases),2)
+            self.assertEqual(len(comps),12)
+            self.assertEqual(len(miss),2)  # synthetic salt has correct scope but missed Gold row
+            by_id={r["test_id"]: r for r in miss}
+            self.assertEqual(by_id["M-01-A"]["entry_wrong"],"1")
+            self.assertEqual(by_id["S-01-A"]["gold_row_not_found"],"1")
+            self.assertEqual({r["test_id"]:r for r in cases}["M-01-A"]["only_4b_strict"],"1")
+            self.assertEqual(base_path.read_bytes(),origin)
+            metadata=json.loads(files[0].read_text(encoding="utf-8"))
+            self.assertEqual(metadata["n_component_rows"],12)
+            self.assertTrue(metadata["privacy"].startswith("PRIVATE"))
+
     def test_mixed_settings_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp)

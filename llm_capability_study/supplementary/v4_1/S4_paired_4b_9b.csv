@@ -1,0 +1,4 @@
+metric,both_success,only_4b_success,only_9b_success,both_fail
+정답 근거 행 전체 검색,37,3,8,12
+지정범위·혼합물 규정 판단,32,6,16,6
+최종 완전정답 및 근거 검색,13,4,3,40
