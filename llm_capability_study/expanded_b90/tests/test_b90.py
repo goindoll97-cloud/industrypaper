@@ -182,6 +182,48 @@ class ExpansionTests(unittest.TestCase):
         self.assertEqual(composition("PbO"),composition("OPb"))
         self.assertIsNone(composition("C6H5+"))
 
+    def test_60_annex_based_new_b_gold_and_explicit_exclusions(self):
+        import prepare_provisional_b90 as p90
+        data=b90.load(HERE/"proposals"/"PROPOSED_90_B_cases.jsonl")
+        annex,legacy=p90.annex_rows()
+        candidates=b90.read_csv(HERE/"proposals"/"PROPOSED_new_60_component_review.csv")
+        new,flags=p90.derive_new(data,candidates,annex)
+        self.assertEqual(len(new),60)
+        self.assertEqual(len(flags),90)
+        self.assertTrue(all(x["test_id"].endswith("-B") for x in new))
+        for row in new:
+            self.assertEqual(row["review_status"],"CURATED_PROVISIONAL")
+            self.assertFalse(row["independent_expert_review_completed"])
+            for comp in row["component_gold"]:
+                raw=annex[comp["source_excel_row"]]
+                self.assertEqual(comp["relevant_entry_id"],raw["parent_designation_id"])
+                self.assertEqual(comp["direct_cas_match"],
+                    p90.exact_cas(raw,comp["cas"]))
+                self.assertEqual(comp["covered_by_clause"],
+                    comp["expected_relation"]!="EXPLICIT_EXCEPTION")
+        by_test={c["test_id"]:c for c in new}
+        def val(case_id):
+            return by_test[case_id]["component_gold"][0]
+        self.assertEqual(val("S-28-B")["expected_relation"],"GROUP_INCLUDED")
+        self.assertEqual(val("S-28-B")["source_excel_row"],466)
+        self.assertEqual(val("S-30-B")["expected_relation"],"EXPLICIT_EXCEPTION")
+        self.assertEqual(val("C-28-B")["expected_relation"],"GROUP_INCLUDED")
+        self.assertEqual(val("C-30-B")["expected_relation"],"EXPLICIT_EXCEPTION")
+        self.assertEqual(val("M-29-B")["expected_relation"],"EXPLICIT_EXCEPTION")
+        self.assertFalse(by_test["M-23-B"]["mixture_article3_all_listed"])
+        self.assertTrue(by_test["M-21-B"]["mixture_article3_all_listed"])
+        self.assertTrue(all(not r["independent_expert_verified"] for r in flags))
+
+    def test_unreviewed_source_clause_mismatch_refused(self):
+        import prepare_provisional_b90 as p90
+        original=b90.load(HERE/"proposals"/"PROPOSED_90_B_cases.jsonl")
+        rows=b90.read_csv(HERE/"proposals"/"PROPOSED_new_60_component_review.csv")
+        row=next(x for x in rows if x["case_id"]=="C-30")
+        row["candidate_annex_row"]="120"
+        annex,_=p90.annex_rows()
+        with self.assertRaisesRegex(ValueError,"검증 실패|고시행이 제안서와 다름"):
+            p90.derive_new(original,rows,annex)
+
     def test_duplicate_structure_blocks_experiment(self):
         old,_=b90.baseline_b()
         mixed=old+[dict(old[0],test_id="S-99-B",case_id="S-99")]
