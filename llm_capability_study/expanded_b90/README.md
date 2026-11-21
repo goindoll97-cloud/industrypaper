@@ -60,6 +60,16 @@ python .\prepare_b90.py --init-candidates
 
 각 성분 행의 `cas`, `name_en`, `formula`, 혼합물의 `mass_percent`, `identity_source_url`, `identity_reviewer`, `identity_verified`(검증하면 YES), `selection_rationale`, `difficulty_rationale`, `regulatory_pattern`을 채우세요. 혼합물 내 모든 성분에 각자 출처를 기입해야 합니다.
 
+**CAS 번호는 검사숫자(check digit)까지 검증**합니다. `regulatory_pattern`은 아래 중에서 선택합니다. 같은 혼합물의 모든 성분 행에는 같은 패턴을 기입하세요. 각 유형·난이도 10개 신규 사례에는 패턴을 **최소 두 종류** 포함해야 하므로 특정 법령 상황만 반복하는 것을 막습니다.
+
+| 유형 | `regulatory_pattern` 허용값(쉼표로 구분) |
+|---|---|
+| 모체 및 염류 | `DIRECT`, `SALT_INCLUDED`, `PARENT_NAMING`, `EXPLICIT_EXCEPTION` |
+| 화합물군 | `DIRECT`, `CLASS_INCLUDED`, `ISOMER_CONDITION`, `EXPLICIT_EXCEPTION` |
+| 혼합물 | `ALL_DIRECT`, `GROUP_INCLUDED`, `ONE_EXCEPTION`, `MIXED_CLAUSES` |
+
+이 표시는 **문항 선정의 사전 기록**이며 모델에는 제공되지 않습니다. 실제 법령상 지정 관계는 전문가가 별도 Gold 검토표에서 확정합니다. 구성 단계에서 같은 CAS의 단일물질 중복 및 동일한 혼합물 조성 중복도 차단합니다.
+
 **주의:** `private/` 폴더는 비공개입니다. GitHub에는 실험을 준비하는 코드와 안내서만 올라갑니다.
 
 ## 단계 2. 90개 B 질문 만들기
@@ -89,7 +99,7 @@ python .\prepare_b90.py --freeze
 python .\prepare_b90.py --check
 ~~~
 
-모든 90문항의 정답 검토가 완료되고 공식 고시행·CAS 직접 기재·관계 유형이 일치하면 **별도 90문항 Gold와 SHA256 동결 기록**이 `private/`에 생성됩니다. 기존 v4.1 Gold 및 결과는 수정하지 않습니다.
+모든 90문항의 정답 검토가 완료되고 공식 고시행·CAS 직접 기재·관계 유형이 일치하면 **별도 90문항 Gold와 SHA256 동결 기록**이 `private/`에 생성됩니다. 후보표·법령 검토표·질문 데이터·정답지의 SHA256에 더해 **검색·추론·채점 소스코드 SHA256**도 기록하여 후속 코드 변경에 따른 결과 혼합을 차단합니다. 기존 v4.1 Gold 및 결과는 수정하지 않습니다.
 
 ## 단계 4. 같은 네 모델로 본실험
 
