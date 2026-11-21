@@ -179,6 +179,205 @@ def render(cases, components, consistency, run_info, gold_sha, models=None):
     return "\n".join(lines)
 
 
+
+def render_paired_failure_analysis(cases, components, details, consistency_components):
+    """Compare 4B vs 9B for the very same test_ids and Gold components.
+
+    The generated local Markdown is diagnostic only; multi-label errors are
+    descriptive, not exclusive causal attributions. Never change scores/Gold.
+    """
+    small, large = "qwen3.5:4b", "qwen3.5:9b"
+    by_case = {
+        model: {r["test_id"]: r for r in cases if r["model"] == model}
+        for model in (small, large)
+    }
+    keys = set(by_case[small])
+    if not keys or keys != set(by_case[large]):
+        raise ValueError("4B와 9B의 동일 test_id가 일치하지 않습니다")
+    by_comp = {
+        model: {(r["test_id"], r["component_id"]): r
+                for r in components if r["model"] == model}
+        for model in (small, large)
+    }
+    component_keys = set(by_comp[small])
+    if not component_keys or component_keys != set(by_comp[large]):
+        raise ValueError("4B와 9B의 성분별 식별자가 일치하지 않습니다")
+    by_detail = {
+        (r["model"], r["test_id"], r["component_id"]): r
+        for r in details if r["model"] in (small, large)
+    }
+    by_cons = {
+        model: [r for r in consistency_components if r["model"] == model]
+        for model in (small, large)
+    }
+    if (len(by_detail) != 2 * len(component_keys)
+            or any(len(by_cons[model]) != len(component_keys) for model in (small, large))):
+        raise ValueError("성분별 오류 진단 또는 응답 일관성 자료가 누락되었습니다")
+
+    metrics = [
+        ("정답 근거 행 전체 검색", "all_gold_rows_retrieved"),
+        ("지정범위·혼합물 규정 판단", "scope_plus_article3_correct"),
+        ("최종 완전정답 및 근거 검색", "strict_end_to_end"),
+    ]
+    lines = [
+        "## 8. Qwen3.5 4B와 9B의 동일 문항 오류 비교",
+        "",
+        "두 모델에 동일한 질문을 제시했을 때 성공과 실패가 어떻게 달라졌는지를 확인했습니다. "
+        "모델당 같은 원사례 30개에 A/B 두 조건을 적용한 60문항이며, "
+        "아래 결과는 사례별 대응 비교입니다.",
+        "",
+        "### 8.1. 같은 질문에서 어느 모델이 맞혔는가?",
+        "",
+    ]
+    transitions = []
+    for label, field in metrics:
+        both = only4 = only9 = neither = 0
+        for tid in sorted(keys):
+            a = bool(by_case[small][tid][field])
+            b = bool(by_case[large][tid][field])
+            if a and b:
+                both += 1
+            elif a:
+                only4 += 1
+            elif b:
+                only9 += 1
+            else:
+                neither += 1
+        transitions.append([label, both, only4, only9, neither])
+    lines.extend([
+        table(["비교 기준", "둘 다 성공", "4B만 성공", "9B만 성공", "둘 다 실패"], transitions),
+        "",
+        "주: 성공 여부는 같은 문항에서 각각 확인한 것입니다. "
+        "특히 '4B만 성공'과 '9B만 성공'을 함께 봐야 모델별 정답 수의 차이를 해석할 수 있습니다.",
+        "",
+        "### 8.2. 어떤 세부 판단에서 오류가 발생했는가?",
+        "",
+    ])
+    component_measures = [
+        ("정답 고시 행 검색", "strict_gold_row_hit"),
+        ("지정범위 포함 여부", "scope_correct"),
+        ("지정 관계 유형", "relation_correct"),
+        ("CAS 직접 지정 여부", "direct_cas_correct"),
+        ("지정번호", "entry_correct"),
+        ("고시 소번호", "sub_number_correct"),
+        ("성분의 세부 항목 모두", "component_exact"),
+    ]
+    component_table = []
+    ncomp = len(component_keys)
+    for label, field in component_measures:
+        correct = [sum(int(by_comp[m][key][field]) for key in component_keys)
+                   for m in (small, large)]
+        component_table.append([
+            label, proportion(correct[0], ncomp), proportion(correct[1], ncomp),
+            f"{correct[1] - correct[0]:+d}건",
+        ])
+    lines.extend([
+        table(["성분별 평가 항목", "4B 정답", "9B 정답", "9B-4B"], component_table),
+        "",
+        "주: 각 질문에 여러 성분이 포함될 수 있으므로 성분 수는 질문 수와 다릅니다. "
+        "위 항목은 서로 독립적인 오류 원인을 뜻하지 않습니다.",
+        "",
+    ])
+    contradictions = []
+    for m, name in ((small, "4B"), (large, "9B")):
+        checked = sum(int(r["relation_scope_checkable"]) for r in by_cons[m])
+        wrong = sum(int(r["relation_scope_contradiction"]) for r in by_cons[m])
+        contradictions.append([name, proportion(wrong, checked)])
+    lines.extend([
+        table(["모델", "답변 내부의 논리적 모순"], contradictions),
+        "",
+        "이 모순은 '지정된 물질'이라고 분류하면서 동시에 '지정범위에 해당하지 않는다'고 답하는 "
+        "등의 필드 간 불일치입니다. 모순이 적더라도 실제 판단이 반드시 맞는 것은 아닙니다.",
+        "",
+        "### 8.3. 9B가 지정범위를 맞히고도 최종 정답을 놓친 이유",
+        "",
+    ])
+
+    # One case can contribute to multiple rows, so do not call these causal shares.
+    labels = (
+        ("정답 고시 행을 검색하지 못함", "missing_retrieval", "all_gold_rows_retrieved"),
+        ("지정 관계 유형이 다름", "wrong_relation", "relation_correct"),
+        ("CAS 직접 지정 판단이 다름", "wrong_direct_cas", "direct_cas_correct"),
+        ("지정번호가 다름", "wrong_entry", "entry_correct"),
+        ("고시 소번호가 다름", "wrong_sub_number", "sub_number_correct"),
+    )
+    selected = sorted(tid for tid in keys
+                      if bool(by_case[large][tid]["scope_plus_article3_correct"])
+                      and not bool(by_case[large][tid]["strict_end_to_end"]))
+    reasons = {}
+    for tid in selected:
+        parts = [r for k, r in by_comp[large].items() if k[0] == tid]
+        misses = {}
+        for label, name, field in labels:
+            if name == "missing_retrieval":
+                misses[name] = not bool(by_case[large][tid][field])
+            else:
+                misses[name] = any(not bool(r[field]) for r in parts)
+        reasons[tid] = misses
+    totals = []
+    for label, name, _ in labels:
+        matched = [tid for tid in selected if reasons[tid][name]]
+        totals.append([label, f"{len(matched)}건", ", ".join(matched[:4]) or "—"])
+    lines.extend([
+        f"9B 모델에서 **지정범위 및 혼합물 규정 판단은 맞았지만 최종 완전정답에는 "
+        f"이르지 못한 문항은 {len(selected)}건**입니다.",
+        "",
+        table(["함께 발견된 오류 유형", "해당 문항 수", "사례 번호(최대 4개)"], totals),
+        "",
+        "주의: 한 문항에 검색 오류, 관계 해석 오류, 번호 오류 등이 동시에 발생할 수 있으므로 "
+        "위 건수를 더해도 전체 문항 수와 같지 않습니다. "
+        "첫 번째로 표시된 오류가 반드시 실제 원인이라는 뜻도 아닙니다.",
+        "",
+        "### 8.4. 완전정답 여부가 서로 달랐던 문항",
+        "",
+    ])
+    different = []
+    def _explain(model, tid):
+        x = by_case[model][tid]
+        if bool(x["strict_end_to_end"]):
+            return "완전정답"
+        issues = []
+        if not bool(x["answer_valid"]):
+            issues.append("응답 형식")
+        if not bool(x["all_gold_rows_retrieved"]):
+            issues.append("근거 행")
+        if not bool(x["scope_plus_article3_correct"]):
+            issues.append("지정범위/혼합물")
+        parts = [r for k, r in by_comp[model].items() if k[0] == tid]
+        for label, field in (
+            ("관계 유형", "relation_correct"),
+            ("CAS 직접 일치", "direct_cas_correct"),
+            ("지정번호", "entry_correct"),
+            ("소번호", "sub_number_correct"),
+        ):
+            if any(not bool(r[field]) for r in parts):
+                issues.append(label)
+        return ", ".join(issues) or "기타 확인 필요"
+
+    for tid in sorted(keys):
+        a, b = by_case[small][tid], by_case[large][tid]
+        if bool(a["strict_end_to_end"]) == bool(b["strict_end_to_end"]):
+            continue
+        different.append([
+            tid, GROUP_LABELS.get(a["group"], a["group"]), a["difficulty"],
+            "정답" if a["strict_end_to_end"] else "오답",
+            "정답" if b["strict_end_to_end"] else "오답",
+            _explain(large, tid) if not b["strict_end_to_end"] else _explain(small, tid) + " (4B)",
+        ])
+    lines.extend([
+        table(["문항 ID", "유형", "난이도", "4B", "9B", "틀린 모델의 오류 항목"],
+              different or [["—", "—", "—", "—", "—", "완전정답 변동 없음"]]),
+        "",
+        "**해석:** 관련 규정 검색, 지정범위 판단, 세부 근거번호 및 답변의 자기일관성은 "
+        "서로 다른 평가 항목입니다. 어느 한 항목의 개선만으로 완전정답률의 향상을 단정할 수 없습니다. "
+        "이 비교는 같은 30개 원사례에서 수행한 기술적 분석이며, "
+        "모델 규모의 인과효과나 다른 고시에 대한 일반화 가능성을 입증하지 않습니다. "
+        "잠정 Gold의 전문가 검토 결과에 따라 판단 일치율은 달라질 수 있습니다.",
+        "",
+    ])
+    return "\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(description="기존 3개 JSONL만으로 논문용 결과표 1개 생성")
     parser.add_argument("--results-dir", default="results_v4_1",
@@ -208,7 +407,7 @@ def main():
             parser.error(f"{model}: 현재 실험 설정이 동결한 v4.1 결과와 다릅니다")
     runs = {m: load(folder / (m.replace(":", "_") + "__main.jsonl")) for m in MODELS}
     details, _, _, _, _ = diagnose(gold, runs, cases, components)
-    _, consistency = audit_consistency(details)
+    consistency_components, consistency = audit_consistency(details)
     selected_models = list(MODELS)
     if ns.strong_results_dir is not None:
         strong_folder = ENGINE_DIR / ns.strong_results_dir
@@ -238,14 +437,18 @@ def main():
             parser.error("추가 모델 태그와 digest 기록을 확인하세요")
         new_details, _, _, _, _ = diagnose(
             gold, {stronger: raw_new}, new_cases, new_components, models=[stronger])
-        _, new_consistency = audit_consistency(new_details)
+        new_consistency_components, new_consistency = audit_consistency(new_details)
         cases.extend(new_cases)
         components.extend(new_components)
         consistency.extend(new_consistency)
+        consistency_components.extend(new_consistency_components)
+        details.extend(new_details)
         run_info.update(new_meta)
         selected_models.append(stronger)
     report = render(cases, components, consistency, run_info, gold_sha,
                     models=selected_models)
+    if ns.strong_results_dir is not None:
+        report += "\n" + render_paired_failure_analysis(cases, components, details, consistency_components)
     target = folder / "PAPER_RESULTS_v4_1.md"
     if target.exists() and target.read_text(encoding="utf-8") != report:
         print("주의: 기존 논문용 보고서를 덮어씁니다 (같은 고정 Gold·실험 설정)")

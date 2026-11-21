@@ -168,6 +168,58 @@ class StagedScoreTests(unittest.TestCase):
             self.assertIn("추후 평가한 대조군", report)
             self.assertIn("8 문항-모델", report)
 
+    def test_pairwise_4b_9b_exposes_opposite_wins_and_overlapping_errors(self):
+        from run_retrieval import ADDITIONAL_MODELS
+        from diagnose_raw_failures import diagnose, audit_consistency
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+        from make_paper_report import render_paired_failure_analysis
+
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            gold = self.create_fixture(folder)
+            small, large = MODELS[-1], ADDITIONAL_MODELS[0]
+            original = folder / (small.replace(":", "_") + "__main.jsonl")
+            records = [json.loads(x) for x in original.read_text(encoding="utf-8").splitlines()]
+            for rec in records:
+                rec["model"] = large
+                rec["settings_sha256"] = "9b-frozen"
+            # Original 4B misses the Gold salt row while 9B finds it.
+            records[0]["retrieved_by_component"]["C1"][0]["excel_row"] = 33
+            # Original 4B gets the mixture right; 9B has correct scope but wrong entry ID.
+            answer = json.loads(records[1]["answer_raw"])
+            answer["components"][0]["relevant_entry_id"] = "97-1-999"
+            records[1]["answer_raw"] = json.dumps(answer)
+            (folder / (large.replace(":", "_") + "__main.jsonl")).write_text(
+                "".join(json.dumps(x) + "\n" for x in records), encoding="utf-8")
+
+            case_small, comp_small, _, _ = inspect_run(folder, gold, models=[small])
+            case_large, comp_large, _, _ = inspect_run(folder, gold, models=[large])
+            original_rows = [json.loads(x) for x in original.read_text(encoding="utf-8").splitlines()]
+            detail_small = diagnose(
+                gold, {small: original_rows}, case_small, comp_small, models=[small])[0]
+            detail_large = diagnose(
+                gold, {large: records}, case_large, comp_large, models=[large])[0]
+            consistency_rows = audit_consistency(detail_small + detail_large)[0]
+
+            report = render_paired_failure_analysis(
+                case_small + case_large, comp_small + comp_large,
+                detail_small + detail_large, consistency_rows)
+            self.assertIn("4B만 성공", report)
+            self.assertIn("9B만 성공", report)
+            self.assertIn("S-01-A", report)
+            self.assertIn("M-01-A", report)
+            self.assertIn("지정번호가 다름", report)
+            self.assertIn("1건", report)
+            # No raw scores or JSONLs are written over by the diagnostic.
+            self.assertEqual(
+                original.read_text(encoding="utf-8").splitlines()[0],
+                json.dumps(original_rows[0]))
+
+            with self.assertRaisesRegex(ValueError, "동일 test_id"):
+                render_paired_failure_analysis(
+                    case_small + case_large[:-1], comp_small + comp_large,
+                    detail_small + detail_large, consistency_rows)
+
     def test_mixed_settings_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp)
