@@ -1,6 +1,6 @@
 # 후속 본실험 v5: B 조건 90문항 확장 계획 및 실행
 
-**현재 상태: 실험설계와 검증·실행 코드 준비 완료. 신규 60개 화학물질 사례와 전문가 정답은 아직 작성·확정되지 않았습니다.** 따라서 지금은 90문항 모델 정확도를 제시할 수 없으며, 모든 검증 조건이 충족되기 전에는 모델 실행을 허용하지 않습니다.
+**현재 상태: 신규 60사례의 CAS·영문명·분자식·가상 혼합물 조성까지 채운 후보 1차 초안 작성 완료. 화학물질 정보와 법령 정답은 독립 전문가 검증 전이므로 확정 검증셋은 아닙니다.** 따라서 지금은 90문항 모델 정확도를 제시할 수 없으며, 모든 검증 조건이 충족되기 전에는 모델 실행을 허용하지 않습니다.
 
 ## 연구 목적
 
@@ -45,6 +45,25 @@ EASY는 2성분, HARD는 3성분이며, 전 성분 지정 사례와 일부 성�
 - **법적 지정 여부·직접 CAS 기재 여부·포괄 포함·명시적 제외·조항 번호**는 모델 출력에서 추측해 정답으로 삼지 않습니다. 검토용 Gold는 검색·추론 입력에서 분리하고 모든 90문항에 대해 독립 법령 검토 후 동결합니다.
 - 기존 30개 B 사례의 Gold도 과거의 잠정 판정이므로 이번 버전에서는 **모두 재검토**합니다. 필요하면 새 버전의 전문가 Gold에서 정정하며 구버전 Gold와 결과는 절대 덮어쓰지 않습니다.
 
+## 이번에 작성한 실제 90문항 후보 자료
+
+**[B 조건 90문항 후보 1차 초안 및 검증 상태 확인](proposals/README.md)**
+
+- **기존 B 문항 30개 그대로 + 신규 60문항 = 총 90문항**: `proposals/PROPOSED_90_B_cases.jsonl`
+- 새로 선정한 60개 사례의 CAS·영문명·분자식·혼합물 조성: `proposals/PROPOSED_new_60_cases_summary.csv`
+- 새 60사례의 90개 성분별 PubChem 출처 및 고시 후보 근거 행: `proposals/PROPOSED_new_60_component_review.csv`
+
+위 자료는 모델 입력 후보를 **작성한 것이지 정답을 확정한 것이 아닙니다.** 독립 법령 검토 전 골드 정답을 임의로 만들거나 90문항 정확도를 제시하지 않습니다.
+
+이미 빈 후보표를 생성했다면 아래 명령으로 **빈 입력표에 실제 화학물질 초안을 채울 수 있습니다.** 입력자가 작성한 내용이 있는 파일은 덮어쓰지 않습니다.
+
+~~~powershell
+python .\\prepare_b90.py --import-proposals
+python .\\proposals\\check_pubchem.py
+~~~
+
+PubChem 교차검사는 CAS별 제안 분자식의 일치 여부만 확인하고, 사람의 `identity_verified=YES` 확인이나 법령 전문가 Gold 검토를 자동으로 대신하지 않습니다.
+
 ## 단계 1. 새 60사례 입력표 만들기
 
 Windows PowerShell:
@@ -58,9 +77,9 @@ python .\prepare_b90.py --init-candidates
 
 로컬에 `private/new_cases_review.csv`가 생성됩니다. Excel에서 열면 **유형·난이도·사례번호·성분번호는 자동으로 채워져 있고**, 물질에 대한 사실은 모두 **빈칸**입니다. 아무 물질이나 자동 생성하여 잘못된 화학정보가 연구에 들어가지 않도록 일부러 비워두었습니다.
 
-각 성분 행의 `cas`, `name_en`, `formula`, 혼합물의 `mass_percent`, `identity_source_url`, `identity_reviewer`, `identity_verified`(검증하면 YES), `selection_rationale`, `difficulty_rationale`, `regulatory_pattern`을 채우세요. 혼합물 내 모든 성분에 각자 출처를 기입해야 합니다.
+**공개된 후보표를 사용하면 `cas`, `name_en`, `formula`, `mass_percent`, `identity_source_url`, 사전 선정 사유와 `regulatory_pattern`이 이미 입력되어 있습니다.** 해당 값을 실제 PubChem 자료와 대조하고, 검토자 `identity_reviewer`와 검증 완료 항목의 `identity_verified=YES`만 독립 확인 후 입력하세요. 혼합물 내 모든 성분에 각자 출처를 기입해야 합니다.
 
-**CAS 번호는 검사숫자(check digit)까지 검증**합니다. `regulatory_pattern`은 아래 중에서 선택합니다. 같은 혼합물의 모든 성분 행에는 같은 패턴을 기입하세요. 각 유형·난이도 10개 신규 사례에는 패턴을 **최소 두 종류** 포함해야 하므로 특정 법령 상황만 반복하는 것을 막습니다.
+**CAS 번호는 검사숫자(check digit)까지 검증**합니다. `regulatory_pattern`은 아래 중에서 선택합니다. 같은 혼합물의 모든 성분 행에는 같은 패턴을 기입하세요. EASY 사례는 직접 지정된 단순 문제로 구성할 수 있으므로, **각 유형 전체와 HARD 사례에서 패턴을 최소 두 종류** 포함하도록 검사합니다.
 
 | 유형 | `regulatory_pattern` 허용값(쉼표로 구분) |
 |---|---|
