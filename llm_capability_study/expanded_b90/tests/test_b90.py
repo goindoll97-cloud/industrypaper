@@ -138,6 +138,50 @@ class ExpansionTests(unittest.TestCase):
         self.assertIn("15/90",report)
         self.assertIn("10",report)
 
+    def test_proposal_is_complete_90_b_only_but_unverified(self):
+        path = HERE/"proposals"/"PROPOSED_90_B_cases.jsonl"
+        cases = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+        self.assertTrue(b90.validate_cases(cases))
+        original,_=b90.baseline_b()
+        lookup={r["test_id"]:r for r in cases}
+        self.assertEqual(len(lookup),90)
+        for row in original:
+            self.assertEqual(lookup[row["test_id"]],row,
+                             "Prior 30 B questions must remain literally unchanged")
+        proposal=b90.read_csv(HERE/"proposals"/"PROPOSED_new_60_component_review.csv")
+        self.assertEqual(len(proposal),90)
+        self.assertEqual(len({r["case_id"] for r in proposal}),60)
+        self.assertTrue(all(r["cas"] and r["name_en"] and r["formula"]
+                            and r["identity_source_url"]
+                            and r["identity_verified"]=="NO"
+                            for r in proposal))
+        self.assertTrue(all(b90.valid_cas(r["cas"]) for r in proposal))
+        self.assertEqual(sum(c["group"]=="MIXTURE" for c in cases),30)
+
+    def test_import_proposal_requires_blank_existing_draft(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            with patch.object(b90,"PRIVATE",root/"private"),\
+                 patch.object(b90,"DATA",root/"data"):
+                b90.init_candidates(b90.PRIVATE/"new_cases_review.csv")
+                b90.import_proposals()
+                target=b90.PRIVATE/"new_cases_review.csv"
+                rows=b90.read_csv(target)
+                self.assertEqual(len(rows),90)
+                self.assertEqual(rows[0]["identity_verified"],"NO")
+                self.assertEqual(sum(x["group"]=="MIXTURE" for x in rows),50)
+                with self.assertRaisesRegex(ValueError,"덮어쓰기|입력"):
+                    b90.import_proposals()
+                with self.assertRaisesRegex(ValueError,"독립 확인"):
+                    b90.build_cases(target)
+
+    def test_pubchem_composition_is_structural_not_legal(self):
+        sys.path.insert(0,str(HERE/"proposals"))
+        from check_pubchem import composition
+        self.assertEqual(composition("BF4.Na"),composition("BF4Na"))
+        self.assertEqual(composition("PbO"),composition("OPb"))
+        self.assertIsNone(composition("C6H5+"))
+
     def test_duplicate_structure_blocks_experiment(self):
         old,_=b90.baseline_b()
         mixed=old+[dict(old[0],test_id="S-99-B",case_id="S-99")]
