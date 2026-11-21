@@ -9,6 +9,7 @@ Only provisional aggregate statistics are exported. No answers leave the PC.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 from pathlib import Path
@@ -378,6 +379,122 @@ def render_paired_failure_analysis(cases, components, details, consistency_compo
     return "\n".join(lines)
 
 
+
+def export_local_supplementary(output_dir, cases, components, details,
+                               consistency_rows, run_info, gold_sha, models):
+    """Private evidence appendix: never commit these provisional Gold labels."""
+    required = ("qwen3.5:4b", "qwen3.5:9b")
+    if not all(model in models for model in required):
+        raise ValueError("4B와 9B 결과가 모두 필요합니다")
+    by_case = {(r["model"], r["test_id"]): r for r in cases}
+    by_comp = {(r["model"], r["test_id"], r["component_id"]): r for r in components}
+    by_detail = {(r["model"], r["test_id"], r["component_id"]): r for r in details}
+    by_cons = {(r["model"], r["test_id"], r["component_id"]): r
+               for r in consistency_rows}
+    test_ids = sorted(set(r["test_id"] for r in cases))
+    if any((m, tid) not in by_case for m in models for tid in test_ids):
+        raise ValueError("대응 문항 누락")
+    aliases = {"qwen2.5:3b":"q25", "qwen3:4b-instruct":"q3",
+               "qwen3.5:4b":"q35_4b", "qwen3.5:9b":"q35_9b"}
+    fields = ("query_valid","answer_valid","all_gold_rows_retrieved",
+              "scope_plus_article3_correct","all_relation_correct",
+              "all_direct_cas_correct","all_entry_correct",
+              "all_sub_number_correct","strict_case_exact","strict_end_to_end")
+    case_rows = []
+    for tid in test_ids:
+        base = by_case[models[0], tid]
+        row = {key:base[key] for key in
+               ("test_id","case_id","condition","group","difficulty","component_count")}
+        for model in models:
+            q = by_case[model, tid]
+            if any(q[k] != base[k] for k in
+                   ("case_id","condition","group","difficulty","component_count")):
+                raise ValueError("모델 간 문항 정보 불일치: "+tid)
+            for fld in fields:
+                row[aliases[model]+"_"+fld] = int(q[fld])
+        row["only_4b_strict"] = int(bool(by_case[required[0],tid]["strict_end_to_end"]) and
+                                     not bool(by_case[required[1],tid]["strict_end_to_end"]))
+        row["only_9b_strict"] = int(bool(by_case[required[1],tid]["strict_end_to_end"]) and
+                                     not bool(by_case[required[0],tid]["strict_end_to_end"]))
+        case_rows.append(row)
+    comp_rows = []
+    for model in models:
+        source = sorted((r for r in components if r["model"] == model),
+                        key=lambda r:(r["test_id"],r["component_id"]))
+        for r in source:
+            k = (model,r["test_id"],r["component_id"])
+            if k not in by_detail or k not in by_cons:
+                raise ValueError("성분별 진단 누락: "+str(k))
+            d, c = by_detail[k], by_cons[k]
+            comp_rows.append({
+                "model":model,"test_id":r["test_id"],"case_id":r["case_id"],
+                "condition":r["condition"],"group":r["group"],
+                "difficulty":r["difficulty"],"component_id":r["component_id"],
+                "cas":d["cas"],"gold_row":d["gold_row"],
+                "gold_row_retrieved":r["strict_gold_row_hit"],
+                "retrieved_row_ids":d["retrieved_row_ids"],
+                "retrieved_designation_ids":d["retrieved_designation_ids"],
+                "gold_scope":d["gold_scope"],"predicted_scope":d["predicted_scope"],
+                "scope_correct":r["scope_correct"],
+                "gold_relation":d["gold_relation"],"predicted_relation":d["predicted_relation"],
+                "relation_correct":r["relation_correct"],
+                "gold_direct_cas":d["gold_direct_cas"],
+                "predicted_direct_cas":d["predicted_direct_cas"],
+                "direct_cas_correct":r["direct_cas_correct"],
+                "gold_entry_id":d["gold_designation_id"],
+                "predicted_entry_id":d["predicted_designation_id"],
+                "entry_correct":r["entry_correct"],
+                "gold_sub_number":d["gold_sub_number"],
+                "predicted_sub_number":d["predicted_sub_number"],
+                "sub_number_correct":r["sub_number_correct"],
+                "component_exact":r["component_exact"],
+                "relation_scope_contradiction":c["relation_scope_contradiction"],
+                "designation_grounding":c["designation_grounding"],
+                "wrong_fields":d["wrong_fields"],
+                "gold_review_status":"CURATED_PROVISIONAL",
+                "independent_expert_reviewed":0})
+    pending = []
+    for tid in test_ids:
+        q = by_case[required[1],tid]
+        if not (q["scope_plus_article3_correct"] and not q["strict_end_to_end"]):
+            continue
+        cs = [r for r in components if r["model"] == required[1] and r["test_id"] == tid]
+        pending.append({
+            "test_id":tid,"group":q["group"],"difficulty":q["difficulty"],
+            "4b_strict_correct":int(by_case[required[0],tid]["strict_end_to_end"]),
+            "9b_scope_correct":1,"9b_strict_correct":0,
+            "gold_row_not_found":int(not q["all_gold_rows_retrieved"]),
+            "relation_wrong":int(any(not x["relation_correct"] for x in cs)),
+            "direct_cas_wrong":int(any(not x["direct_cas_correct"] for x in cs)),
+            "entry_wrong":int(any(not x["entry_correct"] for x in cs)),
+            "sub_number_wrong":int(any(not x["sub_number_correct"] for x in cs))})
+    if len(test_ids)==60 and not (len(pending)==32 and
+          sum(by_case[required[1],tid]["scope_plus_article3_correct"] for tid in test_ids)==48 and
+          sum(by_case[required[1],tid]["strict_end_to_end"] for tid in test_ids)==16):
+        raise ValueError("동결 9B 결과와 보충자료 집계 불일치")
+    output_dir.mkdir(parents=True,exist_ok=True)
+    def write(name,rows):
+        filepath = output_dir/name
+        with filepath.open("w",encoding="utf-8-sig",newline="") as fp:
+            writer=csv.DictWriter(fp,fieldnames=list(rows[0]),extrasaction="raise")
+            writer.writeheader()
+            writer.writerows(rows)
+        return filepath
+    paths = [
+        write("S8_60_case_outcomes_PRIVATE.csv",case_rows),
+        write("S9_360_component_evidence_PRIVATE.csv",comp_rows),
+        write("S10_9B_32_scope_correct_failed_PRIVATE.csv",pending)]
+    meta = {"gold_sha256":gold_sha,
+            "gold_status":"CURATED_PROVISIONAL; expert validation pending",
+            "model_run_sha256":{m:run_info[m]["file_sha256"] for m in models},
+            "n_case_rows":len(case_rows),"n_component_rows":len(comp_rows),
+            "n_9b_scope_correct_failed":len(pending),
+            "privacy":"PRIVATE: contains provisional Gold labels and model predictions",
+            "note":"Flags overlap; no causal error attribution; A/B cases paired"}
+    manifest = output_dir/"S0_provenance_PRIVATE.json"
+    manifest.write_text(json.dumps(meta,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    return [manifest,*paths]
+
 def main():
     parser = argparse.ArgumentParser(description="기존 3개 JSONL만으로 논문용 결과표 1개 생성")
     parser.add_argument("--results-dir", default="results_v4_1",
@@ -453,6 +570,13 @@ def main():
     if target.exists() and target.read_text(encoding="utf-8") != report:
         print("주의: 기존 논문용 보고서를 덮어씁니다 (같은 고정 Gold·실험 설정)")
     target.write_text(report, encoding="utf-8")
+    if ns.strong_results_dir is not None:
+        paths = export_local_supplementary(
+            folder/"supplementary_PRIVATE", cases, components, details,
+            consistency_components, run_info, gold_sha, selected_models)
+        print("PASS: 로컬 보충자료 증거표 60문항·360성분·9B 불일치 생성:",paths[0].parent)
+        print("주의: 이 폴더에는 잠정 정답값과 모델 판단값이 포함되어 공개 GitHub에 올리지 않습니다.")
+
     print(f"PASS: 논문용 요약 1개 생성: {target}")
     print("주의: 정답지 미검증 상태. 논문 최종 결과가 아닌 탐색적 분석입니다.")
 
