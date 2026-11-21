@@ -265,8 +265,10 @@ class StagedScoreTests(unittest.TestCase):
                 miss=list(csv.DictReader(fp))
             self.assertEqual(len(cases),2)
             self.assertEqual(len(comps),12)
-            self.assertEqual(len(miss),1)
-            self.assertEqual(miss[0]["entry_wrong"],"1")
+            self.assertEqual(len(miss),2)  # synthetic salt has correct scope but missed Gold row
+            by_id={r["test_id"]: r for r in miss}
+            self.assertEqual(by_id["M-01-A"]["entry_wrong"],"1")
+            self.assertEqual(by_id["S-01-A"]["gold_row_not_found"],"1")
             self.assertEqual(cases[1]["only_4b_strict"],"1")
             self.assertEqual(base_path.read_bytes(),origin)
             metadata=json.loads(files[0].read_text(encoding="utf-8"))
