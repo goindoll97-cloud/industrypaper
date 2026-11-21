@@ -23,6 +23,11 @@ from run_retrieval import load  # noqa: E402
 
 GROUPS = {"S": "PARENT_AND_SALTS", "C": "COMPOUND_CLASS", "M": "MIXTURE"}
 RELATIONS = {"DIRECT_SPECIFIC", "GROUP_INCLUDED", "EXPLICIT_EXCEPTION"}
+PATTERNS = {
+    "PARENT_AND_SALTS": {"DIRECT", "SALT_INCLUDED", "PARENT_NAMING", "EXPLICIT_EXCEPTION"},
+    "COMPOUND_CLASS": {"DIRECT", "CLASS_INCLUDED", "ISOMER_CONDITION", "EXPLICIT_EXCEPTION"},
+    "MIXTURE": {"ALL_DIRECT", "GROUP_INCLUDED", "ONE_EXCEPTION", "MIXED_CLAUSES"},
+}
 CANDIDATE_COLS = (
     "case_id", "group", "difficulty", "component_id", "cas", "name_en",
     "formula", "mass_percent", "identity_source_url", "identity_reviewer",
@@ -38,6 +43,25 @@ GOLD_COLS = (
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def valid_cas(text):
+    """CAS check-digit validation; catches common transcription errors."""
+    if not re.fullmatch(r"\d{2,7}-\d\d-\d", text):
+        return False
+    digits = text.replace("-", "")
+    check = sum(position * int(digit) for position, digit in
+                enumerate(reversed(digits[:-1]), start=1)) % 10
+    return check == int(digits[-1])
+
+
+def source_code_sha():
+    """Pin key source and preprocessing code so a later pull cannot silently
+    run a different retrieval protocol against the same frozen cases."""
+    paths = (V4 / "run_retrieval.py", V4 / "search_legal_db.py",
+             V4 / "build_legal_db.py", ROOT / "prepare_b90.py",
+             ROOT / "run_b90.py")
+    return {str(p.relative_to(ROOT.parent)): sha(p) for p in paths}
 
 
 def require(flag, message):
@@ -156,10 +180,25 @@ def build_cases(csv_path):
                 str(key)+": CAS·영문명·분자식의 독립 확인 필요")
         require(r["identity_source_url"].startswith(("https://","http://")),
                 str(key)+": 검증 가능한 출처 URL 필요")
-        require(re.fullmatch(r"\d{2,7}-\d\d-\d",r["cas"].strip()),
-                str(key)+": CAS 표기 형식 확인")
+        require(valid_cas(r["cas"].strip()),
+                str(key)+": CAS 형식 또는 검사숫자(check digit)가 잘못되었습니다")
+        require(r["regulatory_pattern"] in PATTERNS[r["group"]],
+                str(key)+": 규제 상황 태그가 사전정의된 값과 다릅니다. "
+                + ", ".join(sorted(PATTERNS[r["group"]])))
         found[key] = r
     require(set(found) == set(expected), "후보 슬롯 누락")
+    # One scenario has one pre-assigned regulatory-pattern tag even if
+    # its mixture contains 2–3 chemical components. Require diversity
+    # within each of the six group/difficulty strata.
+    by_case_pattern = defaultdict(set)
+    by_stratum_pattern = defaultdict(set)
+    for row in found.values():
+        by_case_pattern[row["case_id"]].add(row["regulatory_pattern"])
+        by_stratum_pattern[row["group"], row["difficulty"]].add(row["regulatory_pattern"])
+    require(all(len(patterns) == 1 for patterns in by_case_pattern.values()),
+            "같은 혼합물의 성분별 규제 상황 태그가 일치하지 않습니다")
+    require(all(len(patterns) >= 2 for patterns in by_stratum_pattern.values()),
+            "각 유형·난이도 10개 신규 사례에는 규제 상황을 2종 이상 포함하세요")
     created = []
     for first, group in GROUPS.items():
         for n in range(11, 31):
@@ -315,6 +354,9 @@ def freeze():
         "legacy_cases_sha256":old_manifest["cases_sha256"],
         "n_cases":90,"n_original_B":30,"n_new_B":60,
         "review_status":"INDEPENDENT_EXPERT_REVIEWED",
+        "identity_review_csv_sha256":sha(PRIVATE/"new_cases_review.csv"),
+        "legal_review_csv_sha256":sha(review_path),
+        "protocol_code_sha256":source_code_sha(),
         "note":"Locally validated Gold; reviewer responsibility remains with research team",
     }
     lock.write_text(json.dumps(metadata,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
@@ -339,7 +381,15 @@ def assert_frozen(need_gold=False):
     require(m["annex_sha256"]==legacy["annex_sha256"] and
             m["legacy_cases_sha256"]==legacy["cases_sha256"],
             "기존 고시/문항 원본 변경")
+    require(m.get("protocol_code_sha256")==source_code_sha(),
+            "동결 이후 검색·추론 코드가 바뀌었습니다. 새 버전으로 검토 필요")
+    require(m.get("identity_review_csv_sha256")==
+            sha(PRIVATE/"new_cases_review.csv"),
+            "동결 이후 화학물질 원자료 검토표가 변경됨")
     if need_gold:
+        require(m.get("legal_review_csv_sha256")==
+                sha(PRIVATE/"gold_review_90_B.csv"),
+                "동결 이후 법령 전문가 검토표가 변경됨")
         g=PRIVATE/"gold_90_B.jsonl"
         require(g.exists() and sha(g)==m["gold_sha256"],"90문항 Gold SHA 불일치")
         rows=load(g)
