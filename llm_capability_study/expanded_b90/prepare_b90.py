@@ -120,6 +120,46 @@ def init_candidates(path):
     print(f"후보 입력표 생성: {path} (60개 새 사례, 성분 90행; 화학적 사실은 빈칸)")
 
 
+
+def import_proposals():
+    """Copy a reviewed *candidate proposal*, not an expert verified benchmark.
+
+    The first --init-candidates command creates a blank private template. This
+    operation replaces that template ONLY while every editable value is still
+    blank. Existing human edits, completed cases and Gold are never overwritten.
+    """
+    source = ROOT / "proposals" / "PROPOSED_new_60_component_review.csv"
+    target = PRIVATE / "new_cases_review.csv"
+    require(source.is_file(), "GitHub 후보 자료가 없습니다: "+str(source))
+    require(not (DATA/"cases_90_B.jsonl").exists() and
+            not (PRIVATE/"candidate_build_manifest.json").exists(),
+            "이미 90문항을 생성했습니다. 기존 실험 데이터 변경 금지")
+    rows=read_csv(source)
+    expected={(x["case_id"],x["component_id"]):x for x in slots()}
+    require(len(rows)==len(expected) and
+            {(x["case_id"],x["component_id"]) for x in rows}==set(expected),
+            "저장소 제안표의 60사례/90성분 개수·ID 검증 실패")
+    require(all(x["identity_verified"]=="NO" for x in rows),
+            "제안표는 전문가 검증 전 상태여야 합니다")
+    if target.exists():
+        previous=read_csv(target)
+        require(len(previous)==len(expected) and
+                {(x["case_id"],x["component_id"]) for x in previous}==set(expected),
+                "이미 다른 후보표가 있습니다. 수동으로 병합해야 합니다")
+        edited=[x for x in previous if any(str(x.get(col,"")).strip()
+                       for col in CANDIDATE_COLS
+                       if col not in ("case_id","group","difficulty","component_id"))]
+        require(not edited,
+                "사용자가 입력한 기존 후보 정보를 보호하기 위해 가져오기를 중단합니다")
+        backup=PRIVATE/"new_cases_review_original_blank.csv"
+        require(not backup.exists(),"원본 빈 양식 백업이 이미 있습니다. 수동 점검 필요")
+        backup.write_bytes(target.read_bytes())
+    target.parent.mkdir(parents=True,exist_ok=True)
+    target.write_bytes(source.read_bytes())
+    print("PASS: 신규 60사례의 실제 CAS·물질명·분자식·가상 혼합물 조성을 가져왔습니다")
+    print("후보 입력표:",target)
+    print("주의: identity_verified=NO. PubChem 및 법령 독립 검토 전까지 본실험 생성 불가")
+
 def validate_cases(cases):
     require(len(cases) == 90, "총 90문항이 아닙니다")
     ids = [c["test_id"] for c in cases]
@@ -192,14 +232,20 @@ def build_cases(csv_path):
     # its mixture contains 2–3 chemical components. Require diversity
     # within each of the six group/difficulty strata.
     by_case_pattern = defaultdict(set)
-    by_stratum_pattern = defaultdict(set)
+    by_group_pattern = defaultdict(set)
+    by_hard_pattern = defaultdict(set)
     for row in found.values():
         by_case_pattern[row["case_id"]].add(row["regulatory_pattern"])
-        by_stratum_pattern[row["group"], row["difficulty"]].add(row["regulatory_pattern"])
+        by_group_pattern[row["group"]].add(row["regulatory_pattern"])
+        if row["difficulty"] == "HARD":
+            by_hard_pattern[row["group"]].add(row["regulatory_pattern"])
     require(all(len(patterns) == 1 for patterns in by_case_pattern.values()),
             "같은 혼합물의 성분별 규제 상황 태그가 일치하지 않습니다")
-    require(all(len(patterns) >= 2 for patterns in by_stratum_pattern.values()),
-            "각 유형·난이도 10개 신규 사례에는 규제 상황을 2종 이상 포함하세요")
+    # EASY is intentionally allowed to contain only direct-listed cases:
+    # force variety in each GROUP and in each HARD stratum instead.
+    require(all(len(patterns) >= 2 for patterns in by_group_pattern.values())
+            and all(len(patterns) >= 2 for patterns in by_hard_pattern.values()),
+            "유형별 전체 및 HARD 신규 사례에는 규제 상황을 2종 이상 포함하세요")
     created = []
     for first, group in GROUPS.items():
         for n in range(11, 31):
@@ -423,12 +469,14 @@ def main():
     ap=argparse.ArgumentParser(description="기존 B 30개를 유지한 90문항 신규 평가셋 구축")
     g=ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--init-candidates",action="store_true")
+    g.add_argument("--import-proposals",action="store_true")
     g.add_argument("--build-cases",action="store_true")
     g.add_argument("--init-gold",action="store_true")
     g.add_argument("--freeze",action="store_true")
     g.add_argument("--check",action="store_true")
     args=ap.parse_args()
     if args.init_candidates:init_candidates(PRIVATE/"new_cases_review.csv")
+    if args.import_proposals:import_proposals()
     if args.build_cases:build_cases(PRIVATE/"new_cases_review.csv")
     if args.init_gold:init_gold()
     if args.freeze:freeze()
