@@ -56,9 +56,9 @@ class ExpansionTests(unittest.TestCase):
     def test_synthetic_validated_90_and_freeze_block_until_expert_review(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir=Path(tmp)
-            csvfile=tmpdir/"new_cases_review.csv"
             data=tmpdir/"data"
             private=tmpdir/"private"
+            csvfile=private/"new_cases_review.csv"
             records=b90.slots()
             for j,r in enumerate(records):
                 r["cas"]=valid_cas_for(j+1)
