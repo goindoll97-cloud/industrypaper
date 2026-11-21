@@ -232,6 +232,36 @@ def build_provisional():
     b90.require(len(combined)==90 and
                 {x["test_id"] for x in combined}==set(by_id),
                 "90문항 잠정 정답 누락·중복")
+    # Add the 45 already-reviewed-by-researcher, but still not expert-verified,
+    # original B components to the same row-level review queue as the new 90.
+    old_audit=[]
+    for c in old_gold:
+        for comp in c["component_gold"]:
+            source=annex[int(comp["source_excel_row"])]
+            old_audit.append({
+                "test_id":c["test_id"],
+                "component_id":comp["component_id"],
+                "cas":comp["cas"],
+                "name_en":next(z["name_en"] for z in by_id[c["test_id"]]["components"]
+                               if z["component_id"]==comp["component_id"]),
+                "provisional_gold_relation":comp["expected_relation"],
+                "provisional_scope_of_clause":int(comp["covered_by_clause"]),
+                "exact_cas_in_selected_annex_row":int(comp["direct_cas_match"]),
+                "annex_excel_row":int(comp["source_excel_row"]),
+                "annex_designation_id":comp["relevant_entry_id"],
+                "annex_sub_number":(comp["relevant_sub_number"]
+                                     if comp["relevant_sub_number"] is not None else ""),
+                "annex_name_ko":source["name_ko"],
+                "annex_name_en":source["name_en"],
+                "method":"LEGACY_B30_PROVISIONAL_GOLD",
+                "review_status":"CURATED_PROVISIONAL",
+                "independent_expert_verified":0,
+                "identity_verified":0,
+                "review_note":"Original frozen 30 B provisional Gold, independent expert check pending",
+            })
+    audit=sorted([*old_audit,*audit],
+                 key=lambda x:(x["test_id"],x["component_id"]))
+    b90.require(len(audit)==135,"90문항의 성분 135행 대조표 누락")
     PRIVATE.mkdir(parents=True,exist_ok=True)
     # Exact existing proposal bytes; no A-question can enter this dataset.
     shutil.copyfile(proposal,CASES)
@@ -261,7 +291,7 @@ def build_provisional():
     }
     MANIFEST.write_text(json.dumps(meta,ensure_ascii=False,indent=2)+"\n",
                         encoding="utf-8")
-    print("PASS: B 조건만 90문항, 잠정 Gold 90문항, 신규 90성분 고시 근거 대조표 작성")
+    print("PASS: B 조건만 90문항, 잠정 Gold 90문항, 전체 135성분 고시 근거 대조표 작성")
     print("비공개 답지:",GOLD)
     print("비공개 검토표:",REVIEW)
     print("상태: CURATED_PROVISIONAL (독립 전문가 검증 전)")
