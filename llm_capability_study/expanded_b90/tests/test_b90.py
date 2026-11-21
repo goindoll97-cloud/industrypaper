@@ -208,6 +208,14 @@ class ExpansionTests(unittest.TestCase):
         self.assertEqual(val("S-28-B")["source_excel_row"],466)
         self.assertEqual(val("S-30-B")["expected_relation"],"EXPLICIT_EXCEPTION")
         self.assertEqual(val("C-28-B")["expected_relation"],"GROUP_INCLUDED")
+        for tid in ("C-29-B","M-26-B"):
+            fixed=val(tid)
+            self.assertEqual(fixed["source_excel_row"],377)
+            self.assertEqual(fixed["relevant_sub_number"],2)
+            self.assertEqual(fixed["relevant_entry_id"],"97-1-299")
+            self.assertEqual(fixed["expected_relation"],"GROUP_INCLUDED")
+            self.assertFalse(fixed["direct_cas_match"])
+        self.assertFalse(p90.proof_clause(annex[376],"95-70-5","GROUP_INCLUDED"))
         self.assertEqual(val("C-30-B")["expected_relation"],"EXPLICIT_EXCEPTION")
         self.assertEqual(val("M-29-B")["expected_relation"],"EXPLICIT_EXCEPTION")
         self.assertFalse(by_test["M-23-B"]["mixture_article3_all_listed"])
@@ -287,6 +295,40 @@ class ExpansionTests(unittest.TestCase):
                                     for x in gold))
                 with self.assertRaisesRegex(ValueError,"덮어쓰지"):
                     p90.build_provisional()
+                # Simulate a frozen v1 key and a manual researcher update.
+                # Use synthetic hashes in tests; production only accepts real
+                # researcher-confirmed old/new hashes.
+                corrected_bytes=p90.GOLD.read_bytes()
+                revised_sha=hashlib.sha256(corrected_bytes).hexdigest()
+                for row in gold:
+                    for comp in row["component_gold"]:
+                        if comp["cas"]=="95-70-5":
+                            comp.update(source_excel_row=376,relevant_sub_number=1)
+                prior_bytes=p90._canonical_gold(gold)
+                prior_sha=hashlib.sha256(prior_bytes).hexdigest()
+                review_file=HERE/"proposals"/"PROPOSED_new_60_component_review.csv"
+                previous_csv=b"".join(
+                    line.replace(b",377,,POTENTIAL_CLASS_OR_EXCEPTION_CLAUSE,",
+                                 b",376,,POTENTIAL_CLASS_OR_EXCEPTION_CLAUSE,")
+                    if b",95-70-5," in line else line
+                    for line in review_file.read_bytes().splitlines(keepends=True))
+                meta.pop("gold_revision",None)
+                meta["gold_sha256"]=prior_sha
+                meta["new_component_review_sha256"]=hashlib.sha256(previous_csv).hexdigest()
+                p90.MANIFEST.write_text(json.dumps(meta),encoding="utf-8")
+                p90.GOLD.write_bytes(prior_bytes)
+                # Corrected existing answer key or original key are both supported.
+                with patch.object(p90,"PREVIOUS_GOLD_SHA",prior_sha),\
+                     patch.object(p90,"RESEARCHER_GOLD_SHA",revised_sha):
+                    p90.apply_researcher_correction()
+                    self.assertEqual(p90.GOLD.read_bytes(),corrected_bytes)
+                    self.assertEqual((private/"before_row377_correction"/p90.GOLD.name).read_bytes(),
+                                     prior_bytes)
+                    p90.apply_researcher_correction() # idempotent
+                    _,_,revised=p90.assert_provisional(need_gold=True)
+                    self.assertEqual(revised["gold_revision"],p90.GOLD_REVISION)
+                    self.assertEqual(revised["previous_gold_sha256"],prior_sha)
+                    self.assertEqual(revised["gold_sha256"],revised_sha)
                 p90.GOLD.write_text("tampered",encoding="utf-8")
                 with self.assertRaisesRegex(ValueError,"SHA|해시"):
                     p90.assert_provisional(need_gold=True)
