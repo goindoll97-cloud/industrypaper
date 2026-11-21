@@ -172,7 +172,7 @@ class ExpansionTests(unittest.TestCase):
                 self.assertEqual(sum(x["group"]=="MIXTURE" for x in rows),50)
                 with self.assertRaisesRegex(ValueError,"덮어쓰기|입력"):
                     b90.import_proposals()
-                with self.assertRaisesRegex(ValueError,"독립 확인"):
+                with self.assertRaisesRegex(ValueError,"identity_reviewer|독립 확인"):
                     b90.build_cases(target)
 
     def test_pubchem_composition_is_structural_not_legal(self):
