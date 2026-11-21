@@ -7,12 +7,14 @@ on:
       - "llm_capability_study/make_paper_report.py"
       - ".github/workflows/retrieval-v4-tests.yml"
       - ".gitattributes"
+      - "llm_capability_study/expanded_b90/**"
   pull_request:
     paths:
       - "llm_capability_study/retrieval_v4/**"
       - "llm_capability_study/make_paper_report.py"
       - ".github/workflows/retrieval-v4-tests.yml"
       - ".gitattributes"
+      - "llm_capability_study/expanded_b90/**"
 
 permissions:
   contents: read
@@ -53,5 +55,9 @@ jobs:
           assert target.read_bytes() == original
           print('PASS: CRLF-only data safely recovered and SHA verified')
           PY
+      - name: Test new B-only 90-case selection and fail-closed expert-review gate
+        run: |
+          python -m py_compile ../expanded_b90/prepare_b90.py ../expanded_b90/run_b90.py ../expanded_b90/score_b90.py
+          python -m unittest discover -s ../expanded_b90/tests -p "test_*.py" -v
       - name: Test Gold-safe parsing, staged scoring and raw diagnosis
         run: python -m unittest discover -s tests -p "test_*.py" -v
