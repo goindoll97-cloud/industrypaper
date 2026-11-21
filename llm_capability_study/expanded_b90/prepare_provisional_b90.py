@@ -29,6 +29,9 @@ GOLD=PRIVATE/"gold_90_B_PROVISIONAL.jsonl"
 CASES=PRIVATE/"cases_90_B_PROVISIONAL.jsonl"
 MANIFEST=PRIVATE/"provisional_manifest.json"
 REVIEW=PRIVATE/"gold_90_B_review_queue_PROVISIONAL.csv"
+GOLD_REVISION="2026-11-22_row377"
+RESEARCHER_GOLD_SHA="248864f3aa8bd9715e1ed26216454c2c78ef0a2dc79fe5e2c7f60acb135f83c5"
+PREVIOUS_GOLD_SHA="418344437217c209397bc88b33d49698b947a8bd913cf12ec5001461c680f7f5"
 
 # Only deliberate *non-direct-CAS* entries. Map each CAS to the actual
 # OFFICIAL annex clause row and relation. Do NOT derive these from the
@@ -40,7 +43,7 @@ CLAUSE_ONLY = {
     "13826-83-0": (466, "GROUP_INCLUDED"),
     "7774-29-0": (187, "EXPLICIT_EXCEPTION"),  # mercuric iodide
     "95-80-7": (376, "GROUP_INCLUDED"),        # 2,4-toluenediamine
-    "95-70-5": (376, "GROUP_INCLUDED"),        # 2,5-toluenediamine
+    "95-70-5": (377, "GROUP_INCLUDED"),        # 2,5-toluenediamine: separately specified
     "13943-58-3": (112, "EXPLICIT_EXCEPTION"), # ferrocyanide salts
     "14075-53-7": (466, "EXPLICIT_EXCEPTION"), # potassium tetrafluoroborate
     "823-40-5": (376, "EXPLICIT_EXCEPTION"),   # 2,6-toluenediamine
@@ -75,8 +78,10 @@ def proof_clause(row, cas, relation):
     if relation=="GROUP_INCLUDED":
         if cas in ("13755-29-8","13826-83-0"):
             return "Tetrafluoroboric acid" in name and "salts" in name
-        if cas in ("95-80-7","95-70-5"):
+        if cas=="95-80-7":
             return "Toluenediamines" in name and "823-40-5" in name
+        if cas=="95-70-5":
+            return "2,5-Toluenediamine(95-70-5)" in name and "salts" in name
     if relation=="EXPLICIT_EXCEPTION":
         if cas=="13943-58-3":
             # The class is excluded by chemical family, not enumerated by CAS.
@@ -274,6 +279,7 @@ def build_provisional():
         writer.writerows(audit)
     meta={
         "version":"b90_PROVISIONAL_v1",
+        "gold_revision":GOLD_REVISION,
         "review_status":"CURATED_PROVISIONAL",
         "independent_expert_review_completed":False,
         "identity_verified":False,
@@ -336,14 +342,129 @@ def assert_provisional(need_gold=False):
     return cases,m
 
 
+
+def _canonical_gold(rows):
+    return "".join(json.dumps(x,ensure_ascii=False,sort_keys=True)+"\n"
+                   for x in sorted(rows,key=lambda x:x["test_id"])).encode("utf-8")
+
+
+def apply_researcher_correction():
+    """Apply ONLY the researcher-confirmed row 377 change; preserve old results.
+
+    Accept either the original v1 Gold or the exact uploaded edited Gold.
+    Refuse any other edits instead of blessing arbitrary hashes.
+    """
+    b90.require(all(p.is_file() for p in (GOLD,CASES,MANIFEST,REVIEW)),
+                "기존 잠정 문항/답지/manifest/검토표가 필요합니다. 새 실험이면 --create 사용")
+    m=json.loads(MANIFEST.read_text(encoding="utf-8"))
+    if m.get("gold_revision")==GOLD_REVISION:
+        assert_provisional(need_gold=True)
+        print("이미 정답지 정정본 적용 완료")
+        return
+    b90.require(m.get("review_status")=="CURATED_PROVISIONAL" and
+                m.get("independent_expert_review_completed") is False and
+                m.get("identity_verified") is False,
+                "잠정 정답지 상태 불일치")
+    b90.require(m.get("gold_sha256") in (PREVIOUS_GOLD_SHA,RESEARCHER_GOLD_SHA),
+                "기존 답지 manifest SHA가 이번 정정 대상과 다릅니다. 파일 보존 후 확인 필요")
+    b90.require(_hash(GOLD) in (PREVIOUS_GOLD_SHA,RESEARCHER_GOLD_SHA),
+                "답지가 이번 연구자 업로드본 또는 기존 원본과 다릅니다. 임의 변경 금지")
+    b90.require(m["protocol_code_sha256"]==b90.source_code_sha(),
+                "실험 실행/채점 코드가 변경됨. 기존 실험과 혼합 금지")
+    proposal=PROPOSALS/"PROPOSED_90_B_cases.jsonl"
+    b90.require(_hash(CASES)==m["cases_sha256"]==_hash(proposal)==m["proposals_sha256"],
+                "90개 모델 입력 문항이 변경됨")
+    review_file=PROPOSALS/"PROPOSED_new_60_component_review.csv"
+    current=review_file.read_bytes()
+    old_lines=[]
+    changed=0
+    for line in current.splitlines(keepends=True):
+        if b",95-70-5," in line:
+            b90.require(b",377,,POTENTIAL_CLASS_OR_EXCEPTION_CLAUSE," in line,
+                        "정정된 공개 검토표 행 불일치")
+            line=line.replace(b",377,,POTENTIAL_CLASS_OR_EXCEPTION_CLAUSE,",
+                              b",376,,POTENTIAL_CLASS_OR_EXCEPTION_CLAUSE,")
+            changed+=1
+        old_lines.append(line)
+    b90.require(changed==2 and m["new_component_review_sha256"] in (
+        hashlib.sha256(b"".join(old_lines)).hexdigest(),_hash(review_file)),
+        "공개 검토표에 지정된 두 행 외 변경이 있습니다")
+    cases=b90.load(CASES)
+    b90.validate_cases(cases)
+    annex,legacy=annex_rows()
+    b90.require(m["annex_sha256"]==legacy["annex_sha256"] and
+                m["legacy_cases_sha256"]==legacy["cases_sha256"],
+                "고시 또는 기존 문항 원본이 변경됨")
+    original_gold=V4/"private"/"gold_60.jsonl"
+    b90.require(original_gold.is_file() and _hash(original_gold)==m["legacy_gold_sha256"],
+                "기존 B30 정답 원본이 변경됨")
+    records=b90.load(GOLD)
+    b90.require(len(records)==90 and {r["test_id"] for r in records}==
+                {r["test_id"] for r in cases}, "90문항 대응 불일치")
+    affected=[]
+    for r in records:
+        for c in r["component_gold"]:
+            if c["cas"]=="95-70-5":
+                b90.require(c["component_id"]=="C1" and
+                    c["expected_relation"]=="GROUP_INCLUDED" and
+                    c["covered_by_clause"] is True and c["direct_cas_match"] is False and
+                    c["relevant_entry_id"]=="97-1-299" and
+                    (c["source_excel_row"],c["relevant_sub_number"]) in ((376,1),(377,2)),
+                    "정정 대상의 기존 값이 다릅니다")
+                c.update(source_excel_row=377,relevant_sub_number=2)
+                affected.append(r["test_id"])
+    b90.require(sorted(affected)==["C-29-B","M-26-B"], "정정 대상 두 문항 불일치")
+    new_bytes=_canonical_gold(records)
+    b90.require(hashlib.sha256(new_bytes).hexdigest()==RESEARCHER_GOLD_SHA,
+                "정정 결과가 연구자 업로드본 SHA256과 다릅니다")
+    new_gold,new_audit=derive_new(cases,b90.read_csv(review_file),annex)
+    new_by_id={r["test_id"]:r for r in new_gold}
+    b90.require(all(r==new_by_id[r["test_id"]] for r in records if r["test_id"] in new_by_id),
+                "신규 60문항 정답 생성값과 정정본 불일치")
+    prior_audit=b90.read_csv(REVIEW)
+    keys={(r["test_id"],r["component_id"]) for r in prior_audit}
+    b90.require(len(prior_audit)==len(keys)==135 and keys==
+                {(r["test_id"],c["component_id"]) for r in records for c in r["component_gold"]},
+                "기존 135성분 검토표 불일치")
+    replacements={(r["test_id"],r["component_id"]):r for r in new_audit
+                  if r["test_id"] in affected and r["component_id"]=="C1"}
+    b90.require(len(replacements)==2,"두 성분의 고시 근거 갱신 실패")
+    updated_audit=[replacements.get((r["test_id"],r["component_id"]),r)
+                   for r in prior_audit]
+    backup=PRIVATE/"before_row377_correction"
+    b90.require(not backup.exists(),"이전 정정 백업이 존재합니다. 중복 또는 부분 실행 확인")
+    backup.mkdir()
+    for p in (GOLD,MANIFEST,REVIEW):
+        shutil.copy2(p,backup/p.name)
+    GOLD.write_bytes(new_bytes)
+    with REVIEW.open("w",encoding="utf-8-sig",newline="") as fp:
+        writer=csv.DictWriter(fp,fieldnames=list(prior_audit[0]))
+        writer.writeheader()
+        writer.writerows(updated_audit)
+    m.update(gold_sha256=_hash(GOLD),gold_revision=GOLD_REVISION,
+             previous_gold_sha256=PREVIOUS_GOLD_SHA,
+             researcher_supplied_gold_sha256=RESEARCHER_GOLD_SHA,
+             new_component_review_sha256=_hash(review_file),
+             provisional_builder_sha256=_hash(Path(__file__)))
+    MANIFEST.write_text(json.dumps(m,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    assert_provisional(need_gold=True)
+    print("PASS: C-29-B와 M-26-B/C1의 고시 근거 377행, 소번호 2 정정 완료")
+    print("원본/manifest/검토표 백업:",backup)
+    print("90개 입력 문항 및 기존 모델 원본 응답은 변경하지 않았습니다")
+    print("정답지 SHA256:",m["gold_sha256"])
+
 def main():
     ap=argparse.ArgumentParser(description="90 B-only 잠정 답지 생성/검산 (전문가 확정 아님)")
     group=ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--create",action="store_true")
     group.add_argument("--check",action="store_true")
+    group.add_argument("--apply-correction",action="store_true",
+                       help="기존 B90 잠정 답지에 연구자 정정 2건 적용")
     args=ap.parse_args()
     if args.create:
         build_provisional()
+    if args.apply_correction:
+        apply_researcher_correction()
     if args.check:
         c,g,meta=assert_provisional(need_gold=True)
         print(f"PASS: B-only {len(c)}문항 / provisional Gold {len(g)}문항 / "

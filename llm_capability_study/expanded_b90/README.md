@@ -45,7 +45,7 @@ python .\run_b90.py --provisional --model qwen3.5:9b --limit 2
 |---|---|
 | `private/provisional_b90/cases_90_B_PROVISIONAL.jsonl` | **B 질문만 90개**. 기존 B 질문 30개 + 신규 60개 |
 | `private/provisional_b90/gold_90_B_PROVISIONAL.jsonl` | **잠정 답지 90개**, 성분별 고시 근거·CAS·관계 유형·지정번호 포함 |
-| `private/provisional_b90/gold_90_B_review_queue_PROVISIONAL.csv` | 신규 60문항의 90성분에 대한 원본 고시행·CAS 직접 기재·제외 문구 검토표 |
+| `private/provisional_b90/gold_90_B_review_queue_PROVISIONAL.csv` | 전체 90문항의 135성분에 대한 원본 고시행·CAS 직접 기재·제외 문구 검토표 |
 | `private/provisional_b90/provisional_manifest.json` | 질문·답지·고시·기존 Gold·실험 코드의 SHA256 |
 | `results_b90_provisional/qwen...__main.jsonl` | 4개 모델 각각의 원본 응답, **전문가 검증 실험과 별도 보관** |
 | `results_b90_provisional/B90_REPORT_PRIVATE.md` | 모델별 결과·검색·지정범위·최종 정답·4B와 9B 대응 비교 |
@@ -60,6 +60,46 @@ python .\run_b90.py --provisional --model qwen3.5:9b --limit 2
 신규 60문항의 90성분은 고시의 **직접 CAS 기재** 또는 **특정 포괄·제외 조항**으로 분류했습니다. 고시 행에 CAS가 직접 기재된 경우에는 직접 지정으로 채점하고, CAS가 직접 없으면 원문 문구에서 테트라플루오로붕산염, 톨루엔디아민 이성질체, 수은화합물, 페로시안염, 염소치환 수가 적은 PCB 등의 포함·제외 관계를 따로 확인합니다. 정답 후보 행 번호와 지정번호를 성분별 검토 CSV에 남깁니다.
 
 단, 기존 30문항은 이전 연구자의 잠정 Gold를 사용하고, 신규 분자식·포괄 지정 우선순위 및 명시적 제외는 아직 법령·화학물질 전문가가 독립 확인하지 않았습니다. **현재 생성되는 정확도는 연구설계 점검·오류 탐색용**입니다. 논문 최종 수치는 90문항을 독립 검증한 뒤 별도의 전문가 검증 실험으로 산출하세요.
+
+---
+
+## 2026-11-22 연구자 정답지 정정: 2,5-톨루엔디아민
+
+연구자 제공 정답지 `gold_90_B_PROVISIONAL.jsonl`(90개 B 문항, 135성분)를 반영했습니다.
+
+| 문항·성분 | CAS | 기존 근거 | 정정 근거 |
+|---|---|---|---|
+| C-29-B / C1 | 95-70-5 | 고시 376행, 소번호 1 | **고시 377행, 소번호 2** |
+| M-26-B / C1 | 95-70-5 | 고시 376행, 소번호 1 | **고시 377행, 소번호 2** |
+
+고시 376행의 별도 규정 제외 문구와 377행의 "2,5-톨루엔디아민과 그 염류"를 고려한 변경입니다. 지정번호 97-1-299, 포괄 포함, CAS 전용 필드 미기재 여부, 지정범위 판단은 그대로 유지합니다. **질문, 모델 프롬프트, 검색 조건, 추론 원본은 바꾸지 않습니다.** 전문가 독립 검증 전 잠정 답지라는 지위도 유지합니다.
+
+연구자 제공 정정 답지 SHA256:
+`248864f3aa8bd9715e1ed26216454c2c78ef0a2dc79fe5e2c7f60acb135f83c5`
+
+### 기존에 잠정 정답지를 생성한 PC
+
+기존 답지가 이미 존재하거나 연구자가 수동 정정한 답지를 기존 폴더에 저장한 경우, 다음 명령으로 **두 항목만 정정하고 manifest와 135성분 검토표를 일치시킵니다.** 원본/manifest/검토표는 `private/provisional_b90/before_row377_correction/`에 백업합니다. 기존 해시와 수정본 해시를 검사하므로 다른 수정이 섞였으면 자동 중단됩니다.
+
+~~~powershell
+cd F:\framework_chemical_regul_paper
+git pull origin main
+cd .\llm_capability_study\expanded_b90
+python .\prepare_provisional_b90.py --apply-correction
+python .\prepare_provisional_b90.py --check
+~~~
+
+처음 시작하는 PC는 기존처럼 `--create`를 실행하면 377행 정정이 자동 반영됩니다.
+
+### 실험을 이미 완료한 경우
+
+90개 질문과 모델 실행 조건은 변경되지 않았으므로 **모델 재실행 없이 재채점**할 수 있습니다. 이전 채점표를 덮어쓰지 않으려면 아래처럼 별도 결과 폴더를 지정합니다.
+
+~~~powershell
+python .\score_b90.py --provisional --out-dir .\results_b90_provisional\revised_gold_20261122
+~~~
+
+미완료 실험은 `python .\run_b90.py --provisional --model all`로 이어서 실행합니다. 기존 응답 파일과 설정이 일치하면 완료된 문항을 건너뜁니다. 정답지 전체와 모델 응답 파일은 GitHub에 올리지 않습니다.
 
 ---
 
