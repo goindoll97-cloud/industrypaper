@@ -78,6 +78,12 @@ def proof_clause(row, cas, relation):
         if cas in ("95-80-7","95-70-5"):
             return "Toluenediamines" in name and "823-40-5" in name
     if relation=="EXPLICIT_EXCEPTION":
+        if cas=="13943-58-3":
+            # The class is excluded by chemical family, not enumerated by CAS.
+            return "ferrocyanide salts" in name.lower()
+        if cas=="2051-60-7":
+            # 2-chlorobiphenyl has one chlorine substitution (<3).
+            return "pcbs" in name.lower() and "less than 3 chlorine" in name.lower()
         return cas in name
     return False
 
@@ -124,6 +130,9 @@ def derive_new(cases, review_rows, annex):
                         f"{key}: 근거 원본 고시 행 {row_id} 미존재")
             source=annex[row_id]
             direct=exact_cas(source,cas)
+            if cas=="2051-60-7":
+                b90.require(comp["formula"]=="C12H9Cl" and "Chlorobiphenyl" in comp["name_en"],
+                            "PCB 염소치환 수를 확인할 분자식/명칭 불일치")
             if mode=="CAS_EXACT_IN_ANNEX":
                 b90.require(direct, f"{key}: 고시 CAS 필드에 {cas} 직접 표기되지 않음")
                 b90.require(proposal["annex_match_kind"]=="SAME_CAS_APPEARS_IN_ANNEX",
