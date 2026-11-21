@@ -73,7 +73,7 @@ class ExpansionTests(unittest.TestCase):
                 r["identity_verified"]="YES"
                 r["selection_rationale"]="pre-registered fixture"
                 r["difficulty_rationale"]="synthetic difficulty fixture"
-                r["regulatory_pattern"]="synthetic fixture tag"
+                r["regulatory_pattern"]=sorted(b90.PATTERNS[r["group"]])[int(r["case_id"].split("-")[1])%2]
             b90.write_csv(csvfile,b90.CANDIDATE_COLS,records)
             with patch.object(b90,"DATA",data),patch.object(b90,"PRIVATE",private):
                 casepath=b90.build_cases(csvfile)
@@ -97,6 +97,11 @@ class ExpansionTests(unittest.TestCase):
                     b90.assert_frozen()
                 with self.assertRaisesRegex(ValueError,"덮어쓰기"):
                     b90.build_cases(csvfile)
+
+    def test_cas_check_digit(self):
+        self.assertTrue(b90.valid_cas("65-30-5"))
+        self.assertFalse(b90.valid_cas("65-30-4"))
+        self.assertFalse(b90.valid_cas("fake-cas"))
 
     def test_duplicate_structure_blocks_experiment(self):
         old,_=b90.baseline_b()
