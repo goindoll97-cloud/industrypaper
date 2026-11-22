@@ -1,0 +1,45 @@
+{
+  "dataset": {
+    "n_questions": 90,
+    "n_cases_per_group": 30,
+    "repeats": 5,
+    "n_models": 4,
+    "n_component_decisions_per_run": 135
+  },
+  "statuses": {
+    "gold": "CURATED_PROVISIONAL",
+    "independent_expert_review_completed": false
+  },
+  "hashes": {
+    "cases_sha256": "373662ae112eebec09c03cc760a0d556665a56ded1487500ce866867583c2566",
+    "annex_sha256": "665c2d449e769c0c7352c49f89934ff3ffaaea2ba4ebf35cc1e5ae545f004bc0",
+    "gold_sha256": "248864f3aa8bd9715e1ed26216454c2c78ef0a2dc79fe5e2c7f60acb135f83c5"
+  },
+  "protocol": {
+    "name": "b90_repeat_v1_fixed_temperature0_seed20261120",
+    "settings": {
+      "num_ctx": 4096,
+      "query_tokens": 384,
+      "reason_tokens": 900,
+      "temperature": 0,
+      "seed": 20261120,
+      "timeout": 480,
+      "search": "lexical_rank_fusion_v2_cas",
+      "keep_alive": "5m",
+      "think": false
+    }
+  },
+  "hardware": {
+    "os": "Windows-10-10.0.26200-SP0",
+    "processor": "AMD64 Family 25 Model 33 Stepping 2, AuthenticAMD",
+    "python": "3.11.12",
+    "ollama": "0.34.0",
+    "gpu_driver_memory": "NVIDIA GeForce RTX 2060, 610.88, 6144 MiB"
+  },
+  "models": {
+    "qwen2.5:3b": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+    "qwen3:4b-instruct": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+    "qwen3.5:4b": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+    "qwen3.5:9b": "56671c2ab9385f9cfcb404638e32cd62d88e3501d44822208363c010179a3c90"
+  }
+}

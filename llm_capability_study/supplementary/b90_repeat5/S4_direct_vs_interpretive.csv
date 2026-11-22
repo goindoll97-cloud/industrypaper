@@ -1,0 +1,9 @@
+model,designation_pattern,n,strict_n,strict_pct,retrieval_n,scope_n
+qwen2.5:3b,DIRECT_ONLY,54,0,0.00,49,0
+qwen2.5:3b,GROUP_OR_EXCEPTION,36,0,0.00,23,6
+qwen3:4b-instruct,DIRECT_ONLY,54,52,96.30,53,53
+qwen3:4b-instruct,GROUP_OR_EXCEPTION,36,1,2.78,20,10
+qwen3.5:4b,DIRECT_ONLY,54,42,77.78,54,43
+qwen3.5:4b,GROUP_OR_EXCEPTION,36,2,5.56,24,17
+qwen3.5:9b,DIRECT_ONLY,54,50,92.59,54,51
+qwen3.5:9b,GROUP_OR_EXCEPTION,36,0,0.00,27,25
