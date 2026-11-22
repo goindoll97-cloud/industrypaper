@@ -1,20 +1,20 @@
-name: Retrieval v4 offline regression tests
+name: B90 benchmark offline regression tests
 
 on:
   push:
     paths:
       - "llm_capability_study/retrieval_v4/**"
-      - "llm_capability_study/make_paper_report.py"
       - ".github/workflows/retrieval-v4-tests.yml"
       - ".gitattributes"
       - "llm_capability_study/expanded_b90/**"
+      - "llm_capability_study/supplementary/b90_repeat5/**"
   pull_request:
     paths:
       - "llm_capability_study/retrieval_v4/**"
-      - "llm_capability_study/make_paper_report.py"
       - ".github/workflows/retrieval-v4-tests.yml"
       - ".gitattributes"
       - "llm_capability_study/expanded_b90/**"
+      - "llm_capability_study/supplementary/b90_repeat5/**"
 
 permissions:
   contents: read
@@ -30,10 +30,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Validate manuscript summary script
-        run: |
-          python -m py_compile ../make_paper_report.py
-          python ../make_paper_report.py --help
       - name: Check source-file SHA and safe Windows CRLF recovery
         run: |
           python preflight.py

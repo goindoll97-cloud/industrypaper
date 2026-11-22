@@ -1,5 +1,0 @@
-model,n_cases,query_valid,answer_json_valid,all_gold_rows_retrieved,scope_article3_correct,strict_case_exact,strict_end_to_end
-Qwen2.5 3B,60,51,60,32,8,0,0
-Qwen3 4B,60,57,51,34,24,17,17
-Qwen3.5 4B,60,60,60,40,38,17,17
-Qwen3.5 9B (추가),60,60,60,45,48,16,16

@@ -1,6 +1,0 @@
-error_type,n_cases,example_test_ids,denominator_case_n,multiple_errors_possible
-정답 고시 행을 검색하지 못함,6,"C-07-A, C-07-B, C-08-B, M-06-A",32,TRUE
-지정 관계 유형이 다름,24,"C-01-A, C-01-B, C-07-A, C-07-B",32,TRUE
-CAS 직접 지정 판단이 다름,17,"C-01-A, C-01-B, C-09-A, C-09-B",32,TRUE
-지정번호가 다름,11,"C-07-A, C-07-B, C-08-B, C-10-A",32,TRUE
-고시 소번호가 다름,6,"C-07-A, C-07-B, C-08-B, M-06-A",32,TRUE

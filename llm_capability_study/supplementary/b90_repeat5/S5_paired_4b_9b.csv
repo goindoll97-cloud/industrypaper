@@ -1,0 +1,4 @@
+metric,both_correct,only_4b,only_9b,both_wrong,n
+all_gold_rows_retrieved,76,2,5,7,90
+scope_plus_article3_correct,57,3,19,11,90
+strict_end_to_end,40,4,10,36,90
