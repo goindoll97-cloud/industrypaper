@@ -14,6 +14,7 @@ on:
       - ".github/workflows/retrieval-v4-tests.yml"
       - ".gitattributes"
       - "llm_capability_study/expanded_b90/**"
+      - "llm_capability_study/supplementary/b90_repeat5/**"
 
 permissions:
   contents: read
