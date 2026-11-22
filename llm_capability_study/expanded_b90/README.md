@@ -2,6 +2,73 @@
 
 **현재 상태: 신규 60사례의 CAS·영문명·분자식·가상 혼합물 조성까지 채운 후보 1차 초안 작성 완료. 화학물질 정보와 법령 정답은 독립 전문가 검증 전이므로 확정 검증셋은 아닙니다.** 따라서 지금은 90문항 모델 정확도를 제시할 수 없으며, 모든 검증 조건이 충족되기 전에는 모델 실행을 허용하지 않습니다.
 
+
+## 5회 반복실험 및 모델별 실제 소요시간 (권장)
+
+수정된 90개 B 질문과 잠정 Gold를 그대로 사용합니다. 기존 1회 실험과 분리된 **새로운 5회 반복**입니다. 기존 1회 결과를 합산하거나 원본을 덮어쓰지 않습니다. 이미 연구자 정정본을 적용한 PC라면 새 Gold 생성이 필요 없습니다.
+
+~~~powershell
+cd F:\framework_chemical_regul_paper
+git pull origin main
+cd .\llm_capability_study\expanded_b90
+
+# 기존 질문 및 수정 답지 검증
+python .\prepare_provisional_b90.py --check
+
+# 4개 모델 × 동일 90문항 × 5회 (총 1,800개 평가, 3,600회 LLM 호출)
+python .\repeat_b90.py
+
+# 모두 완료 후 정확도·일관성·시간 분석
+python .\repeat_b90.py --score
+~~~
+
+`--check`에서 정답지 정정 전이라고 나오면 기존 문서의 `--apply-correction` 절차를 먼저 수행하십시오. 잠정 답지가 없는 PC에서는 `--create`를 먼저 실행하십시오.
+
+모델별로 따로 실행하려면 다음 명령을 순서대로 실행합니다. 설정과 반복 수가 동일하면 완료된 문항은 자동으로 건너뜁니다. 중단되면 동일 명령을 다시 실행하면 됩니다. 여러 PowerShell에서 동시에 실행하지 마십시오. 같은 PC, Ollama 버전·모델 digest 및 다른 프로그램의 부하가 가능한 한 동일한 조건에서 측정하십시오.
+
+~~~powershell
+python .\repeat_b90.py --model qwen2.5:3b
+python .\repeat_b90.py --model qwen3:4b-instruct
+python .\repeat_b90.py --model qwen3.5:4b
+python .\repeat_b90.py --model qwen3.5:9b
+python .\repeat_b90.py --score
+~~~
+
+기본 5회가 아닌 3회를 선택하려면 **처음부터** `--repeats 3 --out-dir .\results_b90_repeated_3runs`를 실행과 채점 명령 모두에 동일하게 부여합니다. 동일 결과 폴더에서 반복 수·모델 버전·환경·실험 코드를 변경할 수 없습니다. 본실험에서는 별도 시험용 `--limit`를 사용하지 않는 것을 권장합니다(재개 시 추가 모델 로딩 비용이 발생하기 때문).
+
+### 실험 조건 및 시간 정의
+
+- 기존과 동일한 프롬프트, 검색 범위, context=4096, 최대 출력 384/900 토큰, temperature=0 및 seed=20261120, Qwen3 계열 think=false. 따라서 **같은 설정에서의 재현성과 일관성**을 측정하며 확률적 조건의 민감도 실험은 아닙니다. 같은 답변이 반복될 수 있습니다.
+- 검색어 생성 API 소요시간, SQLite 검색시간, 최종판단 API 소요시간을 분리 기록합니다. API 시간은 모델 로딩과 요청/응답 시간도 포함합니다.
+- 문항별 end-to-end 처리시간은 실제 단조 시계(perf_counter)로 측정합니다. 검색어 생성, 로컬 검색, 최종판단, 프롬프트 구성 및 응답 파싱을 포함합니다. 출력 및 파일 저장, DB 준비, 블록 전후 언로드는 제외합니다.
+- 각 모델·반복 블록 시작 시 모델을 언로드하고, 첫 문항에 로딩 시간을 포함합니다. 첫 문항을 제외한 처리시간도 기록합니다. 전체 model/block wall time은 언로드·출력·저장도 포함하여 별도로 기록합니다. 중단 및 재개된 블록은 별도로 표기하며, 기록이 불완전한 경우 블록 총시간은 NA로 표시합니다.
+- 모델별 90문항 처리시간 합계, 문항당 평균·중앙값·표준편차, 5회 반복별 평균 및 표준편차, 전체 5회 작업시간 합계를 구합니다. Ollama가 제공하는 load/eval/prompt-eval duration 및 토큰 수도 원본 JSONL에 보존합니다.
+- 모든 반복의 응답이 유효하고 성분별 구조화된 판단(자유서술형 설명 제외)이 동일한 문항 비율, 모두 정답/모두 오답 비율 및 정확도 평균·표준편차를 구합니다. 반복은 같은 문항을 사용하므로 450개의 서로 독립적인 시험 문항으로 취급하면 안 됩니다.
+- PC와 GPU 종류, 드라이버, Ollama/Python 버전, 모델 digest가 기록됩니다. 해당 환경에서의 실측시간이며 사람의 업무시간 대비 절약률이나 일반적인 하드웨어 속도를 직접 측정하는 실험은 아닙니다.
+
+### 결과 파일
+
+`results_b90_repeated/` 아래에 반복별 4개 모델 원본 JSONL, `blocks.jsonl`, `repeat_manifest.json`이 저장됩니다. 모두 완료 후 `analysis/` 안에 다음 분석 결과가 생성됩니다.
+
+| 파일 | 내용 |
+|---|---|
+| REPEAT_REPORT_PRIVATE.md | 모델별 정확도, 시간, 일관성 주요 지표 |
+| REPEAT_model_summary_PRIVATE.csv | 모델별 5회 평균 및 SD, 누적 처리시간, 일관성 |
+| REPEAT_per_run_PRIVATE.csv | 각 모델·반복별 정확도와 검색·판단·전체 시간 |
+| REPEAT_case_scores_PRIVATE.csv | 반복별 문항 점수 및 처리시간 |
+| REPEAT_component_scores_PRIVATE.csv | 성분별 판정 정확도 |
+| REPEAT_decision_agreement_PRIVATE.csv | 같은 문항에 대한 반복 판단 일관성 |
+| REPEAT_subgroups_PRIVATE.csv | 유형·난이도·지정관계별 정확도 평균 및 SD |
+| REPEAT_provenance_PRIVATE.json | 실행환경, 원본 파일 SHA와 수정 Gold의 SHA |
+
+분석 결과 전달은 아래 명령으로 ZIP 파일을 만들어 진행합니다(공개 GitHub에 원본 응답과 답지 업로드 금지).
+
+~~~powershell
+Compress-Archive -Path .\results_b90_repeated -DestinationPath .\B90_REPEATED_RESULTS.zip -Force
+~~~
+
+---
+
 ## 바로 실험할 수 있는 B 조건 90문항 잠정 정답지 (신규)
 
 **이전 30개의 비공개 잠정 정답지와 공식 2026-5호 고시 별표를 사용해 90문항 답지를 로컬에서 생성하고 바로 4개 모델을 평가할 수 있습니다. A 질문은 입력·답지·결과에 포함하지 않습니다.**
