@@ -474,6 +474,30 @@ def score(args):
             fmt(x["scope_plus_article3_correct_pct_mean_across_repeats"]),
             fmt(x["task_seconds_mean_mean_across_repeats"]),fmt(task/60),
             str(x["all_valid_identical_n"])+"/90"])+"|")
+    lines+=["","## 모델별 처리시간 상세 (초, 5회 또는 지정 반복 수의 평균)","",
+            "|모델|검색어 생성/문항|고시 검색/문항|최종 판단/문항|전체/문항|"
+            "90문항 총시간 (분) 평균 ± SD|전체 반복 작업시간 (시간)|",
+            "|---|---:|---:|---:|---:|---:|---:|"]
+    for x in ms:
+        task=x["task_seconds_total_mean_across_repeats"]
+        sd=x["task_seconds_total_sd_across_repeats"]
+        lines.append("|"+"|".join([
+            x["model"],
+            fmt(x["query_seconds_mean_mean_across_repeats"]),
+            fmt(x["retrieval_seconds_mean_mean_across_repeats"]),
+            fmt(x["reason_seconds_mean_mean_across_repeats"]),
+            fmt(x["task_seconds_mean_mean_across_repeats"]),
+            fmt(task/60)+" ± "+fmt(sd/60 if sd is not None else None),
+            fmt(x["all_repeats_task_seconds"]/3600)])+"|")
+    lines+=["","## 반복별 모델 처리시간 (분)","",
+            "|반복|모델|90문항 작업시간|블록 전체 실측시간|cold-start 문항 수|",
+            "|---:|---|---:|---:|---:|"]
+    for x in rep_stats:
+        wall=x["wall_block_seconds_total"]
+        lines.append("|"+"|".join([str(x["repeat"]),x["model"],
+            fmt(x["task_seconds_total"]/60),
+            fmt(wall/60 if wall is not None else None),
+            str(x["cold_first_cases"])])+"|")
     lines+=["","90문항 작업시간은 각 문항의 실제 end-to-end 측정값의 합이다. "
             "검색어 생성, 로컬 고시 검색, 최종 판단 및 파싱을 포함하며 파일 기록, "
             "출력, DB 준비, 블록 전후 모델 언로드는 제외한다.",
