@@ -1,17 +1,16 @@
-# 2026-5호 화학물질 지정고시 기반 소형 LLM 연구
+# 화학물질 규제 확인 업무의 LLM 수행 가능성 연구
 
-## 논문 작업은 아래 페이지 하나에서 시작하세요.
+**현재 논문 기준: 화학물질안전원고시 제2026-5호, B 조건 90문항, 4개 Qwen 모델, 각 5회 반복.**
 
-**[논문 방법론·현재 결과·실행코드 통합 안내](llm_capability_study/README.md)**
+CAS 번호의 단순 대조만으로 판단하기 어려운 포괄 지정·제외 조건을 포함하여, LLM이 화학물질 규제 확인 업무를 어디까지 수행할 수 있는지 **정확성·동일 설정 재현성·실제 처리시간**을 평가합니다.
 
-- 논문용 결과표 생성: `llm_capability_study/make_paper_report.py`
-- 핵심 실험 코드: `llm_capability_study/retrieval_v4/run_retrieval.py`
-- 정답 채점: `llm_capability_study/retrieval_v4/score_results.py`
+- [논문용 연구 개요 및 결과](llm_capability_study/README.md)
+- [최신 보충자료 S1–S6 (공개 집계표)](llm_capability_study/supplementary/b90_repeat5/README.md)
+- [90문항 실행·채점과 환경](llm_capability_study/expanded_b90/README.md)
+- [반복실험 실행 코드](llm_capability_study/expanded_b90/repeat_b90.py)
 
-나머지는 재현성을 위한 보조 코드와 이전 버전입니다. 실험 자료를 지우거나 새 실험을 수행할 필요는 없습니다.
+**핵심 수치:** 모델당 90문항 × 5회. 완전정답률 0.00%, 58.89%, 48.89%, 55.56% (Qwen2.5 3B, Qwen3 4B, Qwen3.5 4B, Qwen3.5 9B). 모델별 90문항 평균 처리시간 5.37, 10.95, 9.45, 46.20분 (RTX 2060 6GB 기반).
 
-**[후속 B 조건 90문항 확대 실험 준비·실행 안내](llm_capability_study/expanded_b90/README.md)** — 기존 30개 B 문항에 60개 신규 화학물질 규제 상황의 CAS·분자식·가상 혼합물 조성을 갖춘 **후보 초안은 작성했고**, 화학물질 정보와 전문가 Gold는 검증·동결 전입니다.
+**중요:** 전문가 독립 검증 전인 잠정 Gold에 대한 일치율입니다. 최종 법적 판단, 업무 완전 대체, 사람 대비 시간 절약률을 입증한 결과가 아닙니다. 개인 연구 자료인 Gold, 상세 모델 응답 및 성분별 감사자료는 공개하지 않습니다.
 
-**[총 90개 B 질문 후보 파일 확인](llm_capability_study/expanded_b90/proposals/README.md)** — 기존 B 30문항 보존, 신규 60문항의 실제 CAS·명칭·분자식·혼합물 함량을 포함한 제안 자료.
-
-**데이터 보호:** Gold 정답지(`private/`), 모델 원본 응답(`results_v4_1/`)은 로컬에만 보관합니다. 공개 저장소에 정답지 원문이나 원본 응답을 업로드하지 마세요. Gold는 아직 독립 법령 전문가 검증 전 잠정판정입니다.
+이전 연구 파일은 메인 브랜치에서 정리했습니다. 정리 전 저장소 상태는 [보존 브랜치](https://github.com/goindoll97-cloud/industrypaper/tree/archive/pre-b90-cleanup-20261122)에 유지되어 복구할 수 있습니다.

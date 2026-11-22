@@ -1,343 +1,61 @@
-# 후속 본실험 v5: B 조건 90문항 확장 계획 및 실행
+# B 조건 90문항 · 4개 모델 · 5회 반복 (현재 논문 기준)
 
-**현재 상태: 신규 60사례의 CAS·영문명·분자식·가상 혼합물 조성까지 채운 후보 1차 초안 작성 완료. 화학물질 정보와 법령 정답은 독립 전문가 검증 전이므로 확정 검증셋은 아닙니다.** 따라서 지금은 90문항 모델 정확도를 제시할 수 없으며, 모든 검증 조건이 충족되기 전에는 모델 실행을 허용하지 않습니다.
+현재 논문 결과는 **\`repeat_b90.py\`의 5회 반복실험**입니다. 이전 단일 실행 \`run_b90.py\`와 v4 A/B 실험 결과는 현재 논문 통계에 합산하지 않습니다. 실행/채점의 입력 및 소스 해시는 동결되어 있으며, 기존 코드는 재현성 때문에 유지합니다.
 
+## 준비
 
-## 5회 반복실험 및 모델별 실제 소요시간 (권장)
+Windows PowerShell에서 기존 프로젝트 폴더를 사용합니다. Ollama에 \`qwen2.5:3b\`, \`qwen3:4b-instruct\`, \`qwen3.5:4b\`, \`qwen3.5:9b\`가 설치되어 있어야 합니다.
 
-수정된 90개 B 질문과 잠정 Gold를 그대로 사용합니다. 기존 1회 실험과 분리된 **새로운 5회 반복**입니다. 기존 1회 결과를 합산하거나 원본을 덮어쓰지 않습니다. 이미 연구자 정정본을 적용한 PC라면 새 Gold 생성이 필요 없습니다.
-
-~~~powershell
+\`\`\`powershell
 cd F:\framework_chemical_regul_paper
 git pull origin main
 cd .\llm_capability_study\expanded_b90
-
-# 기존 질문 및 수정 답지 검증
 python .\prepare_provisional_b90.py --check
+\`\`\`
 
-# 4개 모델 × 동일 90문항 × 5회 (총 1,800개 평가, 3,600회 LLM 호출)
+위 검사는 로컬 \`private/provisional_b90/\`의 잠정 정답지, 고시 1,451행 및 프로토콜 해시가 일치하는지 확인합니다. **수정 전 Gold/manifest**라서 불일치하면, 일회성으로 \`python .\prepare_provisional_b90.py --apply-correction\` 실행 후 \`--check\`를 다시 시도하십시오. 이미 올바르게 검증된 파일에는 이 조치를 반복할 필요가 없습니다. 처음 환경에서 로컬 Gold 자체가 없다면 \`python .\prepare_provisional_b90.py --create\`가 필요하며, v4의 비공개 원본 Gold가 필요합니다.
+
+## 실행 및 채점
+
+\`\`\`powershell
+# 90문항 × 네 모델 × 5회 실행
 python .\repeat_b90.py
 
-# 모두 완료 후 정확도·일관성·시간 분석
+# 모든 원본 결과가 준비된 후에 채점
 python .\repeat_b90.py --score
-~~~
+\`\`\`
 
-`--check`에서 정답지 정정 전이라고 나오면 기존 문서의 `--apply-correction` 절차를 먼저 수행하십시오. 잠정 답지가 없는 PC에서는 `--create`를 먼저 실행하십시오.
+- 기본 5회(4모델 × 90문항 = 각 반복 360문항), 총 1,800개 문항 평가. 검색어 생성과 판정 각각 한 번씩 호출합니다.
+- 중단된 경우 같은 명령으로 재실행하면 완료한 질문을 건너뜁니다. 서로 다른 모델을 별도 실행하려면 \`--model qwen3.5:9b\` 등의 옵션을 사용하십시오.
+- 입력, 실행 코드 해시, Ollama 버전, 모델 digest, PC 환경이나 반복 수가 바뀌면 동일 결과 폴더에 이어 쓰지 못하도록 차단합니다.
+- Temperature 0, 고정 seed 20261120, context 4096, 검색어 384·판단 900 출력토큰, 동일한 고시 검색/프롬프트. 다른 온도 조건의 실험이 아닙니다.
 
-모델별로 따로 실행하려면 다음 명령을 순서대로 실행합니다. 설정과 반복 수가 동일하면 완료된 문항은 자동으로 건너뜁니다. 중단되면 동일 명령을 다시 실행하면 됩니다. 여러 PowerShell에서 동시에 실행하지 마십시오. 같은 PC, Ollama 버전·모델 digest 및 다른 프로그램의 부하가 가능한 한 동일한 조건에서 측정하십시오.
+## 결과와 처리시간의 정의
 
-~~~powershell
-python .\repeat_b90.py --model qwen2.5:3b
-python .\repeat_b90.py --model qwen3:4b-instruct
-python .\repeat_b90.py --model qwen3.5:4b
-python .\repeat_b90.py --model qwen3.5:9b
-python .\repeat_b90.py --score
-~~~
+로컬 전용 출력 폴더: \`results_b90_repeated/\`
 
-기본 5회가 아닌 3회를 선택하려면 **처음부터** `--repeats 3 --out-dir .\results_b90_repeated_3runs`를 실행과 채점 명령 모두에 동일하게 부여합니다. 동일 결과 폴더에서 반복 수·모델 버전·환경·실험 코드를 변경할 수 없습니다. 본실험에서는 별도 시험용 `--limit`를 사용하지 않는 것을 권장합니다(재개 시 추가 모델 로딩 비용이 발생하기 때문).
+- \`repeat_01\`부터 \`repeat_05\`: 모델별 원본 JSONL, 20개 파일.
+- \`repeat_manifest.json\`, \`blocks.jsonl\`: 설정, 모델 digest, 장치정보 및 실행 블록 시작/종료.
+- \`analysis/REPEAT_REPORT_PRIVATE.md\`: 모델·반복·검색/추론 단계별 정확도와 실측시간.
+- \`analysis/REPEAT_model_summary_PRIVATE.csv\`: 5회 평균/SD/모델별 총시간과 일관성.
+- \`analysis/REPEAT_per_run_PRIVATE.csv\`, \`REPEAT_case_scores_PRIVATE.csv\`, \`REPEAT_component_scores_PRIVATE.csv\`, \`REPEAT_decision_agreement_PRIVATE.csv\`, \`REPEAT_subgroups_PRIVATE.csv\`: 나머지 상세 분석.
 
-### 실험 조건 및 시간 정의
+문항별 task time은 **검색어 생성 LLM API 시간, 고시 검색, 최종 판단 LLM API 시간, 프롬프트/파싱 시간**의 실제 합계입니다. 파일 기록과 모델 블록 전후의 언로드는 제외하고, 각 모델 블록 첫 질문에는 모델 로딩이 포함됩니다. 별도의 block wall time에는 블록 부대시간이 포함됩니다. 사용자의 RTX 2060 6GB/Windows/Ollama 환경에 해당하는 값입니다.
 
-- 기존과 동일한 프롬프트, 검색 범위, context=4096, 최대 출력 384/900 토큰, temperature=0 및 seed=20261120, Qwen3 계열 think=false. 따라서 **같은 설정에서의 재현성과 일관성**을 측정하며 확률적 조건의 민감도 실험은 아닙니다. 같은 답변이 반복될 수 있습니다.
-- 검색어 생성 API 소요시간, SQLite 검색시간, 최종판단 API 소요시간을 분리 기록합니다. API 시간은 모델 로딩과 요청/응답 시간도 포함합니다.
-- 문항별 end-to-end 처리시간은 실제 단조 시계(perf_counter)로 측정합니다. 검색어 생성, 로컬 검색, 최종판단, 프롬프트 구성 및 응답 파싱을 포함합니다. 출력 및 파일 저장, DB 준비, 블록 전후 언로드는 제외합니다.
-- 각 모델·반복 블록 시작 시 모델을 언로드하고, 첫 문항에 로딩 시간을 포함합니다. 첫 문항을 제외한 처리시간도 기록합니다. 전체 model/block wall time은 언로드·출력·저장도 포함하여 별도로 기록합니다. 중단 및 재개된 블록은 별도로 표기하며, 기록이 불완전한 경우 블록 총시간은 NA로 표시합니다.
-- 모델별 90문항 처리시간 합계, 문항당 평균·중앙값·표준편차, 5회 반복별 평균 및 표준편차, 전체 5회 작업시간 합계를 구합니다. Ollama가 제공하는 load/eval/prompt-eval duration 및 토큰 수도 원본 JSONL에 보존합니다.
-- 모든 반복의 응답이 유효하고 성분별 구조화된 판단(자유서술형 설명 제외)이 동일한 문항 비율, 모두 정답/모두 오답 비율 및 정확도 평균·표준편차를 구합니다. 반복은 같은 문항을 사용하므로 450개의 서로 독립적인 시험 문항으로 취급하면 안 됩니다.
-- PC와 GPU 종류, 드라이버, Ollama/Python 버전, 모델 digest가 기록됩니다. 해당 환경에서의 실측시간이며 사람의 업무시간 대비 절약률이나 일반적인 하드웨어 속도를 직접 측정하는 실험은 아닙니다.
+## 논문용 자료
 
-### 결과 파일
+공개 [보충자료 S1–S6](../supplementary/b90_repeat5/README.md)에서 90문항/5회 실측 결과를 확인할 수 있습니다. 잠정 Gold 원본, 개별 오답, 모델 응답 및 상세 감사자료는 **GitHub에 공개하지 않습니다**. 전부 로컬 파일로 보존하십시오.
 
-`results_b90_repeated/` 아래에 반복별 4개 모델 원본 JSONL, `blocks.jsonl`, `repeat_manifest.json`이 저장됩니다. 모두 완료 후 `analysis/` 안에 다음 분석 결과가 생성됩니다.
-
-| 파일 | 내용 |
-|---|---|
-| REPEAT_REPORT_PRIVATE.md | 모델별 정확도, 시간, 일관성 주요 지표 |
-| REPEAT_model_summary_PRIVATE.csv | 모델별 5회 평균 및 SD, 누적 처리시간, 일관성 |
-| REPEAT_per_run_PRIVATE.csv | 각 모델·반복별 정확도와 검색·판단·전체 시간 |
-| REPEAT_case_scores_PRIVATE.csv | 반복별 문항 점수 및 처리시간 |
-| REPEAT_component_scores_PRIVATE.csv | 성분별 판정 정확도 |
-| REPEAT_decision_agreement_PRIVATE.csv | 같은 문항에 대한 반복 판단 일관성 |
-| REPEAT_subgroups_PRIVATE.csv | 유형·난이도·지정관계별 정확도 평균 및 SD |
-| REPEAT_provenance_PRIVATE.json | 실행환경, 원본 파일 SHA와 수정 Gold의 SHA |
-
-분석 결과 전달은 아래 명령으로 ZIP 파일을 만들어 진행합니다(공개 GitHub에 원본 응답과 답지 업로드 금지).
-
-~~~powershell
+\`\`\`powershell
 Compress-Archive -Path .\results_b90_repeated -DestinationPath .\B90_REPEATED_RESULTS.zip -Force
-~~~
+\`\`\`
 
----
+## 디렉터리 설명
 
-## 바로 실험할 수 있는 B 조건 90문항 잠정 정답지 (신규)
+- \`proposals/\`: **동결된 90문항 질문·검토 파일**. 파일명에 남은 이전 작업 표기는 해시 검증과 재현성을 위해 변경하지 않습니다.
+- \`prepare_b90.py\`, \`prepare_provisional_b90.py\`, \`run_b90.py\`, \`score_b90.py\`: 동결된 자료 구축·채점 의존 코드. 이 파일을 삭제하거나 변경하면 기존 실험의 무결성 검사가 실패할 수 있습니다.
+- \`../retrieval_v4/\`: 고시 검색 및 채점에 쓰이는 **필수 내부 엔진과 입력 데이터**. 연구에서 사용한 고시·문항의 SHA 검증 때문에 유지합니다.
+- \`tests/\`: 재현성 회귀 테스트.
+- \`results_b90_repeated/\`, \`private/\`: 로컬에만 생성되며 GitHub 추적/공개 대상이 아닙니다.
 
-**이전 30개의 비공개 잠정 정답지와 공식 2026-5호 고시 별표를 사용해 90문항 답지를 로컬에서 생성하고 바로 4개 모델을 평가할 수 있습니다. A 질문은 입력·답지·결과에 포함하지 않습니다.**
-
-이 경로는 기존 독립 법령 전문가 검증 프로세스와 **명확하게 분리된 예비실험용**입니다. 모든 90문항의 정답을 생성하지만 **정답지·CAS/분자식의 독립 전문가 검증은 완료되지 않았으므로 논문에 확정 정확도로 기재하면 안 됩니다.** 공식 고시 내 정확한 근거 행과 제외 문구를 대조한 *잠정 Gold*입니다.
-
-기존 로컬 파일 `retrieval_v4/private/gold_60.jsonl`이 있어야 합니다. 이 파일은 과거 30사례의 A/B 정답 60개로 구성되어 있으며, 새 프로그램은 **B 정답 30개만** 가져옵니다. SHA256은 기존 로컬 `gold_registry.json`과 검증합니다. 해당 파일이 없으면 과거 Gold 설치 ZIP에서 복원해야 하며, GitHub에는 업로드하지 않습니다.
-
-Windows PowerShell에서 **다음 순서대로 실행하세요.** 기존 빈 `new_cases_review.csv`에 실제 물질 정보를 복사하거나 전문가 확인을 미리 진행할 필요는 없습니다. 신규 60문항은 GitHub에 작성한 후보 초안에서 가져옵니다.
-
-~~~powershell
-cd F:\framework_chemical_regul_paper
-git pull origin main
-cd .\llm_capability_study\expanded_b90
-
-# 1. B 질문만 총 90개 + 기존 B 잠정 정답 30개 + 신규 잠정 정답 60개
-python .\prepare_provisional_b90.py --create
-
-# 2. 질문·답지 수 및 SHA256 재검사
-python .\prepare_provisional_b90.py --check
-
-# 3. 원래와 같은 4개 모델로 B 질문 90개씩 실행
-python .\run_b90.py --provisional --model qwen2.5:3b
-python .\run_b90.py --provisional --model qwen3:4b-instruct
-python .\run_b90.py --provisional --model qwen3.5:4b
-python .\run_b90.py --provisional --model qwen3.5:9b
-
-# 4. 모델별 정확도·유형별 결과·4B 대 9B 같은 문항 비교
-python .\score_b90.py --provisional
-~~~
-
-먼저 입력 구조와 모델 작동을 2문항만 시험할 수도 있습니다. **해당 2문항은 같은 결과 파일에 기록되어 전체 실행 때 건너뜁니다.**
-
-~~~powershell
-python .\run_b90.py --provisional --model qwen3.5:9b --limit 2
-~~~
-
-### 생성되는 비공개 파일
-
-| 위치 | 내용 |
-|---|---|
-| `private/provisional_b90/cases_90_B_PROVISIONAL.jsonl` | **B 질문만 90개**. 기존 B 질문 30개 + 신규 60개 |
-| `private/provisional_b90/gold_90_B_PROVISIONAL.jsonl` | **잠정 답지 90개**, 성분별 고시 근거·CAS·관계 유형·지정번호 포함 |
-| `private/provisional_b90/gold_90_B_review_queue_PROVISIONAL.csv` | 전체 90문항의 135성분에 대한 원본 고시행·CAS 직접 기재·제외 문구 검토표 |
-| `private/provisional_b90/provisional_manifest.json` | 질문·답지·고시·기존 Gold·실험 코드의 SHA256 |
-| `results_b90_provisional/qwen...__main.jsonl` | 4개 모델 각각의 원본 응답, **전문가 검증 실험과 별도 보관** |
-| `results_b90_provisional/B90_REPORT_PRIVATE.md` | 모델별 결과·검색·지정범위·최종 정답·4B와 9B 대응 비교 |
-| `results_b90_provisional/B90_*_PRIVATE.csv` | 논문 보충자료 작성을 위한 문항별·성분별 판정 및 불일치 증거 |
-
-고시 포괄 조항의 **명시적 제외**는 ‘그 조항의 지정범위에서 제외’라는 뜻입니다. 모든 다른 화학물질 법규에서 완전히 규제받지 않는다는 뜻이 아닙니다. 혼합물 판정 또한 고시 제3조의 **모든 성분이 지정되었는지**만 평가합니다.
-
-**실험 상태 구분:** `--provisional` 출력은 `results_b90_provisional/`에만 기록되며, 나중에 독립 전문가 확인을 마친 `--freeze` 경로의 `results_b90/`와 합치지 않습니다. 원본 v4.1 결과·Gold에는 어떠한 변경도 하지 않습니다. 잠정 답지 생성은 같은 파일이 있으면 덮어쓰지 않고 중단합니다.
-
-### 답지 검증 수준
-
-신규 60문항의 90성분은 고시의 **직접 CAS 기재** 또는 **특정 포괄·제외 조항**으로 분류했습니다. 고시 행에 CAS가 직접 기재된 경우에는 직접 지정으로 채점하고, CAS가 직접 없으면 원문 문구에서 테트라플루오로붕산염, 톨루엔디아민 이성질체, 수은화합물, 페로시안염, 염소치환 수가 적은 PCB 등의 포함·제외 관계를 따로 확인합니다. 정답 후보 행 번호와 지정번호를 성분별 검토 CSV에 남깁니다.
-
-단, 기존 30문항은 이전 연구자의 잠정 Gold를 사용하고, 신규 분자식·포괄 지정 우선순위 및 명시적 제외는 아직 법령·화학물질 전문가가 독립 확인하지 않았습니다. **현재 생성되는 정확도는 연구설계 점검·오류 탐색용**입니다. 논문 최종 수치는 90문항을 독립 검증한 뒤 별도의 전문가 검증 실험으로 산출하세요.
-
----
-
-## 2026-11-22 연구자 정답지 정정: 2,5-톨루엔디아민
-
-연구자 제공 정답지 `gold_90_B_PROVISIONAL.jsonl`(90개 B 문항, 135성분)를 반영했습니다.
-
-| 문항·성분 | CAS | 기존 근거 | 정정 근거 |
-|---|---|---|---|
-| C-29-B / C1 | 95-70-5 | 고시 376행, 소번호 1 | **고시 377행, 소번호 2** |
-| M-26-B / C1 | 95-70-5 | 고시 376행, 소번호 1 | **고시 377행, 소번호 2** |
-
-고시 376행의 별도 규정 제외 문구와 377행의 "2,5-톨루엔디아민과 그 염류"를 고려한 변경입니다. 지정번호 97-1-299, 포괄 포함, CAS 전용 필드 미기재 여부, 지정범위 판단은 그대로 유지합니다. **질문, 모델 프롬프트, 검색 조건, 추론 원본은 바꾸지 않습니다.** 전문가 독립 검증 전 잠정 답지라는 지위도 유지합니다.
-
-연구자 제공 정정 답지 SHA256:
-`248864f3aa8bd9715e1ed26216454c2c78ef0a2dc79fe5e2c7f60acb135f83c5`
-
-### 기존에 잠정 정답지를 생성한 PC
-
-기존 답지가 이미 존재하거나 연구자가 수동 정정한 답지를 기존 폴더에 저장한 경우, 다음 명령으로 **두 항목만 정정하고 manifest와 135성분 검토표를 일치시킵니다.** 원본/manifest/검토표는 `private/provisional_b90/before_row377_correction/`에 백업합니다. 기존 해시와 수정본 해시를 검사하므로 다른 수정이 섞였으면 자동 중단됩니다.
-
-~~~powershell
-cd F:\framework_chemical_regul_paper
-git pull origin main
-cd .\llm_capability_study\expanded_b90
-python .\prepare_provisional_b90.py --apply-correction
-python .\prepare_provisional_b90.py --check
-~~~
-
-처음 시작하는 PC는 기존처럼 `--create`를 실행하면 377행 정정이 자동 반영됩니다.
-
-### 실험을 이미 완료한 경우
-
-90개 질문과 모델 실행 조건은 변경되지 않았으므로 **모델 재실행 없이 재채점**할 수 있습니다. 이전 채점표를 덮어쓰지 않으려면 아래처럼 별도 결과 폴더를 지정합니다.
-
-~~~powershell
-python .\score_b90.py --provisional --out-dir .\results_b90_provisional\revised_gold_20261122
-~~~
-
-미완료 실험은 `python .\run_b90.py --provisional --model all`로 이어서 실행합니다. 기존 응답 파일과 설정이 일치하면 완료된 문항을 건너뜁니다. 정답지 전체와 모델 응답 파일은 GitHub에 올리지 않습니다.
-
----
-
-## 연구 목적
-
-**“더 좋은 대규모 언어모델(LLM)이 나오면 화학물질 규제의 지정 여부와 그 법적 근거를 정확하게 판정할 수 있는가?”**를 B 조건 질문으로 확대 평가합니다. 같은 4개 모델(Qwen2.5 3B, Qwen3 4B, Qwen3.5 4B, Qwen3.5 9B), 동일 고시 1,451행과 v4.1 검색·판정 절차를 사용하되, **90문항의 후속 연구는 새 실험 버전**으로 보존합니다. 기존 60문항 결과를 90문항 결과와 합쳐 평균을 내지 않습니다.
-
-이전 B 조건에는 **CAS 번호·영문명·분자식**이 포함되어 있고 **SMILES는 제공되지 않았습니다.** 새 60문항도 같은 조건으로 작성합니다.
-
-### 최종 검증셋
-
-| 평가 유형 | 기존 B 사례 | 새 사례 | 최종 EASY | 최종 HARD | 최종 총수 |
-|---|---:|---:|---:|---:|---:|
-| 모체 및 염류 | 10 | 20 | 15 | 15 | **30** |
-| 화합물군 | 10 | 20 | 15 | 15 | **30** |
-| 혼합물 | 10 | 20 | 15 | 15 | **30** |
-| 합계 | **30** | **60** | **45** | **45** | **90** |
-
-- 기존 질문: S-01-B ~ S-10-B, C-01-B ~ C-10-B, M-01-B ~ M-10-B. 이 30문항은 **입력 문장과 성분정보를 그대로 재사용**합니다.
-- 추가 질문: 각 유형의 11~30번(B 조건만). 11~20번은 EASY, 21~30번은 HARD.
-- EASY 혼합물은 2개 성분, HARD 혼합물은 3개 성분입니다. 조성 합계는 반드시 100%여야 합니다.
-- 최종 모델별 90질문, 4모델 × 90질문 = **360개 문항-모델 결과**; 검색어 생성과 최종판단을 각각 수행하므로 **총 720회의 모델 호출**이 필요합니다.
-- 최종 문항 90개는 90개 독립 화학물질이라는 뜻이 아닙니다. 혼합물 성분과 다른 사례 사이에 동일 CAS가 등장할 수 있으므로 주의합니다.
-
-## 질문 추가 시 반드시 지킬 선정 기준
-
-### 모체 및 염류
-
-CAS가 직접 기재된 물질, 상위 모체의 명시적 포함, 모체·염류 명칭이 달라 해석이 필요한 사례, 조항의 명시적 예외를 적절히 포함합니다. **물질의 규제 여부나 적합성은 실제 고시 근거를 확인해 독립적으로 판정**합니다.
-
-### 화합물군
-
-금속화합물, 특정 이성질체, 치환 조건, 포괄 지정 항목, 명시적 제외 등이 반복되지 않도록 다양하게 선택합니다. 같은 물질명만 바꾼 중복 사례는 독립 사례로 세지 않습니다.
-
-### 혼합물
-
-EASY는 2성분, HARD는 3성분이며, 전 성분 지정 사례와 일부 성분이 명시적 예외인 사례를 포함합니다. 모든 혼합물은 **화학반응이나 함량별 규제를 평가하는 실물 제품이 아니라 가상 조성**입니다. 평가하는 질문은 고시 제3조의 ‘전부 지정된 성분으로 구성되었는가’에 한정합니다.
-
-### 객관성 확보
-
-- 각 화학물질의 **CAS 번호, 영문명, 분자식**은 공신력 있는 화학물질 데이터베이스·원문 자료와 대조하고 검증 출처 URL과 검토자 정보를 후보표에 기록합니다.
-- EASY/HARD 분류와 서로 다른 규제 관계를 포함해야 하는 이유를 **모델 답변을 보기 전에** 후보표에 기입합니다.
-- 신규 단일물질이 기존 단일물질과 같은 CAS를 사용하거나, 혼합물이 기존 혼합물과 같은 성분·질량비 조합이면 구축 단계에서 중단합니다.
-- **법적 지정 여부·직접 CAS 기재 여부·포괄 포함·명시적 제외·조항 번호**는 모델 출력에서 추측해 정답으로 삼지 않습니다. 검토용 Gold는 검색·추론 입력에서 분리하고 모든 90문항에 대해 독립 법령 검토 후 동결합니다.
-- 기존 30개 B 사례의 Gold도 과거의 잠정 판정이므로 이번 버전에서는 **모두 재검토**합니다. 필요하면 새 버전의 전문가 Gold에서 정정하며 구버전 Gold와 결과는 절대 덮어쓰지 않습니다.
-
-## 이번에 작성한 실제 90문항 후보 자료
-
-**[B 조건 90문항 후보 1차 초안 및 검증 상태 확인](proposals/README.md)**
-
-- **기존 B 문항 30개 그대로 + 신규 60문항 = 총 90문항**: `proposals/PROPOSED_90_B_cases.jsonl`
-- 새로 선정한 60개 사례의 CAS·영문명·분자식·혼합물 조성: `proposals/PROPOSED_new_60_cases_summary.csv`
-- 새 60사례의 90개 성분별 PubChem 출처 및 고시 후보 근거 행: `proposals/PROPOSED_new_60_component_review.csv`
-
-위 자료는 모델 입력 후보를 **작성한 것이지 정답을 확정한 것이 아닙니다.** 독립 법령 검토 전 골드 정답을 임의로 만들거나 90문항 정확도를 제시하지 않습니다.
-
-이미 빈 후보표를 생성했다면 아래 명령으로 **빈 입력표에 실제 화학물질 초안을 채울 수 있습니다.** 입력자가 작성한 내용이 있는 파일은 덮어쓰지 않습니다.
-
-~~~powershell
-python .\\prepare_b90.py --import-proposals
-python .\\proposals\\check_pubchem.py
-~~~
-
-PubChem 교차검사는 CAS별 제안 분자식의 일치 여부만 확인하고, 사람의 `identity_verified=YES` 확인이나 법령 전문가 Gold 검토를 자동으로 대신하지 않습니다.
-
-## 단계 1. 새 60사례 입력표 만들기
-
-Windows PowerShell:
-
-~~~powershell
-cd F:\framework_chemical_regul_paper
-git pull origin main
-cd .\llm_capability_study\expanded_b90
-python .\prepare_b90.py --init-candidates
-~~~
-
-로컬에 `private/new_cases_review.csv`가 생성됩니다. Excel에서 열면 **유형·난이도·사례번호·성분번호는 자동으로 채워져 있고**, 물질에 대한 사실은 모두 **빈칸**입니다. 아무 물질이나 자동 생성하여 잘못된 화학정보가 연구에 들어가지 않도록 일부러 비워두었습니다.
-
-**공개된 후보표를 사용하면 `cas`, `name_en`, `formula`, `mass_percent`, `identity_source_url`, 사전 선정 사유와 `regulatory_pattern`이 이미 입력되어 있습니다.** 해당 값을 실제 PubChem 자료와 대조하고, 검토자 `identity_reviewer`와 검증 완료 항목의 `identity_verified=YES`만 독립 확인 후 입력하세요. 혼합물 내 모든 성분에 각자 출처를 기입해야 합니다.
-
-**CAS 번호는 검사숫자(check digit)까지 검증**합니다. `regulatory_pattern`은 아래 중에서 선택합니다. 같은 혼합물의 모든 성분 행에는 같은 패턴을 기입하세요. EASY 사례는 직접 지정된 단순 문제로 구성할 수 있으므로, **각 유형 전체와 HARD 사례에서 패턴을 최소 두 종류** 포함하도록 검사합니다.
-
-| 유형 | `regulatory_pattern` 허용값(쉼표로 구분) |
-|---|---|
-| 모체 및 염류 | `DIRECT`, `SALT_INCLUDED`, `PARENT_NAMING`, `EXPLICIT_EXCEPTION` |
-| 화합물군 | `DIRECT`, `CLASS_INCLUDED`, `ISOMER_CONDITION`, `EXPLICIT_EXCEPTION` |
-| 혼합물 | `ALL_DIRECT`, `GROUP_INCLUDED`, `ONE_EXCEPTION`, `MIXED_CLAUSES` |
-
-이 표시는 **문항 선정의 사전 기록**이며 모델에는 제공되지 않습니다. 실제 법령상 지정 관계는 전문가가 별도 Gold 검토표에서 확정합니다. 구성 단계에서 같은 CAS의 단일물질 중복 및 동일한 혼합물 조성 중복도 차단합니다.
-
-**주의:** `private/` 폴더는 비공개입니다. GitHub에는 실험을 준비하는 코드와 안내서만 올라갑니다.
-
-## 단계 2. 90개 B 질문 만들기
-
-~~~powershell
-python .\prepare_b90.py --build-cases
-~~~
-
-입력표가 60개 새 사례와 90개 성분 행을 빠짐없이 포함하고, CAS 형식·출처·검증 여부·중복·혼합물 함량·난이도별 사례 수 조건을 만족하면 다음 파일을 생성합니다.
-
-`data/cases_90_B.jsonl`
-
-**기존 B 30문항과 신규 B 60문항을 하나로 묶은 90문항**이며, 임의의 Gold 값이나 판정 결과는 포함되지 않습니다. 원래 v4.1의 `data/cases_60.jsonl`은 바꾸지 않습니다.
-
-## 단계 3. 법령 전문가 정답을 전부 검토하고 고정
-
-~~~powershell
-python .\prepare_b90.py --init-gold
-~~~
-
-`private/gold_review_90_B.csv`가 생성됩니다. 기존 Gold 파일이 로컬에 있으면 **기존 B 30문항의 잠정값**만 참고용으로 채워두고, 신규 60문항의 근거는 비워둡니다.
-
-화학물질·법령 검토자가 각 성분의 **공식 고시 원본 행**, **지정 관계**(직접 지정, 포괄 포함, 명시적 제외), **관련 조항 근거**, 검토자와 검증 여부를 확인하세요. 혼합물의 전부 지정성분 조건도 확인해야 합니다. 각 검토 행의 `independent_legal_reviewed`는 독립 확인을 끝낸 경우에만 `YES`로 기록합니다.
-
-~~~powershell
-python .\prepare_b90.py --freeze
-python .\prepare_b90.py --check
-~~~
-
-모든 90문항의 정답 검토가 완료되고 공식 고시행·CAS 직접 기재·관계 유형이 일치하면 **별도 90문항 Gold와 SHA256 동결 기록**이 `private/`에 생성됩니다. 후보표·법령 검토표·질문 데이터·정답지의 SHA256에 더해 **검색·추론·채점 소스코드 SHA256**도 기록하여 후속 코드 변경에 따른 결과 혼합을 차단합니다. 기존 v4.1 Gold 및 결과는 수정하지 않습니다.
-
-## 단계 4. 같은 네 모델로 본실험
-
-각 모델을 순차 실행해도 되고, 난이도/유형별로 나누어 실행할 수 있습니다.
-
-~~~powershell
-# RTX 2060 6GB라면 작은 모델부터 하나씩 실행할 것을 권장
-python .\run_b90.py --model qwen2.5:3b
-python .\run_b90.py --model qwen3:4b-instruct
-python .\run_b90.py --model qwen3.5:4b
-python .\run_b90.py --model qwen3.5:9b
-~~~
-
-처음에 2문항으로 입력·모델 응답만 시험하고 싶다면 아래와 같이 실행합니다. 완료된 문항은 같은 결과 파일에 보존됩니다.
-
-~~~powershell
-python .\run_b90.py --model qwen3.5:9b --limit 2
-~~~
-
-기록은 `results_b90/qwen...__main.jsonl`에 즉시 저장되며 동일 명령을 재실행하면 **이미 완료한 문항을 건너뜁니다.** 실험 설정·모델 digest·입력 SHA256이 바뀌면 기존 결과에 섞어 쓰는 것을 차단합니다. v4.1과 달리 새 결과는 별도 `results_b90/`에만 저장되며 `--force` 삭제 옵션은 제공하지 않습니다.
-
-9B는 6GB GPU에 모두 올라가지 않아 일반 RAM 일부를 사용하므로 오래 걸릴 수 있습니다.
-
-## 단계 5. 90문항 본실험 결과 채점 및 보충자료
-
-~~~powershell
-python .\score_b90.py
-~~~
-
-4개 모델 각각 고유한 90문항을 모두 완료하고 동결한 입력·전문가 Gold 해시가 일치해야 채점합니다.
-
-로컬 `results_b90/` 아래에 다음 파일을 생성합니다.
-
-| 파일 | 내용 |
-|---|---|
-| `B90_REPORT_PRIVATE.md` | 네 모델 전체 및 유형별·난이도별 검색과 지정범위·완전정답률, 4B·9B 대응 비교, 내부 모순 |
-| `B90_case_scores_PRIVATE.csv` | 360개 문항-모델 결과의 검색·지정범위·정답 여부 |
-| `B90_component_scores_PRIVATE.csv` | 성분별 직접 CAS·관계 유형·지정번호·소번호·근거행 판단의 정답 여부 |
-| `B90_summary_PRIVATE.csv` | 각 모델과 물질 유형·난이도에 따른 건수 |
-| `B90_paired_4B_9B_PRIVATE.csv` | 같은 질문에서 두 모델이 모두 성공/한쪽만 성공/모두 실패 |
-| `B90_component_discrepancies_PRIVATE.csv` | 성분별 잠정 정답·모델 응답·검색 근거의 불일치 |
-| `B90_provenance_PRIVATE.json` | Gold·입력 SHA 및 모델별 원본 추론 파일 해시 |
-
-이 CSV와 MD에는 비공개 정답·모델 응답의 상세 사항이 들어갈 수 있으므로 **공개 GitHub에 업로드하지 마세요.** 논문 심사자료로 공개할 범위는 전문가 검토와 연구윤리·저널 정책에 따라 별도 결정합니다.
-
-## 현재 v4.1과 혼동하지 않기
-
-- 지금까지 검증된 v4.1은 **A/B를 합쳐 60문항/모델**이었고, B만 분석한 예비 결과는 **30문항/모델**입니다.
-- 여기서는 **B 조건만 90문항/모델**로 새롭게 실험합니다. **원래 30문항과 신규 60문항을 동일한 새 실험 조건에서 다시 실행**합니다.
-- 4B와 9B의 차이가 1~2문항이라고 해서 모형의 우월성/열등성을 확정하지 않습니다. 90문항에서 1문항은 전체의 약 **1.1%포인트**, 유형별 30문항 중 1문항은 **3.3%포인트**입니다. 쉬움·어려움 각 15문항에서는 **6.7%포인트**입니다.
-- 90문항은 충분성을 보증하는 보편적인 표본 수 기준이 아니라, 유형별 오류를 더 다양하게 평가하려는 실용적인 확대 규모입니다.
-- **가장 중요한 메시지:** 모델이 커지면 검색·지정범위 판단 능력은 좋아질 수 있어도 정확한 법령 근거까지 모두 맞힐 수 있는지는 별도로 검증해야 합니다.
-
-[기존 논문 및 v4.1 결과](../README.md)
+**연구상 주의:** 결과는 독립 전문가 검증 전인 \`CURATED_PROVISIONAL\` 정답지와의 일치율입니다. 인간 업무시간 및 CAS 번호의 단순 조회만 실시한 통제군은 없습니다. 완전 자동 대체나 사람 대비 속도 향상은 실험 결과로 직접 입증할 수 없습니다.
