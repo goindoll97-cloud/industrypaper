@@ -2,6 +2,7 @@
 private/
 results_b90/
 results_b90_provisional/
+results_b90_repeated*/
 data/cases_90_B.jsonl
 __pycache__/
 *.pyc
