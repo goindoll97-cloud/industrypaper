@@ -1,0 +1,7 @@
+model,difficulty,n_cases,n_repeats,old_scope_article3_correct_n,old_strict_correct_n,new_all_threshold_correct_n,joint_old_scope_new_threshold_correct_n,joint_old_strict_new_threshold_correct_n,posthoc_final_correct_n
+qwen3:4b-instruct,EASY,15,5,15,14,2,2,2,15
+qwen3:4b-instruct,HARD,15,5,3,0,1,1,0,9
+qwen3.5:4b,EASY,15,5,12,12,3,3,3,14
+qwen3.5:4b,HARD,15,5,1,0,6,1,0,14
+qwen3.5:9b,EASY,15,5,13,13,1,1,1,13
+qwen3.5:9b,HARD,15,5,8,0,4,3,0,13

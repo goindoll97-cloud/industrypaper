@@ -1,0 +1,55 @@
+{
+  "analysis": "B90_MIXTURE_TWO_SEPARATE_RUNS_POSTHOC_JOIN_V1",
+  "date": "2026-11-26",
+  "original_b90_n_cases": 90,
+  "original_b90_n_models": 4,
+  "original_b90_n_repeats": 5,
+  "additional_mixture_n_cases": 30,
+  "additional_mixture_n_components": 75,
+  "additional_mixture_n_models": 3,
+  "additional_mixture_n_repeats": 5,
+  "paired_records": 450,
+  "pairing_keys": [
+    "model",
+    "repeat",
+    "test_id"
+  ],
+  "models": [
+    "qwen3:4b-instruct",
+    "qwen3.5:4b",
+    "qwen3.5:9b"
+  ],
+  "inputs_sha256": {
+    "cases": "373662ae112eebec09c03cc760a0d556665a56ded1487500ce866867583c2566",
+    "annex": "665c2d449e769c0c7352c49f89934ff3ffaaea2ba4ebf35cc1e5ae545f004bc0",
+    "local_paired_450_csv": "8866d2d9a7187c56b25b8d0ee3766d0b7645b4e43c8fc86a17816e277652fceb",
+    "local_model_summary_csv": "6f8aa4729da1f997a4f65c7ae8ec5ca8cc5f48c5aef2f53d9d8e3ece1ff12294",
+    "local_provisional_gold_75_components": "e7493b379d1d5e0f1cba1bcd613dc2cd7d9999cfaca5a63952d5891e17f0aad7"
+  },
+  "additional_ollama_params": {
+    "num_ctx": 4096,
+    "query_tokens": 384,
+    "reason_tokens": 1400,
+    "temperature": 0,
+    "seed": 20261120,
+    "thinking": false,
+    "search": "existing_lexical_rank_fusion_v2_cas"
+  },
+  "source_protocol_file": "S6_protocol.json",
+  "first_stage_output_passed_to_second_stage": false,
+  "combination_method": "same model/repeat/test_id post-hoc; published metrics mean of 5 repeated 30-case accuracies",
+  "provisional_final_criterion": "old all_components_designated OR any (old clause inclusion prediction AND new hazard-threshold prediction)",
+  "provisional_gold_final_positive_cases": 30,
+  "provisional_gold_final_negative_cases": 0,
+  "mixture_cases_with_non_designated_component": 7,
+  "provisional_component_count_needing_further_review": 19,
+  "independent_expert_review_completed": false,
+  "scope_note": "covered_by_clause concerns the selected annex clause, not necessarily all legal designation routes",
+  "disclosure": "No negative-final mixture cases; even an always-positive classifier reaches 100% final accuracy. Exploratory scores are not verified legal judgments.",
+  "private_files_not_published": [
+    "original 450 case-level model outputs",
+    "paired 450 case-level scores",
+    "75-component provisional legal gold",
+    "detailed clause and error audit"
+  ]
+}
